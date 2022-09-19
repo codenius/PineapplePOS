@@ -87,6 +87,13 @@ Get information about the api
 
 **returns** `API_INFO`
 
+### `POST: /api/new`
+
+Creates a new item and returns it
+
+**returns** `API_ITEM`
+
+
 ### `GET: /api/items`
 
 Get all items from the shop
@@ -99,12 +106,24 @@ Get information of a single item
 
 **returns** `API_ITEM`
 
-### `POST: /api/{item_id}`
+### `DELETE: /api/{item_id}`
+
+Delete a single item
+
+**returns** `null`
+
+### `PUT: /api/{item_id}`
 
 Set information of a single item
 Takes an `API_ITEM` as argument (from request body)
 
 **returns** `API_TRANSACTION`
+
+### `GET: /api/{item_id}/recover`
+
+Recover a deleted item
+
+**returns** `API_ITEM`
 
 ### `GET: /api/{item_id}/stats`
 
@@ -124,6 +143,12 @@ Get a specific item transaction.
 
 **returns** `API_TRANSACTION` (with global transaction_id)
 
+### `DELETE: /api/{item_id}/transaction/{local_transaction_id}`
+
+Delete a specific item transaction.
+
+**returns** `null`
+
 ### `GET: /api/transactions`
 
 Get all Transitions
@@ -136,3 +161,8 @@ Get a specific Transitions
 
 **returns** `API_TRANSACTION`
 
+### `DELETE: /api/transaction/{transaction_id}`
+
+Delete specific Transition
+
+**returns** `null`
