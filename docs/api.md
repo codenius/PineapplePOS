@@ -87,63 +87,68 @@ Get information about the api
 
 **returns** `API_INFO`
 
-### `POST: /api/new`
-
-Creates a new item and returns it
-
-**returns** `API_ITEM`
-
-
 ### `GET: /api/items`
 
 Get all items from the shop
 
 **returns** `Array[API_ITEM]`
 
-### `GET: /api/{item_id}`
+### `POST: /api/item/new`
+
+Creates a new item and returns it
+
+**returns** `API_ITEM`
+
+### `GET: /api/item/{item_id}`
 
 Get information of a single item
 
 **returns** `API_ITEM`
 
-### `DELETE: /api/{item_id}`
+### `DELETE: /api/item/{item_id}`
 
 Delete a single item
 
 **returns** `null`
 
-### `PUT: /api/{item_id}`
+### `PUT: /api/item/{item_id}`
 
 Set information of a single item
 Takes an `API_ITEM` as argument (from request body)
 
 **returns** `API_TRANSACTION`
 
-### `GET: /api/{item_id}/recover`
+### `GET: /api/item/{item_id}/recover`
 
 Recover a deleted item
 
 **returns** `API_ITEM`
 
-### `GET: /api/{item_id}/stats`
+### `GET: /api/item/{item_id}/stats`
 
 Get all stats of the item
 
 **returns** `API_ITEM_STATS`
 
-### `GET: /api/{item_id}/transactions`
+### `GET: /api/item/{item_id}/transactions`
 
 Get all transaction that were applied to the item
 
 **returns** `Array[API_TRANSACTION]`
 
-### `GET: /api/{item_id}/transaction/{local_transaction_id}`
+### `DELETE: /api/item/{item_id}/transactions`
+
+Delete all transaction of the item
+
+**returns** `Array[API_TRANSACTION]`
+
+### `GET: /api/item/{item_id}/transaction/{local_transaction_id}`
 
 Get a specific item transaction. 
 
 **returns** `API_TRANSACTION` (with global transaction_id)
 
-### `DELETE: /api/{item_id}/transaction/{local_transaction_id}`
+### `DELETE: /api/item/{item_id}/transaction/{local_transaction_id}`
 
 Delete a specific item transaction.
 
@@ -154,6 +159,12 @@ Delete a specific item transaction.
 Get all Transitions
 
 **returns** `Array[API_TRANSACTION]`
+
+### `DELETE: /api/transactions`
+
+Delete all Transitions
+
+**returns** `null`
 
 ### `GET: /api/transaction/{transaction_id}`
 
