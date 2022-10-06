@@ -1,7 +1,9 @@
 version: '3.9'
 services:
     database:
-        image: mysql
+        image: mongo
+        networks:
+            - backend
     
     server:
         build: ./server/Dockerfile
@@ -9,9 +11,22 @@ services:
             - database
         ports:
             - "8080:3000"
-    
+        networks:
+            - backend
+            - global
+
     client:
         build: ./client/Dockerfile
+        networks:
+            - global
 
     proxy:
         image: nginx
+        networks:
+            - global
+
+networks:
+    global:
+        driver: global-driver
+    backend:
+        driver: backend-driver
