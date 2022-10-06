@@ -1,9 +1,14 @@
-import API_Reference from "./api_reference";
+import { Schema, model } from "mongoose";
 
-export default interface Transaction {
-    transaction_id: number,
-    type: "add" | "edit" | "recover" | "remove" | "sell"
-    timestamp: number,
-    old_item: API_Reference,
-    new_item: API_Reference
-}
+const Transaction = new Schema({
+    type: ["add", "edit", "recover", "remove", "sell"],
+    timestamp: Number,
+    old_item: {
+        type: Schema.Types.ObjectId, ref: "logged-item"
+    },
+    new_item: {
+        type: Schema.Types.ObjectId, ref: "logged-item"
+    }
+})
+
+export default model("Transaction", Transaction, "transactions")
