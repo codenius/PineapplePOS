@@ -1,7 +1,12 @@
 # Architecture
 ## Global
 
-Head of development: Codenius and DoctorFuchs
+Frontend: Codenius
+
+Backend (General): TheFentos
+
+Backend (Databases): DoctorFuchs
+
 
 Deployment: Docker
 
@@ -13,7 +18,7 @@ Server - Framework: [NodeJS/Express](https://expressjs.com/)
 
 Chart generation - Framework: [NodeJS/D3](https://d3js.org/)
 
-Database: MySQL
+Database: MongoDB with [mongoose](https://mongoosejs.com/)
 
 ### Jobs
 
