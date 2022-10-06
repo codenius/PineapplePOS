@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 
 const Transaction = new Schema({
     type: ["add", "edit", "recover", "remove", "sell"],
-    timestamp: Number,
+    timestamp: Date,
     old_item: {
         type: Schema.Types.ObjectId, ref: "logged-item"
     },
