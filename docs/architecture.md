@@ -22,20 +22,7 @@ Database: MongoDB with [mongoose](https://mongoosejs.com/)
 
 ### Jobs
 
-#### 1. Sprint
-- handle items:
-  - add items
-  - buy items
-  - remove items
-  - recover items
-  - edit items
-  - single item statistics
-- generate charts for statistic
-- save product images
-- security:
-  - avoid sql injections
-  - external access management
-
+See the backend jobs, tasks, goals in our [Backlog](https://github.com/users/DoctorFuchs/projects/2/views/1)
 
 ## Frontend
 Language: Typescript, [Svelte](https://svelte.dev/)
