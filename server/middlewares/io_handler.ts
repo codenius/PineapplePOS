@@ -25,6 +25,6 @@ export function inputMiddleware(req, res, next) {
 }
 
 export function outputMiddleware(req, res, next) {
-    res.body = mapJSON(res.body, decodeURIComponent) || {}
+    res.body = mapJSON(res.body, (t: boolean | string | number) => { return decodeURIComponent(t.toLocaleString()) }) || {}
     next()
 }
