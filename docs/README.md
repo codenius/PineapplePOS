@@ -1,5 +1,9 @@
 # Documentation
 
+## Project Management 
+- [Customer Specifications](./customer_specification.md)
+- [Performance Specifications](./performance_specification.md)
+
 ## For Developer
 
 - [architecture](./architecture.md)
