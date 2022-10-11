@@ -3,3 +3,8 @@ node_modules
 POS.iml
 .idea
 package-lock.json
+test.ts
+server/test.ts
+server/logs/*
+*.js
+.*-audit.json
