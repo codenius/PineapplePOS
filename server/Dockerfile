@@ -1,3 +1,11 @@
 FROM node:16
 
-# TODO: Develop the image
+WORKDIR /app
+
+ADD . /app
+
+RUN cd app && npm i
+
+EXPOSE 3000
+
+CMD ["npm","run dev"]
