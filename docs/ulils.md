@@ -43,4 +43,28 @@ import logger from 'server/utils/logger'
 logger.info('This is an Info!')
 logger.log('info', 'This is an Info too')
 ```
+#### Warn Log
 
+```ts
+import logger from 'server/utils/logger'
+
+logger.warn('This is a warn')
+logger.log('warn','This is a warn too')
+```
+#### Error Log
+
+```ts
+import logger from 'server/utils/logger'
+
+logger.error('This is a error')
+logger.log('error','This is a error too')
+```
+
+#### Debug Log
+
+```ts
+import logger from 'server/utils/logger'
+
+logger.debug('This is a debug')
+logger.log('debug','This is a debug too')
+```
