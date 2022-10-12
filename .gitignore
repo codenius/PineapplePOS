@@ -5,6 +5,6 @@ POS.iml
 package-lock.json
 test.ts
 server/test.ts
-server/logs/*
+server/logs/*.log
 *.js
 .*-audit.json
