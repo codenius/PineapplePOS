@@ -6,7 +6,7 @@ services:
             - backend
     
     server:
-        build: ./server/Dockerfile
+        build: ./server
         depends_on:
             - database
         ports:
@@ -16,7 +16,7 @@ services:
             - global
 
     client:
-        build: ./client/Dockerfile
+        build: ./client
         networks:
             - global
 
