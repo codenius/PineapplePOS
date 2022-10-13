@@ -2,10 +2,10 @@ FROM node:16
 
 WORKDIR /app
 
-ADD . /app
+COPY package*.json ./
 
-RUN cd app && npm i
+RUN npm ci
 
-EXPOSE 3000
+COPY . .
 
 CMD ["npm","start"]
