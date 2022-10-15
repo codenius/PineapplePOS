@@ -25,9 +25,9 @@ Database: MongoDB with [mongoose](https://mongoosejs.com/)
 See the backend jobs, tasks, goals in our [Backlog](https://github.com/users/DoctorFuchs/projects/2/views/1)
 
 ## Frontend
-Language: Typescript, [Svelte](https://svelte.dev/)
+Language: [Typescript](https://www.typescriptlang.org)/[Svelte](https://svelte.dev/)
 
-Framework: [Vite/Svelte](https://kit.svelte.dev/)
+Framework - Routing: [Vite/SvelteKit](https://kit.svelte.dev/)
 
 UI-Components - Library: [Sveltestrap](https://github.com/bestguy/sveltestrap)
 
