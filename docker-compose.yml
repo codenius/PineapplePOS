@@ -4,13 +4,14 @@ services:
         image: mongo
         networks:
             - backend
-    
+        volumes:
+            - ./data:/data/db
     server:
         build: ./server
         depends_on:
             - database
         ports:
-            - 8080:3000
+            - "8080:3000"
         networks:
             - backend
             - global

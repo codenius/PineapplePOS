@@ -1,0 +1,1 @@
+// combine all api routes to one router
