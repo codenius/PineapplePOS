@@ -10,7 +10,7 @@
 	export let expanded: boolean = false;
 </script>
 
-<NavItem>
+<NavItem class="NavPart">
 	<NavLink
 		{...$$restProps}
 		{href}
@@ -27,10 +27,10 @@
 </NavItem>
 
 <style global>
-	nav .nav-link {
+	aside .nav-link {
 		border-radius: 0 !important;
 	}
-	nav .bi {
+	aside .NavPart .bi {
 		font-size: 2rem;
 	}
 </style>

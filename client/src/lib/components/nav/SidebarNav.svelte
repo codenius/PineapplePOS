@@ -1,12 +1,14 @@
 <script lang="ts">
-	import { beforeNavigate } from '$app/navigation';
 	import { Nav } from 'sveltestrap';
 	import NavPart from './NavPart.svelte';
+	import Settings from './Settings.svelte';
+	import { beforeNavigate } from '$app/navigation';
+	import { t } from '$lib/i18n';
+
 	let expanded: boolean = false;
 
 	function toogleSidebar(): void {
 		expanded = !expanded;
-		console.log(expanded);
 	}
 
 	beforeNavigate(() => {
@@ -14,37 +16,71 @@
 	});
 </script>
 
-<nav class="h-100 sticky-top me-3">
-	<Nav
-		pills
-		vertical
-		class="nav flex-nowrap {expanded ? 'expanded' : ''} 
-    bg-light border-end d-flex flex-column h-100"
-	>
-		<NavPart
-			on:click={toogleSidebar}
-			icon="list"
-			class="text-black bg-white"
-			bind:expanded>Menü</NavPart
+<aside
+	class="{expanded
+		? 'expanded'
+		: ''} h-100 sticky-top me-3 border-end bg-light d-flex flex-column flex-shrink-0 justify-content-between"
+>
+	<nav>
+		<Nav
+			pills
+			vertical
+			class="flex-nowrap  
+     d-flex flex-column"
 		>
-		<NavPart disabled tabindex="-1" icon="three-dots" class="opacity-0" />
-		<NavPart href="/" icon="house-fill" bind:expanded>Start</NavPart>
-		<NavPart href="/shop" icon="shop" bind:expanded>Shop</NavPart>
-		<NavPart href="/stock" icon="boxes" class="border-bottom-0" bind:expanded
-			>Lager</NavPart
-		>
-	</Nav>
-</nav>
+			<NavPart
+				on:click={toogleSidebar}
+				icon="list"
+				class="text-black bg-white"
+				bind:expanded>{$t('menu')}</NavPart
+			>
+			<NavPart disabled tabindex="-1" icon="three-dots" class="opacity-0" />
+			<NavPart href="/" icon="house-fill" bind:expanded>{$t('home')}</NavPart>
+			<NavPart href="/shop" icon="shop" bind:expanded>{$t('shop')}</NavPart>
+			<NavPart href="/stock" icon="boxes" class="border-bottom-0" bind:expanded>
+				{$t('stock')}
+			</NavPart>
+		</Nav>
+	</nav>
+	<div>
+		<Settings bind:expanded />
+	</div>
+</aside>
 
 <style global>
-	nav .nav {
+	aside {
 		transition: 0.2s ease max-width;
 		max-width: 4rem;
-		overflow-x: hidden;
-		overflow-y: auto;
 	}
-	nav .expanded {
-		max-width: 10rem !important;
+	aside.expanded {
+		max-width: 12rem !important;
+		overflow-x: hidden;
+		animation: overflow2 0.2s ease 0s 1 normal;
+	}
+	aside:not(.expanded) {
+		animation: overflow 0.2s ease 0s 1 normal;
+	}
+	@keyframes overflow {
+		form {
+			overflow-x: hidden;
+		}
+		99% {
+			overflow-x: hidden;
+		}
+		to {
+			overflow-x: initial;
+		}
+	}
+	@keyframes overflow2 {
+		form {
+			overflow-x: hidden;
+		}
+		99% {
+			overflow-x: hidden;
+		}
+		to {
+			overflow-x: initial;
+		}
 	}
 
 	/* nav .nav-link span {
