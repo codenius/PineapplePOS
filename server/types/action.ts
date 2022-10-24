@@ -1,9 +1,6 @@
 import { Schema, model } from "mongoose";
 
 const Action = new Schema({
-    employee: {
-        type: Schema.Types.ObjectId, ref: "employee"
-    },
     action_group: {
         type: Schema.Types.ObjectId, ref: "action-group"
     },
