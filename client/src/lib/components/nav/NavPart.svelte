@@ -18,7 +18,7 @@
 		active={/* Workaround to prevent '/' route from beeing active with every path */
 		($page.url.pathname.includes(href) && href != '/') ||
 			($page.url.pathname == '/' && href == '/')}
-		class="nav-link d-flex align-items-center gap-2 py-2 border-bottom {className}"
+		class="nav-link d-flex align-items-center gap-2 py-2 {className}"
 		><Icon name={icon} class="bi" />
 		{#if expanded}<span transition:fade={{ duration: 200 }}>
 				<slot />
