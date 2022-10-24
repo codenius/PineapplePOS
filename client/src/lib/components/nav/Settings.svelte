@@ -38,7 +38,13 @@
 							isOpen = false;
 							$i18n.changeLanguage(language);
 						}}
-						>{$t('thisLang', { lng: language })}
+					>
+						<Icon
+							name="check2"
+							class="me-1 {$i18n.resolvedLanguage == language
+								? ''
+								: 'invisible'}"
+						/> <span>{$t('thisLang', { lng: language })}</span>
 					</DropdownItem>
 				{/each}
 			</DropdownMenu>
