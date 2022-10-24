@@ -18,7 +18,7 @@
 	<DropdownToggle color="transparent" class="p-0">
 		<ul class="list-unstyled mb-1">
 			<NavPart icon="gear" class="border-bottom-0" bind:expanded
-				>Einstellungen</NavPart
+				>{$t('settings')}</NavPart
 			>
 		</ul></DropdownToggle
 	>
