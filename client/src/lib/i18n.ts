@@ -14,7 +14,7 @@ i18next
 			lookupQuerystring: 'lng',
 			lookupLocalStorage: 'locale'
 		},
-		fallbackLng: 'en',
+		fallbackLng: ['en', 'de'],
 		ns: 'common',
 		backend: {
 			loadPath: '/locales/{{lng}}/{{ns}}.json'

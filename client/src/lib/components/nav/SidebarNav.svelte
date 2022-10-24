@@ -37,9 +37,7 @@
 			<NavPart disabled tabindex="-1" icon="three-dots" class="opacity-0" />
 			<NavPart href="/" icon="house-fill" bind:expanded>{$t('home')}</NavPart>
 			<NavPart href="/shop" icon="shop" bind:expanded>{$t('shop')}</NavPart>
-			<NavPart href="/stock" icon="boxes" class="border-bottom-0" bind:expanded>
-				{$t('stock')}
-			</NavPart>
+			<NavPart href="/stock" icon="boxes" bind:expanded>{$t('stock')}</NavPart>
 		</Nav>
 	</nav>
 	<div>

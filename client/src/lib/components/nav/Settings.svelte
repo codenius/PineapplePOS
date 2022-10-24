@@ -18,7 +18,7 @@
 	<DropdownToggle color="transparent" class="p-0">
 		<ul class="list-unstyled mb-1">
 			<NavPart icon="gear" class="border-bottom-0" bind:expanded
-				>Einstellungen</NavPart
+				>{$t('settings')}</NavPart
 			>
 		</ul></DropdownToggle
 	>
@@ -38,7 +38,13 @@
 							isOpen = false;
 							$i18n.changeLanguage(language);
 						}}
-						>{$t('thisLang', { lng: language })}
+					>
+						<Icon
+							name="check2"
+							class="me-1 {$i18n.resolvedLanguage == language
+								? ''
+								: 'invisible'}"
+						/> <span>{$t('thisLang', { lng: language })}</span>
 					</DropdownItem>
 				{/each}
 			</DropdownMenu>
