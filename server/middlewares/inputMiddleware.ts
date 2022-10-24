@@ -1,4 +1,6 @@
 /* Escape Function, that escapes every type that is possible for json responses */
+import logger from "../utils/logger";
+
 function mapJSON(value: object | Array<any> | number | string | boolean, fn = encodeURIComponent) {
     if (Array.isArray(value)) {
         return value.map(item => mapJSON(item))
@@ -21,10 +23,5 @@ function mapJSON(value: object | Array<any> | number | string | boolean, fn = en
 
 export function inputMiddleware(req, res, next) {
     req.body = mapJSON(req.body, encodeURIComponent) || {}
-    next()
-}
-
-export function outputMiddleware(req, res, next) {
-    res.body = mapJSON(res.body, (t: boolean | string | number) => { return decodeURIComponent(t.toLocaleString()) }) || {}
     next()
 }
