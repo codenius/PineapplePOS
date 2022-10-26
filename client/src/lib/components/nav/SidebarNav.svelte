@@ -19,27 +19,25 @@
 <aside
 	class="{expanded
 		? 'expanded'
-		: ''} h-100 sticky-top me-3 border-end bg-light d-flex flex-column flex-shrink-0 justify-content-between"
+		: ''} h-100 sticky-top border-end bg-light d-flex flex-column flex-shrink-0 justify-content-between"
 >
-	<nav>
-		<Nav
-			pills
-			vertical
-			class="flex-nowrap  
-     d-flex flex-column"
-		>
+	<nav class="d-flex flex-column gap-5">
+		<div class="list-unstyled">
 			<NavPart
 				on:click={toogleSidebar}
 				icon="list"
-				class="text-black bg-white"
+				class="text-black bg-white shadow-sm"
 				bind:expanded>{$t('menu')}</NavPart
 			>
-			<NavPart disabled tabindex="-1" icon="three-dots" class="opacity-0" />
+		</div>
+
+		<Nav pills vertical class="d-flex flex-nowrap flex-column">
 			<NavPart href="/" icon="house-fill" bind:expanded>{$t('home')}</NavPart>
 			<NavPart href="/shop" icon="shop" bind:expanded>{$t('shop')}</NavPart>
 			<NavPart href="/stock" icon="boxes" bind:expanded>{$t('stock')}</NavPart>
 		</Nav>
 	</nav>
+
 	<div>
 		<Settings bind:expanded />
 	</div>

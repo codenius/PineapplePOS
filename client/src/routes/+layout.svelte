@@ -31,7 +31,10 @@
 	#wrapper {
 		height: 100%;
 		display: flex;
-		overflow-y: scroll;
+		overflow-y: auto;
+	}
+	main {
+		width: 100%;
 	}
 	:global(.svelte-progress-bar, .svelte-progress-bar-leader) {
 		background-color: var(--bs-primary);
