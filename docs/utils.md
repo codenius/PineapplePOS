@@ -15,7 +15,7 @@ The logger has been building with winston.js .
 
 ### Options
 
-In the `.env`you can change
+In the `.env` File you can change
 
 ```
 LOG_LEVEL=debug
