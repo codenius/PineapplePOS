@@ -1,28 +1,15 @@
 import ItemController from "../../controllers/api/itemController";
 import {Router} from "express";
+import Authenticator from "../../auth/authenticator";
 
 const itemRouter = Router();
 
 /* Item Router paths using the ItemController */
 
-itemRouter.get('',(req,res)=>{
-    /**
-     * * Docs: https://github.com/DoctorFuchs/POS/blob/master/docs/api.md#get-apiitems
-     */
-
-    res.json(ItemController.get(req,res,(e)=>{res.json({error: e})}))
-    
-})
-
-itemRouter.post('new',(req,res)=>{
-    /**
-     * * Docs: https://github.com/DoctorFuchs/POS/blob/master/docs/api.md#post-apiitemnew
-     */
-
-    const i = ItemController.create(req,res,(e)=>{res.json({error: e})})
-
-    res.json(i)
-
-})
+/*
+ * Docs: https://github.com/DoctorFuchs/POS/blob/master/docs/api.md#
+ */
+itemRouter.get('', [Authenticator.read, ItemController.get])
+itemRouter.post('/new', [Authenticator.edit, ItemController.create])
 
 export default itemRouter
