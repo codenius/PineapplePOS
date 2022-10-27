@@ -25,6 +25,11 @@ app.use(loggerMiddleware)
 /* Routes */
 app.use("/api", apiRouter)
 
+/* Errorhandler */
+app.use((err, req, res, next) => {
+    res.send({error_type: "unknown", msg: err.stack}) // CHANGE IN PRODUCTION!
+})
+
 app.listen(3000, () => {
     logger.info("Backend started")
 })

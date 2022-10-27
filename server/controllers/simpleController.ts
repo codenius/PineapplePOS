@@ -9,44 +9,32 @@ class SimpleController {
 
     /* Controller function to get all object of this type*/
     get(req, res, next) {
-        try {
-            let order = {}
-            let order_attribute, order_mode = new RegExp("([_a-z]+):(asc|desc)")
-                .exec(req.querys.orderby.toLocaleLowerCase()) || ["", "name", "asc"]
-                .slice(1, 2)
+        let order = {}
+        let [order_attribute, order_mode] = new RegExp("([_a-z]+):(asc|desc)")
+            .exec(req.querys.orderby.toLocaleLowerCase()) || ["", "name", "asc"]
+            .slice(1, 2)
 
-            order[order_attribute] = order_mode
-            this.model.find().sort(order).exec().then(r => res.status(200).json(r))
-        } catch (e) {
-            next(e)
-        }
+        order[order_attribute] = order_mode
+        this.model.find().sort(order).exec().then(r => res.status(200).json(r))
     }
 
     /* Controller function to get a single object */
     getSingle(req, res, next) {
-        try {
-            if (!Types.ObjectId.isValid(req.params.id)) {
-                return res.status(422).json({error_type: "InputError", msg: "Invalid Item ID: "+req.params.id})
-            }
-            this.model.findById(req.params.id).exec().then(r => res.status(200).json(r))
-        } catch (e) {
-            next(e)
+        if (!Types.ObjectId.isValid(req.params.id)) {
+            return res.status(422).json({error_type: "InputError", msg: "Invalid Item ID: "+req.params.id})
         }
+        this.model.findById(req.params.id).exec().then(r => res.status(200).json(r))
     }
 
     /* Controller function to edit the given object */
     edit(req, res, next) {
-        try {
-            if (!Types.ObjectId.isValid(req.params.id)) {
-                return res.status(422).json({error_type: "InputError", msg: "Invalid Item ID: "+req.params.id})
-            }
-            this.model.findByIdAndUpdate(req.params.id, this.cast(req.body)).exec().then(
-                r => res.status(200).json(r),
-                r => res.status(422).json({error_type: "Unknown Database Error", msg: "If you see this error msg, please report it to our github"})
-            )
-        } catch (e) {
-            next(e)
+        if (!Types.ObjectId.isValid(req.params.id)) {
+            return res.status(422).json({error_type: "InputError", msg: "Invalid Item ID: "+req.params.id})
         }
+        this.model.findByIdAndUpdate(req.params.id, this.cast(req.body)).exec().then(
+            r => res.status(200).json(r),
+            r => res.status(422).json({error_type: "Unknown Database Error", msg: "If you see this error msg, please report it to our github"})
+        )
     }
 
     editSingle(req, res, next) {
