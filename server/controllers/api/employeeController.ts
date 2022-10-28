@@ -1,4 +1,4 @@
-import Employee from "../../types/employee";
+import Employee from "../../types/api/employee";
 import SimpleController from "../simpleController";
 
 export default new SimpleController(Employee)

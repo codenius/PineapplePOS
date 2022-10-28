@@ -1,4 +1,6 @@
-import { Model, Types } from "mongoose";
+import {Model, Types} from "mongoose";
+import InputError from "../types/errors/inputError";
+import DatabaseError from "../types/errors/databaseError";
 
 class SimpleController {
     model: Model<any>
@@ -8,64 +10,73 @@ class SimpleController {
     }
 
     /* Controller function to get all object of this type*/
-    get(req, res, next) {
-        let order = {}
-        let [order_attribute, order_mode] = new RegExp("([_a-z]+):(asc|desc)")
-            .exec(req.querys.orderby.toLocaleLowerCase()) || ["", "name", "asc"]
-            .slice(1, 2)
-
-        order[order_attribute] = order_mode
-        this.model.find().sort(order).exec().then(r => res.status(200).json(r))
+    get(req, res) {
+        this.model.find({deleted: false}).exec().then(
+            r => res.json(r),
+            r => { throw new DatabaseError() }
+        )
     }
 
     /* Controller function to get a single object */
-    getSingle(req, res, next) {
-        if (!Types.ObjectId.isValid(req.params.id)) {
-            return res.status(422).json({error_type: "InputError", msg: "Invalid Item ID: "+req.params.id})
-        }
+    getSingle(req, res) {
+        SimpleController.validateId(req.params.id)
         this.model.findById(req.params.id).exec().then(r => res.status(200).json(r))
     }
 
     /* Controller function to edit the given object */
-    edit(req, res, next) {
-        if (!Types.ObjectId.isValid(req.params.id)) {
-            return res.status(422).json({error_type: "InputError", msg: "Invalid Item ID: "+req.params.id})
+    edit(req, res) {
+        if (!Array.isArray(req.body)) {
+            throw new TypeError("request body is not a list")
         }
-        this.model.findByIdAndUpdate(req.params.id, this.cast(req.body)).exec().then(
-            r => res.status(200).json(r),
-            r => res.status(422).json({error_type: "Unknown Database Error", msg: "If you see this error msg, please report it to our github"})
+        req.body.forEach(item => {
+            this.model.findByIdAndUpdate(item._id, this.cast(req.body)).exec().catch(
+                r => { throw new DatabaseError() }
+            )
+        })
+    }
+
+    editSingle(req, res) {
+        SimpleController.validateId(req.params.id)
+        this.model.findByIdAndUpdate(req.params.id, this.cast(req.body)).exec().catch(
+            r => { throw new DatabaseError() }
         )
     }
 
-    editSingle(req, res, next) {
-
+    deleteSingle(req, res) {
+        SimpleController.validateId(req.params.id)
+        this.model.findByIdAndUpdate(req.params.id, {"deleted": true}).exec().catch(
+            r => { throw new DatabaseError() }
+        )
     }
 
-    delete(req, res, next) {
-
+    recoverSingle(req, res) {
+        SimpleController.validateId(req.params.id)
+        this.model.findByIdAndUpdate(req.params.id, {"deleted": false}).exec().catch(
+            r => { throw new DatabaseError() }
+        )
+        res.status(200)
     }
 
-    create(req, res, next) {
+    create(req, res) {
+        let item = new this.model(this.cast(req.body))
+        item.save().catch(
+            r => { throw new DatabaseError() }
+        )
+        res.send(item)
+    }
 
+    private static validateId(id: string) {
+        if (!Types.ObjectId.isValid(id)) {
+            throw new InputError("invalid ID for an item: "+id)
+        }
     }
 
     /* Cast a plain object to the schema of the given mongoose model */
-    private cast(obj: object): object {
-        let casted_obj = {}
-        this.model.schema.eachPath((path, type) => {
-            if (!obj[path]) {
-                if (!type.default && type.isRequired) {
-                    throw new Error(`Incomplete Input: ${path} is required, has no default and it's not given`)
-                }
-                casted_obj[path] = type.default || null
-            } else {
-                if (type.isRequired && !type.validate(obj[path])) {
-                    throw new Error(`Incorrect Input: ${path} got a invalid input (${obj[path]})`)
-                }
-                casted_obj[path] = type.validate(obj[path])?obj[path]:null
-            }
-        })
-        return casted_obj
+    private cast(obj: object) {
+        let casted = new this.model(obj)
+        let err = casted.validateSync()
+        if (err) {throw new InputError(err._message)}
+        return casted
     }
 }
 
