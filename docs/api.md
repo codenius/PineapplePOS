@@ -2,178 +2,103 @@
 
 ## Common models
 
-### `API_ERROR`
+You can find the models in the ERM ([>database](./database.md)).
 
-Contains information about an error
+These models are modified, because all references to other tables are resolved.
 
-```json
-{
-    "error": "string"
-}
-```
+For example:  Actions having a reference to the employee-table.
 
-### `API_INFO`
-
-Contains information about the api
-
-```json
-{
-    "version": "string",
-    "mysql_version": "string"
-}
-```
-
-### `API_ITEM`
-
-Contains information about a single item from the shop
-
-```json
-{
-    "id": "int",
-    "name": "string",
-    "amount": "int",
-    "costs": "float",
-    "image": "url",
-    "url": "url"
-}
-```
-
-### `API_ITEM_STATS`
-
-Contains stats of a single `API_ITEM`
-
-```json
-{
-    "chart": "url",
-    "sold": "ARRAY[API_TRANSACTION]",
-    "removed": "ARRAY[API_TRANSACTION]",
-    "added": "ARRAY[API_TRANSACTION]",
-    "edits": "ARRAY[API_TRANSACTION]",
-    "item": "API_REFERENCE"
-}
-```
-
-### `API_REFERENCE`
-
-Links to more content, to make the api faster
-
-```json
-{
-    "name": "string",
-    "url": "url"
-}
-```
-
-### `API_TRANSACTION`
-
-Describes a single transaction of an item
-
-```json
-{
-    "id": "int",
-    "type": "add | edit | recover | remove | sell ",
-    "timestamp": "int",
-    "old_item": "API_ITEM",
-    "new_item": "API_ITEM",
-    "item": "API_REFERENCE"
-}
-```
+This reference is resolved and now there is an employee-object.
 
 ## Paths
 
-### `GET: /api`
-
-Get information about the api
-
-**returns** `API_INFO`
+### *Items*
 
 ### `GET: /api/items`
 
 Get all items from the shop
 
-**returns** `Array[API_ITEM]`
+**returns** `Array[Item]`
 
-### `POST: /api/item/new`
+### `POST: /api/items/new`
 
 Creates a new item and returns it
 
-**returns** `API_ITEM`
+**returns** `Item`
 
-### `GET: /api/item/{item_id}`
+### `GET: /api/items/{item._id}`
 
 Get information of a single item
 
-**returns** `API_ITEM`
+**returns** `item`
 
-### `DELETE: /api/item/{item_id}`
+### `DELETE: /api/items/{item._id}`
 
 Delete a single item
 
 **returns** `null`
 
-### `PUT: /api/item/{item_id}`
+### `PUT: /api/items/{item._id}`
 
 Set information of a single item
-Takes an `API_ITEM` as argument (from request body)
+Takes an `Item` as argument (from request body)
 
-**returns** `API_TRANSACTION`
+**returns** `Action`
 
-### `GET: /api/item/{item_id}/recover`
+### `GET: /api/items/{item._id}/recover`
 
 Recover a deleted item
 
-**returns** `API_ITEM`
+**returns** `Item`
 
-### `GET: /api/item/{item_id}/stats`
+### `GET: /api/items/{item._id}/actions`
 
-Get all stats of the item
+Get all actions, that were applied to the item
 
-**returns** `API_ITEM_STATS`
+**returns** `Array[Action]`
 
-### `GET: /api/item/{item_id}/transactions`
-
-Get all transaction that were applied to the item
-
-**returns** `Array[API_TRANSACTION]`
-
-### `DELETE: /api/item/{item_id}/transactions`
+### `DELETE: /api/items/{item._id}/actions`
 
 Delete all transaction of the item
 
-**returns** `Array[API_TRANSACTION]`
+**returns** `Array[Action]`
 
-### `GET: /api/item/{item_id}/transaction/{local_transaction_id}`
+### *Logged Items*
 
-Get a specific item transaction. 
+### `GET: /api/logged-items/`
 
-**returns** `API_TRANSACTION` (with global transaction_id)
+Get all logged items
 
-### `DELETE: /api/item/{item_id}/transaction/{local_transaction_id}`
+**returns** `Array[LoggedItem]`
 
-Delete a specific item transaction.
+### `GET: /api/logged-items/{loggedItem._id}`
+
+Get a logged item from id
+
+**return** `Array[LoggedItem]`
+
+### *Actions*
+
+### `GET: /api/actions`
+
+Get all actions
+
+**returns** `Array[Action]`
+
+### `DELETE: /api/actions`
+
+Delete all actions
 
 **returns** `null`
 
-### `GET: /api/transactions`
+### `GET: /api/actions/{action._id}`
 
-Get all Transitions
+Get a specific actions
 
-**returns** `Array[API_TRANSACTION]`
+**returns** `Action`
 
-### `DELETE: /api/transactions`
+### `DELETE: /api/actions/{action._id}`
 
-Delete all Transitions
-
-**returns** `null`
-
-### `GET: /api/transaction/{transaction_id}`
-
-Get a specific Transitions
-
-**returns** `API_TRANSACTION`
-
-### `DELETE: /api/transaction/{transaction_id}`
-
-Delete specific Transition
+Delete specific action
 
 **returns** `null`
