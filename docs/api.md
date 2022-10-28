@@ -10,6 +10,16 @@ For example:  Actions having a reference to the employee-table.
 
 This reference is resolved and now there is an employee-object.
 
+One exception: Errors
+
+```ts
+interface error {
+    type: string,
+    source:  "internal" | "database" | "user" | "unknown",
+    msg: string
+}
+```
+
 ## Paths
 
 ### *Items*
