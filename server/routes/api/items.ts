@@ -9,7 +9,15 @@ const itemRouter = Router();
 /*
  * Docs: https://github.com/DoctorFuchs/POS/blob/master/docs/api.md#
  */
-itemRouter.get('', [Authenticator.read, ItemController.get])
-itemRouter.post('/new', [Authenticator.edit, ItemController.create])
+
+itemRouter.get('/', [
+    (req, res, next) => Authenticator.read(req, res, next),
+    (req, res) => ItemController.get(req, res)
+])
+
+itemRouter.post('/new', [
+    (req, res, next) => Authenticator.edit(req, res, next),
+    (req, res) => ItemController.create(req, res)
+])
 
 export default itemRouter
