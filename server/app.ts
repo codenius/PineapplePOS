@@ -6,8 +6,12 @@ import * as mongoose from "mongoose";
 import logger from "./utils/logger";
 import loggerMiddleware from "./middlewares/loggerMiddleware";
 import apiRouter from "./routes/api";
+import BaseError from "./types/errors/baseError";
+import {ErrorJson} from "./types/errors/commons";
 
 const DATABASE_URL = process.env.DB_URL || "mongodb://localhost:27017"
+const DEBUG = process.env.DEBUG || true
+
 
 mongoose.connect(DATABASE_URL).then(
     () => logger.info("connected to database"),
@@ -27,7 +31,17 @@ app.use("/api", apiRouter)
 
 /* Errorhandler */
 app.use((err, req, res, next) => {
-    res.send({error_type: "unknown", msg: err.stack}) // CHANGE IN PRODUCTION!
+    if (err instanceof BaseError) {
+        err.send(res)
+    } else {
+        let json: ErrorJson = {
+            type: err.name,
+            source: "internal",
+            msg: DEBUG?err.stack:"internal server error"
+        }
+        logger.error("\n"+err.stack)
+        res.status(500).json(json)
+    }
 })
 
 app.listen(3000, () => {
