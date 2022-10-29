@@ -11,14 +11,12 @@ const levels = {
 
 const logger = createLogger({
     levels: levels,
-    level: process.env.LOG_LEVEL || 'debug',
+    level: process.env.LOG_LEVEL || 'info',
     transports: [
         new transports.Console({
             format: format.combine(
                 format.colorize({ all: true }),
-                format.timestamp({
-                  format: 'YYYY-MM-DD hh:mm:ss A',
-                }),
+                format.timestamp({ format: 'YYYY-MM-DD hh:mm:ss A' }),
                 format.align(),
                 format.printf((info) => `[${info.timestamp}] ${info.level}: ${info.message}`)
             ),
