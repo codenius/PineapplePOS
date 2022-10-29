@@ -20,8 +20,6 @@ loggedItemRouter.get('/:id:', [
 ])
 
 
-loggedItemRouter.get('', [Authenticator.read, loggedItemController.get])
-loggedItemRouter.get(':id:', [Authenticator.read, loggedItemController.get])
 
 
 
