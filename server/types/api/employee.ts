@@ -21,6 +21,10 @@ export const Employee = new Schema({
     password: {
         type: String,
         required: true
+    },
+    deleted: {
+        type: Boolean,
+        default: false
     }
 })
 

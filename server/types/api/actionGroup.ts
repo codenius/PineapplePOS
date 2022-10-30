@@ -14,6 +14,10 @@ export const ActionGroup = new Schema({
         ref: "employee",
         required: true
     },
+    deleted: {
+        type: Boolean,
+        default: false
+    }
 })
 
 export default model("ActionGroup", ActionGroup, "action-group")

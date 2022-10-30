@@ -15,6 +15,10 @@ const Action = new Schema({
         type: Schema.Types.ObjectId,
         ref: "logged-item",
         required: true
+    },
+    deleted: {
+        type: Boolean,
+        default: false
     }
 })
 
