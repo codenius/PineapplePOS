@@ -4,8 +4,11 @@ services:
         image: mongo
         networks:
             - backend
+        ports:
+            - "27017"
         volumes:
-            - ./data:/data/db
+            - "./data:/data/db"
+
     server:
         build: ./server
         depends_on:
