@@ -11,23 +11,23 @@ const actionRouter = Router()
  */
 
 actionRouter.get('/', [
-    (req,res,next)=>Authenticator.read(req,res,next),
-    (req,res)=>ActionController.get(req,res)
+    (req,res,next) => Authenticator.read(req,res,next),
+    (req,res) => ActionController.get(req,res)
 ])
+
 actionRouter.delete('/', [
-    (req,res,next)=>Authenticator.edit(req,res,next),
-    (req,res)=>ActionController.delete(req,res)
+    (req,res,next) => Authenticator.edit(req,res,next),
+    (req,res) => ActionController.delete(req,res)
 ])
+
 actionRouter.get('/:id:', [
-    (req,res,next)=>Authenticator.read(req,res,next),
-    (req,res)=>ActionController.getSingle(req,res)
+    (req,res,next) => Authenticator.read(req,res,next),
+    (req,res) => ActionController.getSingle(req,res)
 ])
+
 actionRouter.delete('/:id:', [
-    (req,res,next)=>Authenticator.edit(req,res,next),
-    (req,res)=>ActionController.deleteSingle(req,res)
+    (req,res,next) => Authenticator.edit(req,res,next),
+    (req,res) => ActionController.deleteSingle(req,res)
 ])
-
-
-
 
 export default actionRouter

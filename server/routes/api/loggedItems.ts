@@ -1,4 +1,4 @@
-import loggedItemController from "../../controllers/api/loggedItemController";
+import LoggedItemController from "../../controllers/api/loggedItemController";
 import {Router} from "express";
 import Authenticator from "../../auth/authenticator";
 
