@@ -1,11 +1,27 @@
 import { Schema, model } from "mongoose";
 
 export const Employee = new Schema({
-    first_name: String,
-    last_name: String,
-    created: Date,
-    level: ["read", "sell", "edit", "admin"],
-    password: String
+    first_name: {
+        type: String,
+        required: true
+    },
+    last_name: {
+        type: String,
+        required: true
+    },
+    created: {
+        type: Date,
+        default: Date.now()
+    },
+    level: {
+        type: ["read", "sell", "edit", "admin"],
+        required: true,
+        default: "read"
+    },
+    password: {
+        type: String,
+        required: true
+    }
 })
 
 export default model("Employee", Employee, "employees")

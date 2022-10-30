@@ -4,7 +4,9 @@ import { Item } from "./item";
 
 const LoggedItem = new Schema({
     original_item_id: {
-        type: Schema.Types.ObjectId, ref: "items"
+        type: Schema.Types.ObjectId,
+        ref: "items",
+        required: true
     }
 }).add(Item)
 

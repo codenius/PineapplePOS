@@ -1,10 +1,18 @@
 import { Schema, model } from "mongoose";
 
 export const ActionGroup = new Schema({
-    timestamp: Date,
-    type: ["add", "edit", "recover", "remove", "sell"],
+    timestamp: {
+        type: Date,
+        default: Date.now()
+    },
+    type: {
+        type: ["add", "edit", "recover", "remove", "sell"],
+        required: true
+    },
     employee: {
-        type: Schema.Types.ObjectId, ref: "employee"
+        type: Schema.Types.ObjectId,
+        ref: "employee",
+        required: true
     },
 })
 
