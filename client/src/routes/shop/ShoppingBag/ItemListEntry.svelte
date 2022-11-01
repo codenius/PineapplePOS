@@ -12,7 +12,7 @@
 			<Button>
 				<Icon name="dash" />
 			</Button>
-			<Input value={1} style="width: 3rem" />
+			<Input value={1} class="text-center" style="width: 3rem" />
 			<Button>
 				<Icon name="plus" />
 			</Button>

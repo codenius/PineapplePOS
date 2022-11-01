@@ -9,7 +9,7 @@
 		</Form>
 	</span>
 	<span>
-		<Button><Icon name="arrow-left" />Undo last purchase</Button>
+		<Button><Icon name="arrow-counterclockwise" />Undo last purchase</Button>
 		<Button><Icon name="x-lg" /> Clear shopping bag</Button>
 	</span>
 </div>
