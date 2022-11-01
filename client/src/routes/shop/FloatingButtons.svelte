@@ -5,8 +5,9 @@
 <ButtonToolbar
 	id="wrapper"
 	style="left: initial; right: 0"
-	class="fixed-bottom m-3"
+	class="fixed-bottom m-4"
 >
-	<Button color="primary" class="shadow">Pay <Icon name="arrow-right" /></Button
+	<Button size="lg" color="primary" class="shadow-lg rounded-pill"
+		>Pay <Icon name="arrow-right" /></Button
 	>
 </ButtonToolbar>

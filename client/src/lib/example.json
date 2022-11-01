@@ -1,176 +1,202 @@
-[{
-  "id": 1,
-  "category": "Music",
-  "name": "Wine - Red, Pelee Island Merlot",
-  "price": "€5,37",
-  "amount": 0,
-  "image": "http://dummyimage.com/102x79.png/5fa2dd/ffffff"
-}, {
-  "id": 2,
-  "category": "Music",
-  "name": "Coconut - Creamed, Pure",
-  "price": "€1,43",
-  "amount": 13,
-  "image": "http://dummyimage.com/144x90.png/dddddd/000000"
-}, {
-  "id": 3,
-  "category": "Garden",
-  "name": "Thyme - Lemon, Fresh",
-  "price": "€9,43",
-  "amount": 44,
-  "image": "http://dummyimage.com/130x118.png/ff4444/ffffff"
-}, {
-  "id": 4,
-  "category": "Music",
-  "name": "Parsley - Dried",
-  "price": "€4,87",
-  "amount": 39,
-  "image": "http://dummyimage.com/93x53.png/cc0000/ffffff"
-}, {
-  "id": 5,
-  "category": "Shoes",
-  "name": "Wine - Red, Antinori Santa",
-  "price": "€7,47",
-  "amount": 25,
-  "image": "http://dummyimage.com/73x123.png/5fa2dd/ffffff"
-}, {
-  "id": 6,
-  "category": "Outdoors",
-  "name": "Lamb - Loin Chops",
-  "price": "€7,75",
-  "amount": 6,
-  "image": "http://dummyimage.com/111x120.png/5fa2dd/ffffff"
-}, {
-  "id": 7,
-  "category": "Sports",
-  "name": "Salad Dressing",
-  "price": "€3,61",
-  "amount": 44,
-  "image": "http://dummyimage.com/135x119.png/cc0000/ffffff"
-}, {
-  "id": 8,
-  "category": "Grocery",
-  "name": "Apple - Granny Smith",
-  "price": "€9,19",
-  "amount": 39,
-  "image": "http://dummyimage.com/59x109.png/5fa2dd/ffffff"
-}, {
-  "id": 9,
-  "category": "Tools",
-  "name": "Veal - Inside Round / Top, Lean",
-  "price": "€8,52",
-  "amount": 27,
-  "image": "http://dummyimage.com/110x140.png/ff4444/ffffff"
-}, {
-  "id": 10,
-  "category": "Industrial",
-  "name": "Tobasco Sauce",
-  "price": "€2,23",
-  "amount": 40,
-  "image": "http://dummyimage.com/120x80.png/ff4444/ffffff"
-}, {
-  "id": 11,
-  "category": "Jewelry",
-  "name": "Tomatoes - Vine Ripe, Red",
-  "price": "€0,82",
-  "amount": 46,
-  "image": "http://dummyimage.com/107x73.png/dddddd/000000"
-}, {
-  "id": 12,
-  "category": "Home",
-  "name": "Pepper - Jalapeno",
-  "price": "€0,58",
-  "amount": 10,
-  "image": "http://dummyimage.com/105x105.png/ff4444/ffffff"
-}, {
-  "id": 13,
-  "category": "Industrial",
-  "name": "Carrots - Jumbo",
-  "price": "€4,10",
-  "amount": 9,
-  "image": "http://dummyimage.com/90x142.png/dddddd/000000"
-}, {
-  "id": 14,
-  "category": "Jewelry",
-  "name": "Container - Foam Dixie 12 Oz",
-  "price": "€0,89",
-  "amount": 43,
-  "image": "http://dummyimage.com/121x149.png/dddddd/000000"
-}, {
-  "id": 15,
-  "category": "Movies",
-  "name": "Banana",
-  "price": "€0,99",
-  "amount": 47,
-  "image": "http://dummyimage.com/127x97.png/cc0000/ffffff"
-}, {
-  "id": 16,
-  "category": "Sports",
-  "name": "Beer - Mcauslan Apricot",
-  "price": "€8,11",
-  "amount": 33,
-  "image": "http://dummyimage.com/96x128.png/cc0000/ffffff"
-}, {
-  "id": 17,
-  "category": "Automotive",
-  "name": "Wine - Champagne Brut Veuve",
-  "price": "€7,44",
-  "amount": 47,
-  "image": "http://dummyimage.com/109x51.png/5fa2dd/ffffff"
-}, {
-  "id": 18,
-  "category": "Industrial",
-  "name": "Cranberries - Frozen",
-  "price": "€5,72",
-  "amount": 41,
-  "image": "http://dummyimage.com/109x53.png/cc0000/ffffff"
-}, {
-  "id": 19,
-  "category": "Grocery",
-  "name": "Broom And Brush Rack Black",
-  "price": "€5,65",
-  "amount": 23,
-  "image": "http://dummyimage.com/87x106.png/ff4444/ffffff"
-}, {
-  "id": 20,
-  "category": "Books",
-  "name": "Thermometer Digital",
-  "price": "€6,89",
-  "amount": 43,
-  "image": "http://dummyimage.com/55x103.png/dddddd/000000"
-}, {
-  "id": 21,
-  "category": "Garden",
-  "name": "Trout - Rainbow, Frozen",
-  "price": "€2,50",
-  "amount": 19,
-  "image": "http://dummyimage.com/82x128.png/ff4444/ffffff"
-}, {
-  "id": 22,
-  "category": "Shoes",
-  "name": "Pepper - Black, Ground",
-  "price": "€9,44",
-  "amount": 38,
-  "image": "http://dummyimage.com/84x96.png/cc0000/ffffff"
-}, {
-  "id": 23,
-  "category": "Tools",
-  "name": "Shrimp - Baby, Cold Water",
-  "price": "€9,62",
-  "amount": 27,
-  "image": "http://dummyimage.com/75x108.png/cc0000/ffffff"
-}, {
-  "id": 24,
-  "category": "Kids",
-  "name": "Nantucket Apple Juice",
-  "price": "€6,33",
-  "amount": 43,
-  "image": "http://dummyimage.com/118x52.png/5fa2dd/ffffff"
-}, {
-  "id": 25,
-  "category": "Clothing",
-  "name": "Carbonated Water - Orange",
-  "price": "€8,90",
-  "amount": 23,
-  "image": "http://dummyimage.com/110x140.png/dddddd/000000"
-}]
+[
+	{
+		"id": 1,
+		"category": "Music",
+		"name": "Wine - Red, Pelee Island Merlot",
+		"price": "€5,37",
+		"amount": 0,
+		"image": "http://dummyimage.com/102x79.png/5fa2dd/ffffff"
+	},
+	{
+		"id": 2,
+		"category": "Music",
+		"name": "Coconut - Creamed, Pure",
+		"price": "€1,43",
+		"amount": 13,
+		"image": "http://dummyimage.com/144x90.png/dddddd/000000"
+	},
+	{
+		"id": 3,
+		"category": "Garden",
+		"name": "Thyme - Lemon, Fresh",
+		"price": "€9,43",
+		"amount": 44,
+		"image": "http://dummyimage.com/130x118.png/ff4444/ffffff"
+	},
+	{
+		"id": 4,
+		"category": "Music",
+		"name": "Parsley - Dried",
+		"price": "€4,87",
+		"amount": 39,
+		"image": "http://dummyimage.com/93x53.png/cc0000/ffffff"
+	},
+	{
+		"id": 5,
+		"category": "Shoes",
+		"name": "Wine - Red, Antinori Santa",
+		"price": "€7,47",
+		"amount": 25,
+		"image": "http://dummyimage.com/73x123.png/5fa2dd/ffffff"
+	},
+	{
+		"id": 6,
+		"category": "Outdoors",
+		"name": "Lamb - Loin Chops",
+		"price": "€7,75",
+		"amount": 6,
+		"image": "http://dummyimage.com/111x120.png/5fa2dd/ffffff"
+	},
+	{
+		"id": 7,
+		"category": "Sports",
+		"name": "Salad Dressing",
+		"price": "€3,61",
+		"amount": 44,
+		"image": "http://dummyimage.com/135x119.png/cc0000/ffffff"
+	},
+	{
+		"id": 8,
+		"category": "Grocery",
+		"name": "Apple - Granny Smith",
+		"price": "€9,19",
+		"amount": 39,
+		"image": "http://dummyimage.com/59x109.png/5fa2dd/ffffff"
+	},
+	{
+		"id": 9,
+		"category": "Tools",
+		"name": "Veal - Inside Round / Top, Lean",
+		"price": "€8,52",
+		"amount": 27,
+		"image": "http://dummyimage.com/110x140.png/ff4444/ffffff"
+	},
+	{
+		"id": 10,
+		"category": "Industrial",
+		"name": "Tobasco Sauce",
+		"price": "€2,23",
+		"amount": 40,
+		"image": "http://dummyimage.com/120x80.png/ff4444/ffffff"
+	},
+	{
+		"id": 11,
+		"category": "Jewelry",
+		"name": "Tomatoes - Vine Ripe, Red",
+		"price": "€0,82",
+		"amount": 46,
+		"image": "http://dummyimage.com/107x73.png/dddddd/000000"
+	},
+	{
+		"id": 12,
+		"category": "Home",
+		"name": "Pepper - Jalapeno",
+		"price": "€0,58",
+		"amount": 10,
+		"image": "http://dummyimage.com/105x105.png/ff4444/ffffff"
+	},
+	{
+		"id": 13,
+		"category": "Industrial",
+		"name": "Carrots - Jumbo",
+		"price": "€4,10",
+		"amount": 9,
+		"image": "http://dummyimage.com/90x142.png/dddddd/000000"
+	},
+	{
+		"id": 14,
+		"category": "Jewelry",
+		"name": "Container - Foam Dixie 12 Oz",
+		"price": "€0,89",
+		"amount": 43,
+		"image": "http://dummyimage.com/121x149.png/dddddd/000000"
+	},
+	{
+		"id": 15,
+		"category": "Movies",
+		"name": "Banana",
+		"price": "€0,99",
+		"amount": 47,
+		"image": "http://dummyimage.com/127x97.png/cc0000/ffffff"
+	},
+	{
+		"id": 16,
+		"category": "Sports",
+		"name": "Beer - Mcauslan Apricot",
+		"price": "€8,11",
+		"amount": 33,
+		"image": "http://dummyimage.com/96x128.png/cc0000/ffffff"
+	},
+	{
+		"id": 17,
+		"category": "Automotive",
+		"name": "Wine - Champagne Brut Veuve",
+		"price": "€7,44",
+		"amount": 47,
+		"image": "http://dummyimage.com/109x51.png/5fa2dd/ffffff"
+	},
+	{
+		"id": 18,
+		"category": "Industrial",
+		"name": "Cranberries - Frozen",
+		"price": "€5,72",
+		"amount": 41,
+		"image": "http://dummyimage.com/109x53.png/cc0000/ffffff"
+	},
+	{
+		"id": 19,
+		"category": "Grocery",
+		"name": "Broom And Brush Rack Black",
+		"price": "€5,65",
+		"amount": 23,
+		"image": "http://dummyimage.com/87x106.png/ff4444/ffffff"
+	},
+	{
+		"id": 20,
+		"category": "Books",
+		"name": "Thermometer Digital",
+		"price": "€6,89",
+		"amount": 43,
+		"image": "http://dummyimage.com/55x103.png/dddddd/000000"
+	},
+	{
+		"id": 21,
+		"category": "Garden",
+		"name": "Trout - Rainbow, Frozen",
+		"price": "€2,50",
+		"amount": 19,
+		"image": "http://dummyimage.com/82x128.png/ff4444/ffffff"
+	},
+	{
+		"id": 22,
+		"category": "Shoes",
+		"name": "Pepper - Black, Ground",
+		"price": "€9,44",
+		"amount": 38,
+		"image": "http://dummyimage.com/84x96.png/cc0000/ffffff"
+	},
+	{
+		"id": 23,
+		"category": "Tools",
+		"name": "Shrimp - Baby, Cold Water",
+		"price": "€9,62",
+		"amount": 27,
+		"image": "http://dummyimage.com/75x108.png/cc0000/ffffff"
+	},
+	{
+		"id": 24,
+		"category": "Kids",
+		"name": "Nantucket Apple Juice",
+		"price": "€6,33",
+		"amount": 43,
+		"image": "http://dummyimage.com/118x52.png/5fa2dd/ffffff"
+	},
+	{
+		"id": 25,
+		"category": "Clothing",
+		"name": "Carbonated Water - Orange",
+		"price": "€8,90",
+		"amount": 23,
+		"image": "http://dummyimage.com/110x140.png/dddddd/000000"
+	}
+]

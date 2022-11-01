@@ -1,15 +1,37 @@
 <script>
-	import { Button, Icon, Input, Form } from 'sveltestrap';
+	import {
+		Button,
+		ButtonToolbar,
+		Icon,
+		Input,
+		InputGroup,
+		InputGroupText,
+		Form
+	} from 'sveltestrap';
 </script>
 
-<div class="p-2 bg-light d-flex justify-content-between gap-1">
+<div
+	style="padding: 0.8rem;"
+	class="bg-light d-flex justify-content-between align-items-center flex-wrap gap-2"
+>
 	<span>
-		<Form>
-			<Input class="" type="search" placeholder="search..." />
+		<Form class="d-flex gap-1">
+			<InputGroup>
+				<Input type="search" placeholder="search..." />
+				<InputGroupText class="p-0">
+					<Button
+						style="border-top-left-radius: 0;
+							   border-bottom-left-radius: 0;"
+						on:click={(event) => {
+							event.preventDefault();
+						}}><Icon name="x-lg" /></Button
+					>
+				</InputGroupText>
+			</InputGroup>
 		</Form>
 	</span>
-	<span>
-		<Button><Icon name="arrow-counterclockwise" />Undo last purchase</Button>
+	<ButtonToolbar class="d-flex align-items-center gap-2">
+		<Button><Icon name="arrow-counterclockwise" /> Undo last purchase</Button>
 		<Button><Icon name="x-lg" /> Clear shopping bag</Button>
-	</span>
+	</ButtonToolbar>
 </div>

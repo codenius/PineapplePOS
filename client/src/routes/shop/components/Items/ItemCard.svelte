@@ -11,35 +11,37 @@
 	const amountError: number = 5;
 
 	function checkAmount(standard: any, warn: any, error: any): any {
-		let result: any
+		let result: any;
 		if (amount <= amountError) {
-			result = error
+			result = error;
+		} else if (amount <= amountWarn) {
+			result = warn;
+		} else {
+			result = standard;
 		}
-		else if (amount <= amountWarn) {
-			result = warn
-		}
-		else {
-			result = standard
-		}
-		return result
+		return result;
 	}
 </script>
 
 <Card class="m-1 card {checkAmount('', 'border-warning', 'border-danger')}"
-	><CardImg
-		style="height: 8rem; object-fit: contain"
-		src={image}
-	/>
+	><CardImg style="height: 8rem; object-fit: contain" src={image} />
 
 	<CardFooter class="d-flex justify-content-between gap-2">
 		<span class="d-flex align-items-baseline gap-2">
 			<span>{name}</span>
 			<CardSubtitle>
-				<small class="{checkAmount('text-muted', 'text-warning', 'text-danger')} text-nowrap">
+				<small
+					class="{checkAmount(
+						'text-muted',
+						'text-warning',
+						'text-danger'
+					)} text-nowrap"
+				>
 					{#if checkAmount(false, true, true)}
 						<Icon name="exclamation-triangle" />
 					{/if}
-					{amount} aval.</small>
+					{amount} aval.</small
+				>
 			</CardSubtitle>
 		</span>
 		<span class="text-nowrap">{price}</span>

@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { json } from '@sveltejs/kit';
-	import ItemCard from './Items/ItemCard.svelte';
-	import data from '$lib/example.json'
+	import ItemCard from './components/Items/ItemCard.svelte';
+	import data from '$lib/example.json';
 </script>
 
 <div id="wrapper">
