@@ -8,4 +8,5 @@
 	{#each data as item}
 		<ItemListEntry {...item} />
 	{/each}
+	<div style="height: 5rem;" />
 </ListGroup>
