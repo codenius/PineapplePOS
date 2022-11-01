@@ -1,4 +1,5 @@
-<script>
+<script lang="ts">
+	import { zoomFactor } from '$lib/stores/itemsZoom';
 	import {
 		Button,
 		ButtonToolbar,
@@ -14,7 +15,7 @@
 	style="padding: 0.8rem;"
 	class="bg-light d-flex justify-content-between align-items-center flex-wrap gap-2"
 >
-	<span>
+	<span class="d-flex align-items-center gap-3">
 		<Form class="d-flex gap-1">
 			<InputGroup>
 				<Input type="search" placeholder="search..." />
@@ -29,6 +30,14 @@
 				</InputGroupText>
 			</InputGroup>
 		</Form>
+		<Input
+			bind:value={$zoomFactor}
+			class="w-50"
+			min={0}
+			max={10}
+			step={1}
+			type="range"
+		/>
 	</span>
 	<ButtonToolbar class="d-flex align-items-center gap-2">
 		<Button><Icon name="arrow-counterclockwise" /> Undo last purchase</Button>

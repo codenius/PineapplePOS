@@ -1,9 +1,10 @@
 <script lang="ts">
 	import ItemCard from './components/Items/ItemCard.svelte';
 	import data from '$lib/example.json';
+	import { zoomFactor } from '$lib/stores/itemsZoom';
 </script>
 
-<div id="wrapper">
+<div style:font-size="{$zoomFactor * 0.2} em" id="wrapper">
 	{#each data as item}
 		<ItemCard {...item} />
 	{/each}
