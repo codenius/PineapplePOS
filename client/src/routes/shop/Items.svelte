@@ -4,7 +4,7 @@
 	import { zoomFactor } from '$lib/stores/itemsZoom';
 </script>
 
-<div style:font-size="{$zoomFactor * 0.2} em" id="wrapper">
+<div style="font-size: {($zoomFactor / 1.5) * 0.2}rem" id="wrapper">
 	{#each data as item}
 		<ItemCard {...item} />
 	{/each}
@@ -13,7 +13,7 @@
 <style>
 	#wrapper {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
 		grid-auto-rows: min-content;
 	}
 </style>
