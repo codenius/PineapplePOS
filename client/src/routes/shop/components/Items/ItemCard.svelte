@@ -26,7 +26,7 @@
 <Card class="m-1 card {checkAmount('', 'border-warning', 'border-danger')}"
 	><CardImg style="height: 8em; object-fit: contain" src={image} />
 
-	<CardFooter class="d-flex justify-content-between gap-2">
+	<CardFooter class="d-flex justify-content-between gap-2 h-100">
 		<span class="d-flex align-items-baseline gap-2">
 			<span>{name}</span>
 			<CardSubtitle style="font-size: inherit">
