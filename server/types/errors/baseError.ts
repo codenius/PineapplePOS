@@ -1,5 +1,10 @@
 import {ErrorCodes, ErrorJson, ErrorSource} from "./commons";
 
+/**
+ * ## Base Error
+ *
+ * Base error class for custom errors. It comes with additional features, like a custom src, error to json, ...
+ */
 class BaseError extends Error {
     src: ErrorSource
     name: string

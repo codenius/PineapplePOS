@@ -12,11 +12,11 @@ const loggedItemRouter = Router()
 
 loggedItemRouter.get('/', [
     (req,res,next)=>Authenticator.read(req,res,next),
-    (req,res)=>LoggedItemController.get(req,res)
+    (req,res)=>LoggedItemController.select.all(req,res)
 ])
 loggedItemRouter.get('/:id:', [
     (req,res,next)=>Authenticator.read(req,res,next),
-    (req,res)=>LoggedItemController.getSingle(req,res)
+    (req,res)=>LoggedItemController.select.single(req,res)
 ])
 
 
