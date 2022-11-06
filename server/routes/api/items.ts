@@ -18,7 +18,7 @@ itemRouter.get('/', [
 
 itemRouter.post('/new', [
     (req,res,next) => Authenticator.edit(req,res,next),
-    (req,res) => ItemController.create(req,res)
+    (req,res) => ItemController.create.single(req,res)
 ])
 
 itemRouter.get('/:id:', [
