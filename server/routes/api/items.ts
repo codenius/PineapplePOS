@@ -13,7 +13,7 @@ const itemRouter = Router();
 
 itemRouter.get('/', [
     (req,res,next) => Authenticator.read(req,res,next),
-    (req,res) => ItemController.get(req,res)
+    (req,res) => ItemController.select.single(req,res)
 ])
 
 itemRouter.post('/new', [
@@ -23,19 +23,20 @@ itemRouter.post('/new', [
 
 itemRouter.get('/:id:', [
     (req,res,next) => Authenticator.read(req,res,next),
-    (req,res) => ItemController.getSingle(req,res)
+    (req,res) => ItemController.select.single(req,res)
 ])
 
 itemRouter.delete('/:id:', [
     (req,res,next) => Authenticator.edit(req,res,next),
-    (req,res) => ItemController.deleteSingle(req,res)
+    (req,res) => ItemController.delete.single(req,res)
 ])
 
 itemRouter.put('/:id:', [
     (req,res,next) => Authenticator.edit(req,res,next),
-    (req,res) => ItemController.editSingle(req,res)
+    (req,res) => ItemController.update.single(req,res)
 ])
 
+/* TODO: NEED AN UPDATE OF THE SIMPLE CONTROLLER (for DoctorFuchs)
 itemRouter.get('/:id:/recover', [
     (req,res,next) => Authenticator.edit(req,res,next),
     (req,res) => ItemController.recoverSingle(req,res)
@@ -58,6 +59,6 @@ itemRouter.delete('/:id:/actions', [
             original_item_id: SimpleController.validateId(req.params.id) // validate ID to refuse any injection
         }})
 ])
-
+*/
 
 export default itemRouter
