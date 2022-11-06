@@ -1,105 +1,135 @@
-import {FilterQuery, Model, Types} from "mongoose";
+import {Model, Types} from "mongoose";
 import InputError from "../types/errors/inputError";
 import DatabaseError from "../types/errors/databaseError";
+import validate from "../types/validator";
+import MethodError from "../types/errors/methodError";
+import ControllerChild from "./controllerChild";
+import {Request, Response} from "express";
 
+/**
+ * ## Simple Controller
+ *
+ * A simple controller has the ability to control simple management tasks.
+ * A controller like this connects the database (MongoDB) and Express with each other.
+ *
+ * For example select, update, delete, create statements.
+ */
 class SimpleController {
     model: Model<any>
 
+    /**
+     * Inits the SimpleController from a mongoose model
+     *
+     * @param model - A mongoose model object that is related to any mongoose schema
+     */
     constructor(model: Model<any>) {
         this.model = model
     }
 
-    /* Controller function to get all object of this type*/
-    get(req, res, filter: FilterQuery<any> = {"deleted": false}) {
-        this.model.find(filter).exec().then(
-            r => res.json(r),
-            r => { throw new DatabaseError() }
-        )
+
+    /**
+     * ## Select
+     *
+     * This controller child manages selecting. It has the ability to read documents from the database.
+     *
+     * @returns ControllerChild
+     */
+    get select() {
+        return new ControllerChild(this, [
+            /* Only allow GET methods */
+            (req, res) => { this.allowMethod(req, res, ["GET"]) }
+        ],[
+            (req, res) => {
+                validate(Types.ObjectId, req.params.id)
+                return this.model.findById(req.params.id).exec()
+            }
+        ], [
+            (req, res) => {
+                return this.model.find(req.body).exec()
+            }
+        ]);
     }
 
-    /* Controller function to get a single object */
-    getSingle(req, res) {
-        SimpleController.validateId(req.params.id)
-        this.model.findById(req.params.id).exec().then(r => res.status(200).json(r))
+
+    /**
+     * ## Update
+     *
+     * This controller child manages editing/updating. It has the ability to change documents from the database.
+     */
+    get update() {
+        return new ControllerChild(this, [
+            (req, res) => {this.allowMethod(req, res, ["PUT", "PATCH"])}
+        ],[
+            (req, res) => {
+                validate(Types.ObjectId, req.params.id)
+                validate(this.model, req.body)
+                return this.model.findByIdAndUpdate(req.params.id, req.body).exec()
+            }
+        ], [
+            (req, res) => {
+                validate([this.model], req.body)
+                return req.body.map(elem => this.model.findByIdAndUpdate(elem._id, elem).exec())
+            }
+        ]);
     }
 
-    /* Controller function to edit the given object */
-    edit(req, res, filter: FilterQuery<any> = {"deleted": false}) {
-        if (!Array.isArray(req.body)) {
-            throw new TypeError("request body is not a list")
+    /**
+     * ## Delete
+     *
+     * This controller child manages deleting. It has the ability to delete documents from the database.
+     */
+    get delete() {
+        return new ControllerChild(this, [
+            (req, res) => {this.allowMethod(req, res, ["DELETE"])}
+        ], [
+            (req, res) => {
+                validate(Types.ObjectId, req.params.id)
+                return this.model.findByIdAndDelete(req.params.id).exec()
+            }
+        ], [
+            (req, res) => {
+                validate([Types.ObjectId], req.body)
+                return req.body.map(elem => this.model.findByIdAndDelete(elem._id, elem).exec())
+            }
+        ]);
+    }
+
+    /**
+     * ## Create
+     *
+     * This controller child manages creating. It has the ability to create new documents and add them to the database.
+     */
+    get create() {
+        return new ControllerChild(this, [
+            (req, res) => {this.allowMethod(req, res, ["POST"])}
+        ], [
+            (req, res) => {
+                validate(this.model, req.body)
+                let document = new this.model(req.body)
+                let err = document.validateSync()
+                if (err) { throw new DatabaseError(err._message) }
+                document.save()
+                return document
+            }
+        ], [
+            (req, res) => {
+                throw new InputError("Can't create multiple documents at the same time")
+            }
+        ])
+    }
+
+    /**
+     * A middleware to restrict invalid http methods.
+     *
+     * @param req - Express request object
+     * @param res - Express response object
+     * @param methods - An array of allowed http methods
+     * @private
+     */
+    private allowMethod(req: Request, res: Response, methods : Array<"GET"|"POST"|"PUT"|"DELETE"|"PATCH"|string>) {
+        if (!methods.includes(req.method.toUpperCase())) {
+            throw new MethodError(`${req.method} method is not allowed`)
         }
-        req.body.forEach(item => {
-            this.model.findByIdAndUpdate(item._id, item).where(filter).exec().catch(
-                r => { throw new DatabaseError() }
-            )
-        })
-    }
-
-    editSingle(req, res) {
-        SimpleController.validateId(req.params.id)
-        this.model.findByIdAndUpdate(req.params.id, this.cast(req.body)).exec().catch(
-            r => { throw new DatabaseError() }
-        )
-    }
-
-    delete(req, res, filter: FilterQuery<any> = {"deleted": false}) {
-        if (!Array.isArray(req.body)) {
-            throw new TypeError("request body is not a list")
-        }
-        req.body.forEach(item => {
-            this.model.findByIdAndUpdate(item._id, {"deleted": true}).where(filter).exec().catch(
-                r => { throw new DatabaseError() }
-            )
-        })
-    }
-
-    deleteSingle(req, res) {
-        SimpleController.validateId(req.params.id)
-        this.model.findByIdAndUpdate(req.params.id, {"deleted": true}).exec().catch(
-            r => { throw new DatabaseError() }
-        )
-    }
-
-    recover(res, req) {
-        if (!Array.isArray(req.body)) {
-            throw new TypeError("request body is not a list")
-        }
-        req.body.forEach(item => {
-            this.model.findByIdAndUpdate(item._id, {"deleted": false}).exec().catch(
-                r => { throw new DatabaseError() }
-            )
-        })
-    }
-
-    recoverSingle(req, res) {
-        SimpleController.validateId(req.params.id)
-        this.model.findByIdAndUpdate(req.params.id, {"deleted": false}).exec().catch(
-            r => { throw new DatabaseError() }
-        )
-        res.status(200)
-    }
-
-    create(req, res) {
-        let item = new this.model(this.cast(req.body))
-        item.save().catch(
-            r => { throw new DatabaseError() }
-        )
-        res.send(item)
-    }
-
-    public static validateId(id: string) {
-        if (!Types.ObjectId.isValid(id)) {
-            throw new InputError("invalid ID for an item: "+id)
-        }
-        return id
-    }
-
-    /* Cast a plain object to the schema of the given mongoose model */
-    private cast(obj: object) {
-        let casted = new this.model(obj)
-        let err = casted.validateSync()
-        if (err) {throw new InputError(err._message)}
-        return casted
     }
 }
 
