@@ -1,5 +1,5 @@
 # typescript builds
-*.js
+build
 
 # IntelliJ IDEs
 POS.iml
