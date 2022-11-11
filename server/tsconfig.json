@@ -1,10 +1,11 @@
 {
     "compilerOptions": {
-        "target": "ES5",
+        "target": "ES6",
         "removeComments": true,
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
         "experimentalDecorators": true,
-        "outDir": "./build"
+        "outDir": "./build",
+        "moduleResolution": "node"
     }
 }

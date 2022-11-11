@@ -43,9 +43,9 @@ class ControllerChild {
      * @param res - Express Response Object
      */
     single(req: Request, res: Response) {
-        if (Array.isArray(req.body)) { throw new InputError("Validation Error")}
         this.handlers.forEach(fn => fn(req, res))
-        res.send(200).json(this.singleHandlers.map(fn => fn(req, res)[-1]))
+        let json = this.singleHandlers.map(fn => fn(req, res))[-1]
+        res.status(200).json(json)
     }
 
     /**
@@ -55,10 +55,9 @@ class ControllerChild {
      * @param res - Express Response Object
      */
     all(req: Request, res: Response) {
-        // if request body is not an array, it will not execute the handlers
-        if (!Array.isArray(req.body)) { throw new InputError("Validation Error")}
         this.handlers.forEach(fn => fn(req, res))
-        res.send(200).json(this.singleHandlers.map(fn => fn(req, res)[-1]))
+        let json = this.allHandlers.map(fn => fn(req, res))[-1] || []
+        res.status(200).json(json)
     }
 }
 

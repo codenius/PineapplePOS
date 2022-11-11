@@ -11,7 +11,7 @@ const levels = {
 
 const logger = createLogger({
     levels: levels,
-    level: process.env.LOG_LEVEL || 'info',
+    level: process.env.LOG_LEVEL || 'error',
     transports: [
         new transports.Console({
             format: format.combine(

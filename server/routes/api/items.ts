@@ -13,7 +13,7 @@ const itemRouter = Router();
 
 itemRouter.get('/', [
     (req,res,next) => Authenticator.read(req,res,next),
-    (req,res) => ItemController.select.single(req,res)
+    (req,res) => ItemController.select.all(req,res)
 ])
 
 itemRouter.post('/new', [
