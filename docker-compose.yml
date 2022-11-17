@@ -25,9 +25,12 @@ services:
             - global
 
     proxy:
-        image: nginx
+        build: ./proxy
         networks:
             - global
+        ports:
+            - "80:80"
+        restart: always
 
 networks:
     global:
