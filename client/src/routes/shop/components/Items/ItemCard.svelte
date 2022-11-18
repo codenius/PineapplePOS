@@ -1,16 +1,23 @@
 <script lang="ts">
+	import { shoppingBag } from '$lib/stores/shoppingBag';
 	import { CardImg, Card, CardSubtitle, CardFooter, Icon } from 'sveltestrap';
+	import type { Item } from '$lib/types/Item';
 
-	export let id: number;
-	export let name: string;
-	export let price: string;
-	export let amount: number;
-	export let image: string;
+	export let id: Item['id'];
+	export let name: Item['name'];
+	export let price: Item['price'];
+	export let amount: Item['amount'];
+	export let image: Item['image'];
 
 	const amountWarn: number = 15;
 	const amountError: number = 5;
 
-	function checkAmount(standard: any, warn: any, error: any): any {
+	function checkAmount(
+		amount: number,
+		standard: any,
+		warn: any,
+		error: any
+	): any {
 		let result: any;
 		if (amount <= amountError) {
 			result = error;
@@ -21,9 +28,26 @@
 		}
 		return result;
 	}
+
+	function increaseInShoppingBag(): void {
+		if (amount - 1 >= 0) {
+			let shoppingBagIndex = $shoppingBag.findIndex((item) => item.id === id);
+			let shoppingBagEntry = $shoppingBag[shoppingBagIndex];
+			if (shoppingBagEntry) {
+				let bagAmount = shoppingBagEntry.amount + 1;
+				$shoppingBag[shoppingBagIndex].amount = bagAmount;
+			} else {
+				let bagAmount = 1;
+				$shoppingBag.push({ id: id, amount: bagAmount });
+			}
+			$shoppingBag = $shoppingBag;
+		}
+	}
 </script>
 
-<Card class="m-1 card {checkAmount('', 'border-warning', 'border-danger')}"
+<Card
+	on:click={increaseInShoppingBag}
+	class="m-1 card {checkAmount(amount, '', 'border-warning', 'border-danger')}"
 	><CardImg style="height: 8em; object-fit: contain" src={image} />
 
 	<CardFooter class="d-flex justify-content-between gap-2 h-100">
@@ -32,12 +56,13 @@
 			<CardSubtitle style="font-size: inherit">
 				<small
 					class="{checkAmount(
+						amount,
 						'text-muted',
 						'text-warning',
 						'text-danger'
 					)} text-nowrap"
 				>
-					{#if checkAmount(false, true, true)}
+					{#if checkAmount(amount, false, true, true)}
 						<Icon name="exclamation-triangle" />
 					{/if}
 					{amount} aval.</small

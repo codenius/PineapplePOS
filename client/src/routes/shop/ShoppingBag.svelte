@@ -1,12 +1,21 @@
-<script>
+<script lang="ts">
+	import { shoppingBag } from '$lib/stores/shoppingBag';
+	import { useQuery } from '@sveltestack/svelte-query';
 	import { ListGroup } from 'sveltestrap';
-	import ItemListEntry from './components/ShoppingBag/ItemListEntry.svelte';
-	import data from '$lib/example.json';
+	import ShoppingBagEntry from './components/ShoppingBag/ShoppingBagEntry.svelte';
+	import type { Item } from '$lib/types/Item';
+
+	let queryResult = useQuery<Item[], Error>('items');
 </script>
 
 <ListGroup class="p-2">
-	{#each data as item}
-		<ItemListEntry {...item} />
-	{/each}
-	<div style="height: 5rem;" />
+	{#if $queryResult.isSuccess}
+		{#each $shoppingBag as { id, amount }}
+			<ShoppingBagEntry
+				{...$queryResult.data.find((item) => item.id == id)}
+				shoppingBagAmount={amount}
+			/>
+		{/each}
+		<div style="height: 5rem;" />
+	{/if}
 </ListGroup>
