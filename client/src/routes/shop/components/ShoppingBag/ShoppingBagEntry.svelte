@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ListGroupItem } from 'sveltestrap';
+	import { ListGroupItem, Button, Icon } from 'sveltestrap';
 	import Counter from './Counter.svelte';
 	import type { Item } from '$lib/types/Item';
 	import { shoppingBag } from '$lib/stores/shoppingBag';
@@ -49,5 +49,14 @@
 	<span class="d-flex align-items-center flex-shrink-0 gap-2">
 		<Counter max={amount} bind:value={shoppingBagAmount} />
 		<span>{price}</span>
+		<Button
+			on:click={() => {
+				shoppingBagAmount = 0;
+			}}
+			outline={true}
+			color="danger"
+		>
+			<Icon name="trash" />
+		</Button>
 	</span>
 </ListGroupItem>
