@@ -1,5 +1,6 @@
 <script lang="ts">
 	import ZoomController from './components/ZoomController.svelte';
+	import { shoppingBag, clearedShoppingBag } from '$lib/stores/shoppingBag';
 	import {
 		Button,
 		ButtonToolbar,
@@ -34,6 +35,6 @@
 	</span>
 	<ButtonToolbar class="d-flex align-items-center gap-2">
 		<Button><Icon name="arrow-counterclockwise" /> Undo last purchase</Button>
-		<Button><Icon name="x-lg" /> Clear shopping bag</Button>
+		<Button class="border-danger text-danger" color="light" on:click={() => {$clearedShoppingBag = $shoppingBag ;$shoppingBag = []}}><Icon name="x-lg" /> Clear shopping bag</Button>
 	</ButtonToolbar>
 </div>
