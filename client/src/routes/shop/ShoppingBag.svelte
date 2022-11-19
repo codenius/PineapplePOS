@@ -52,14 +52,14 @@
 			in:fly={{ y: 30, delay: 100, duration: 150, easing: cubicOut }}
 			class="p-4 text-center"
 		>
-			<Icon class="h1" name="cart-x" />
+			<div class="m-3"><Icon class="h1" name="cart-x" /></div>
 			<h6 class="text-muted">
 				No items in shopping bag yet. Click one on the left to add it.
 			</h6>
 			{#if $clearedShoppingBag.length}
 				<Button
-					class="border-secondary text-secondary"
-					color="light"
+					outline={true}
+					color="secondary"
 					on:click={() => {
 						$shoppingBag = $clearedShoppingBag;
 					}}

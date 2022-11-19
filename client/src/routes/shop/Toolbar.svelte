@@ -35,6 +35,13 @@
 	</span>
 	<ButtonToolbar class="d-flex align-items-center gap-2">
 		<Button><Icon name="arrow-counterclockwise" /> Undo last purchase</Button>
-		<Button class="border-danger text-danger" color="light" on:click={() => {$clearedShoppingBag = $shoppingBag ;$shoppingBag = []}}><Icon name="x-lg" /> Clear shopping bag</Button>
+		<Button
+			outline={true}
+			color="danger"
+			on:click={() => {
+				$clearedShoppingBag = $shoppingBag;
+				$shoppingBag = [];
+			}}><Icon name="x-lg" /> Clear shopping bag</Button
+		>
 	</ButtonToolbar>
 </div>
