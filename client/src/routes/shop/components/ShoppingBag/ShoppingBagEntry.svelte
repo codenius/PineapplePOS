@@ -29,9 +29,7 @@
 </script>
 
 <ListGroupItem class="d-flex justify-content-between align-items-center">
-	<span
-		class="d-flex justify-content-between align-items-center gap-2 overflow-hidden"
-	>
+	<span class="d-flex justify-content-between align-items-center gap-2">
 		<span class="rounded border p-1" style="height: 3rem; aspect-ratio: 1 / 1;">
 			<img
 				class="h-100 w-100"
@@ -40,7 +38,13 @@
 				alt=""
 			/>
 		</span>
-		<span class="text-truncate">{name}</span>
+		<span
+			style="overflow-y:hidden; 
+			word-break: break-word;  
+			display: -webkit-box;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 2;">{name}</span
+		>
 	</span>
 	<span class="d-flex align-items-center flex-shrink-0 gap-2">
 		<Counter max={amount} bind:value={shoppingBagAmount} />

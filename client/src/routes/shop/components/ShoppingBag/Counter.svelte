@@ -61,8 +61,8 @@
 				value = inputValue;
 			}}
 			bind:value={inputValue}
-			class="text-center btn-sm rounded-0 h-100 CounterInput"
-			style="width: 3rem"
+			class="p-1 text-center btn-sm rounded-0 h-100 CounterInput"
+			style="width: 2rem"
 		/>
 	</Form>
 	<InputGroupText class="p-0">

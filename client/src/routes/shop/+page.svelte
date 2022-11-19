@@ -9,10 +9,10 @@
 <div id="wrapper" class="h-100 d-flex flex-column">
 	<Toolbar />
 	<Splitpanes class="Splitpanes" dblClickSplitter={false}>
-		<Pane minSize={30} class="scroll-pane">
+		<Pane minSize="30" class="scroll-pane">
 			<Items />
 		</Pane>
-		<Pane minSize={20} size={30} class="scroll-pane">
+		<Pane minSize="35" size="40" class="scroll-pane">
 			<ShoppingBag />
 		</Pane>
 	</Splitpanes>
