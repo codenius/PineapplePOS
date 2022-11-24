@@ -4,27 +4,41 @@ import {Router} from "express";
 
 const actionRouter = Router()
 
-/* Action Router paths using the ActionController */
-
 /**
- * Docs: https://github.com/DoctorFuchs/POS/blob/master/docs/api.md#actions
+ * Get all Actions
+ * 
+ * @access - Level:Read
  */
-
 actionRouter.get('/', [
     (req,res,next) => Authenticator.read(req,res,next),
     (req,res) => ActionController.select.all(req,res)
 ])
 
+/**
+ * Delete all actions
+ * 
+ * @access - Level:Edit
+ */
 actionRouter.delete('/', [
     (req,res,next) => Authenticator.edit(req,res,next),
     (req,res) => ActionController.delete.all(req,res)
 ])
 
+/**
+ * Get a single Action from id
+ * 
+ * @access - Level:Read
+ */
 actionRouter.get('/:id:', [
     (req,res,next) => Authenticator.read(req,res,next),
     (req,res) => ActionController.select.single(req,res)
 ])
 
+/**
+ * Delete a single Action from id
+ * 
+ * @access - Level:Edit
+ */
 actionRouter.delete('/:id:', [
     (req,res,next) => Authenticator.edit(req,res,next),
     (req,res) => ActionController.delete.single(req,res)

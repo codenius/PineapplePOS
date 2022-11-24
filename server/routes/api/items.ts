@@ -6,31 +6,51 @@ import SimpleController from "../../controllers/simpleController";
 
 const itemRouter = Router();
 
-/* Item Router paths using the ItemController
- *
- * Docs: https://github.com/DoctorFuchs/POS/blob/master/docs/api.md#items
+/**
+ * Get all Items
+ * 
+ * @access - Level:Read
  */
-
 itemRouter.get('/', [
     (req,res,next) => Authenticator.read(req,res,next),
     (req,res) => ItemController.select.all(req,res)
 ])
 
+/**
+ * Creates a new Item
+ * 
+ * @access - Level:Edit
+ */
 itemRouter.post('/new', [
     (req,res,next) => Authenticator.edit(req,res,next),
     (req,res) => ItemController.create.single(req,res)
 ])
 
+/**
+ * Gets a single Item from id
+ * 
+ * @access - Level:Read
+ */
 itemRouter.get('/:id:', [
     (req,res,next) => Authenticator.read(req,res,next),
     (req,res) => ItemController.select.single(req,res)
 ])
 
+/**
+ * Delets a single Item from id
+ * 
+ * @access - Level:Edit
+ */
 itemRouter.delete('/:id:', [
     (req,res,next) => Authenticator.edit(req,res,next),
     (req,res) => ItemController.delete.single(req,res)
 ])
 
+/**
+ * Updates a single Item from id
+ * 
+ * @access - Level:Edit
+ */
 itemRouter.put('/:id:', [
     (req,res,next) => Authenticator.edit(req,res,next),
     (req,res) => ItemController.update.single(req,res)

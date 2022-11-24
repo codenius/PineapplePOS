@@ -9,6 +9,11 @@ class BaseError extends Error {
     src: ErrorSource
     name: string
 
+    /**
+     * @constructor
+     * @param msg = A message that is thrown to the user
+     * @param src = A error source 
+     */
     constructor(msg: string = "If you see this error message, please report it", src: ErrorSource) {
         super(msg);
         this.src = src
@@ -16,6 +21,11 @@ class BaseError extends Error {
         Object.setPrototypeOf(this, BaseError.prototype);
     }
 
+    /**
+     * Converts the error into JSON
+     * 
+     * @returns ErrorJson
+     */
     toErrorJson(): ErrorJson {
         return {
             type: this.name,
@@ -24,6 +34,11 @@ class BaseError extends Error {
         }
     }
 
+    /**
+     * sends the json as error response
+     * 
+     * @param res - an express Response object 
+     */
     send(res) {
         res.status(ErrorCodes[this.src]).json(this.toErrorJson())
     }

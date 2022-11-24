@@ -4,16 +4,22 @@ import Authenticator from "../../auth/authenticator";
 
 const loggedItemRouter = Router()
 
-/* Logged Item Router paths using the LoggedItemController */
 
-/** 
- * * Docs: https://github.com/DoctorFuchs/POS/blob/master/docs/api.md#logged-items
+/**
+ * Get all logged Items
+ * 
+ * @access - Level:Read
  */
-
 loggedItemRouter.get('/', [
     (req,res,next)=>Authenticator.read(req,res,next),
     (req,res)=>LoggedItemController.select.all(req,res)
 ])
+
+/**
+ * Get a single item from id
+ * 
+ * @access - Level:Read
+ */
 loggedItemRouter.get('/:id:', [
     (req,res,next)=>Authenticator.read(req,res,next),
     (req,res)=>LoggedItemController.select.single(req,res)
