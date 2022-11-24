@@ -28,7 +28,7 @@ class ControllerChild {
         instance: SimpleController,
         handlers: Array<(req, res) => any> = [],
         singleHandlers: Array<(req, res) => any> = [],
-        allHandlers: Array<(req, res) => any> = []
+        allHandlers: Array<(req, res) => any > = []
     ) {
         this.handlers = handlers
         this.singleHandlers = singleHandlers
@@ -44,8 +44,8 @@ class ControllerChild {
      */
     single(req: Request, res: Response) {
         this.handlers.forEach(fn => fn(req, res))
-        let json = this.singleHandlers.map(fn => fn(req, res))[-1]
-        res.status(200).json(json)
+        let json = this.singleHandlers.map(fn => fn(req, res)).at(-1)
+        this.send(res, 200, json)
     }
 
     /**
@@ -56,8 +56,24 @@ class ControllerChild {
      */
     all(req: Request, res: Response) {
         this.handlers.forEach(fn => fn(req, res))
-        let json = this.allHandlers.map(fn => fn(req, res))[-1] || []
-        res.status(200).json(json)
+        let json = this.allHandlers.map(fn => fn(req, res)).at(-1)
+        this.send(res, 200, json)
+    }
+
+    /**
+     * Internal send function for the controller child, it unpacks the json, if json is a Promise
+     *
+     * @param res - Express Response object
+     * @param code - HTTP Status code
+     * @param json - Content of the response
+     */
+    private send(res, code, json) {
+        const _send = (_json) => res.status(code).json(_json)
+        if (!(json instanceof Promise)) {
+            _send(json)
+        } else {
+            json.then((j) => {_send(j)})
+        }
     }
 }
 

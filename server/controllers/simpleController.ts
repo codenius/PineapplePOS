@@ -45,7 +45,8 @@ class SimpleController {
             }
         ], [
             (req, res) => {
-                return this.model.find(req.body).exec()
+                let filter = req.body || {}
+                return this.model.find(filter).exec()
             }
         ]);
     }

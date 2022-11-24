@@ -31,17 +31,17 @@ itemRouter.post('/new', [
  * 
  * @access - Level:Read
  */
-itemRouter.get('/:id:', [
+itemRouter.get('/:id', [
     (req,res,next) => Authenticator.read(req,res,next),
     (req,res) => ItemController.select.single(req,res)
 ])
 
 /**
- * Delets a single Item from id
+ * Deletes a single Item from id
  * 
  * @access - Level:Edit
  */
-itemRouter.delete('/:id:', [
+itemRouter.delete('/:id', [
     (req,res,next) => Authenticator.edit(req,res,next),
     (req,res) => ItemController.delete.single(req,res)
 ])
@@ -51,7 +51,7 @@ itemRouter.delete('/:id:', [
  * 
  * @access - Level:Edit
  */
-itemRouter.put('/:id:', [
+itemRouter.put('/:id', [
     (req,res,next) => Authenticator.edit(req,res,next),
     (req,res) => ItemController.update.single(req,res)
 ])

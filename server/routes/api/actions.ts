@@ -15,7 +15,7 @@ actionRouter.get('/', [
 ])
 
 /**
- * Delete all actions
+ * Deletes all actions
  * 
  * @access - Level:Edit
  */
@@ -29,7 +29,7 @@ actionRouter.delete('/', [
  * 
  * @access - Level:Read
  */
-actionRouter.get('/:id:', [
+actionRouter.get('/:id', [
     (req,res,next) => Authenticator.read(req,res,next),
     (req,res) => ActionController.select.single(req,res)
 ])
@@ -39,7 +39,7 @@ actionRouter.get('/:id:', [
  * 
  * @access - Level:Edit
  */
-actionRouter.delete('/:id:', [
+actionRouter.delete('/:id', [
     (req,res,next) => Authenticator.edit(req,res,next),
     (req,res) => ActionController.delete.single(req,res)
 ])

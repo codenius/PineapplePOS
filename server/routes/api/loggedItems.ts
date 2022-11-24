@@ -20,7 +20,7 @@ loggedItemRouter.get('/', [
  * 
  * @access - Level:Read
  */
-loggedItemRouter.get('/:id:', [
+loggedItemRouter.get('/:id', [
     (req,res,next)=>Authenticator.read(req,res,next),
     (req,res)=>LoggedItemController.select.single(req,res)
 ])
