@@ -64,12 +64,12 @@ class SimpleController {
             (req, res) => {
                 validate(Types.ObjectId, req.params.id)
                 validate(this.model, req.body)
-                return this.model.findByIdAndUpdate(req.params.id, req.body).exec()
+                return this.model.findByIdAndUpdate(req.params.id, req.body, {new: true}).exec()
             }
         ], [
             (req, res) => {
                 validate([this.model], req.body)
-                return req.body.map(elem => this.model.findByIdAndUpdate(elem._id, elem).exec())
+                return req.body.map(elem => this.model.findByIdAndUpdate(elem._id, elem, {new: true}).exec())
             }
         ]);
     }
