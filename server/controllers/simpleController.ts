@@ -1,4 +1,4 @@
-import {Model, Types} from "mongoose";
+import {CastError, Model, Types} from "mongoose";
 import InputError from "../types/errors/inputError";
 import DatabaseError from "../types/errors/databaseError";
 import validate from "../types/validator";
@@ -63,13 +63,11 @@ class SimpleController {
         ],[
             (req, res) => {
                 validate(Types.ObjectId, req.params.id)
-                validate(this.model, req.body)
-                return this.model.findByIdAndUpdate(req.params.id, req.body, {new: true}).exec()
+                return this.model.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators: true}).exec().catch(() => {})
             }
         ], [
             (req, res) => {
-                validate([this.model], req.body)
-                return req.body.map(elem => this.model.findByIdAndUpdate(elem._id, elem, {new: true}).exec())
+                return req.body.map(elem => this.model.findByIdAndUpdate(elem._id, elem, {new: true, runValidators: true}).exec().catch(() => {}))
             }
         ]);
     }
@@ -105,7 +103,6 @@ class SimpleController {
             (req, res) => {this.allowMethod(req, res, ["POST"])}
         ], [
             (req, res) => {
-                validate(this.model, req.body)
                 let document = new this.model(req.body)
                 let err = document.validateSync()
                 if (err) { throw new DatabaseError(err._message) }

@@ -15,7 +15,11 @@ function mapJSON(value: object | Array<any> | number | string | boolean, fn: (va
     switch (typeof value) {
         case "object": {
             Object.keys(value).forEach((_key) => {
-                value[_key] = mapJSON(value[_key])
+                if (_key.startsWith("_")) {
+                    delete value[_key]
+                } else {
+                    value[_key] = mapJSON(value[_key])
+                }
             })
             return value
         }
@@ -31,7 +35,7 @@ function mapJSON(value: object | Array<any> | number | string | boolean, fn: (va
 }
 
 /**
- * A inpt middleware for an express router/app to encode input from users.
+ * An input middleware for an express router/app to encode input from users.
  * This is our defender against injections from input.
  */
 export function inputMiddleware(req, res, next) {
