@@ -11,7 +11,7 @@ const actionRouter = Router()
  */
 actionRouter.get('/', [
     (req,res,next) => Authenticator.read(req,res,next),
-    (req,res) => ActionController.select.all(req,res)
+    (req,res,next) => ActionController.select.all(req,res,next)
 ])
 
 /**
@@ -21,7 +21,7 @@ actionRouter.get('/', [
  */
 actionRouter.delete('/', [
     (req,res,next) => Authenticator.edit(req,res,next),
-    (req,res) => ActionController.delete.all(req,res)
+    (req,res,next) => ActionController.delete.all(req,res,next)
 ])
 
 /**
@@ -31,7 +31,7 @@ actionRouter.delete('/', [
  */
 actionRouter.get('/:id', [
     (req,res,next) => Authenticator.read(req,res,next),
-    (req,res) => ActionController.select.single(req,res)
+    (req,res,next) => ActionController.select.single(req,res, next)
 ])
 
 /**
@@ -41,7 +41,7 @@ actionRouter.get('/:id', [
  */
 actionRouter.delete('/:id', [
     (req,res,next) => Authenticator.edit(req,res,next),
-    (req,res) => ActionController.delete.single(req,res)
+    (req,res,next) => ActionController.delete.single(req,res,next)
 ])
 
 export default actionRouter

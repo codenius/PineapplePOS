@@ -12,7 +12,7 @@ const loggedItemRouter = Router()
  */
 loggedItemRouter.get('/', [
     (req,res,next)=>Authenticator.read(req,res,next),
-    (req,res)=>LoggedItemController.select.all(req,res)
+    (req,res,next)=>LoggedItemController.select.all(req,res,next)
 ])
 
 /**
@@ -22,11 +22,7 @@ loggedItemRouter.get('/', [
  */
 loggedItemRouter.get('/:id', [
     (req,res,next)=>Authenticator.read(req,res,next),
-    (req,res)=>LoggedItemController.select.single(req,res)
+    (req,res,next)=>LoggedItemController.select.single(req,res,next)
 ])
-
-
-
-
 
 export default loggedItemRouter

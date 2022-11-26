@@ -1,4 +1,4 @@
-import {CastError, Model, Types} from "mongoose";
+import {CastError, Model, QueryOptions, Types} from "mongoose";
 import InputError from "../types/errors/inputError";
 import DatabaseError from "../types/errors/databaseError";
 import validate from "../types/validator";
@@ -16,6 +16,7 @@ import {Request, Response} from "express";
  */
 class SimpleController {
     model: Model<any>
+    options: QueryOptions
 
     /**
      * Inits the SimpleController from a mongoose model
@@ -24,6 +25,7 @@ class SimpleController {
      */
     constructor(model: Model<any>) {
         this.model = model
+        this.options = {new: true, runValidators: true}
     }
 
 
@@ -39,14 +41,14 @@ class SimpleController {
             /* Only allow GET methods */
             (req, res) => { this.allowMethod(req, res, ["GET"]) }
         ],[
-            (req, res) => {
+            async (req, res) => {
                 validate(Types.ObjectId, req.params.id)
-                return this.model.findById(req.params.id).exec()
+                return await this.model.findById(req.params.id).exec()
             }
         ], [
-            (req, res) => {
+            async (req, res) => {
                 let filter = req.body || {}
-                return this.model.find(filter).exec()
+                return await this.model.find(filter).exec()
             }
         ]);
     }
@@ -61,13 +63,13 @@ class SimpleController {
         return new ControllerChild(this, [
             (req, res) => {this.allowMethod(req, res, ["PUT", "PATCH"])}
         ],[
-            (req, res) => {
+            async (req, res) => {
                 validate(Types.ObjectId, req.params.id)
-                return this.model.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators: true}).exec().catch(() => {})
+                return await this.model.findByIdAndUpdate(req.params.id, req.body, this.options).exec()
             }
         ], [
-            (req, res) => {
-                return req.body.map(elem => this.model.findByIdAndUpdate(elem._id, elem, {new: true, runValidators: true}).exec().catch(() => {}))
+            async (req, res) => {
+                return await req.body.map(async elem => await this.model.findByIdAndUpdate(elem._id, elem, this.options).exec())
             }
         ]);
     }
@@ -81,14 +83,15 @@ class SimpleController {
         return new ControllerChild(this, [
             (req, res) => {this.allowMethod(req, res, ["DELETE"])}
         ], [
-            (req, res) => {
+            async (req, res) => {
                 validate(Types.ObjectId, req.params.id)
-                return this.model.findByIdAndDelete(req.params.id).exec()
+                req.body._id = req.params.id
+                return await this.model.findOneAndDelete(req.body, this.options).exec()
             }
         ], [
-            (req, res) => {
-                validate([Types.ObjectId], req.body)
-                return req.body.map(elem => this.model.findByIdAndDelete(elem._id, elem).exec())
+            async (req, res) => {
+                if (!Array.isArray(req.body)) { req.body = [] }
+                return await req.body.map(async elem => await this.model.findOneAndDelete(elem, this.options).exec())
             }
         ]);
     }

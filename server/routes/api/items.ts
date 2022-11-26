@@ -2,9 +2,9 @@ import ItemController from "../../controllers/api/itemController";
 import {Router} from "express";
 import Authenticator from "../../auth/authenticator";
 import ActionController from "../../controllers/api/actionController";
-import SimpleController from "../../controllers/simpleController";
 import validate from "../../types/validator";
 import {Types} from "mongoose";
+import actionRouter from "./actions";
 
 const itemRouter = Router();
 
@@ -15,7 +15,7 @@ const itemRouter = Router();
  */
 itemRouter.get('/', [
     (req,res,next) => Authenticator.read(req,res,next),
-    (req,res) => ItemController.select.all(req,res)
+    (req,res,next) => ItemController.select.all(req,res,next)
 ])
 
 /**
@@ -25,7 +25,7 @@ itemRouter.get('/', [
  */
 itemRouter.post('/new', [
     (req,res,next) => Authenticator.edit(req,res,next),
-    (req,res) => ItemController.create.single(req,res)
+    (req,res,next) => ItemController.create.single(req,res,next)
 ])
 
 /**
@@ -48,7 +48,7 @@ itemRouter.get("/categories", [
  */
 itemRouter.get('/:id', [
     (req,res,next) => Authenticator.read(req,res,next),
-    (req,res) => ItemController.select.single(req,res)
+    (req,res,next) => ItemController.select.single(req,res,next)
 ])
 
 /**
@@ -58,7 +58,7 @@ itemRouter.get('/:id', [
  */
 itemRouter.delete('/:id', [
     (req,res,next) => Authenticator.edit(req,res,next),
-    (req,res) => ItemController.delete.single(req,res)
+    (req,res,next) => ItemController.delete.single(req,res,next)
 ])
 
 /**
@@ -68,25 +68,15 @@ itemRouter.delete('/:id', [
  */
 itemRouter.put('/:id', [
     (req,res,next) => Authenticator.edit(req,res,next),
-    (req,res) => ItemController.update.single(req,res)
+    (req,res,next) => ItemController.update.single(req,res,next)
 ])
 
-
-itemRouter.get("/:id/actions", [
-    (req, res, next) => Authenticator.read(req, res, next),
-    (req, res) => {
-        validate(Types.ObjectId, req.params.id)
-        req.body.orginal_item_id = req.params.id
-        ActionController.select.all(req, res)
+itemRouter.use("/:item_id/actions/", [(req, res, next) => {
+    if (req.method == "GET") {
+        validate(Types.ObjectId, req.params.item_id)
+        req.body.original_item_id = req.params.item_id
     }
-])
+    next()
+}, actionRouter])
 
-itemRouter.get("/:item_id/actions/:id", [
-    (req, res, next) => Authenticator.read(req, res, next),
-    (req, res) => {
-        validate(Types.ObjectId, req.params.id)
-        req.body.orginal_item_id = req.params.id
-        ActionController.select.single(req, res)
-    }
-])
 export default itemRouter

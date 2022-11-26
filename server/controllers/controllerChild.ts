@@ -1,5 +1,5 @@
 import SimpleController from "./simpleController";
-import {Request, Response} from "express";
+import {NextFunction, Request, Response} from "express";
 
 /**
  * Controller Child
@@ -40,11 +40,17 @@ class ControllerChild {
      *
      * @param req - Express Request Object
      * @param res - Express Response Object
+     * @param next - Express Next Function
      */
-    async single(req: Request, res: Response) {
-        this.handlers.forEach(fn => fn(req, res))
-        let json = await this.singleHandlers.map(fn => fn(req, res)).at(-1)
-        this.send(res, json?200:404, json?json:[])
+    async single(req: Request, res: Response, next: NextFunction) {
+        try {
+            this.handlers.forEach(fn => fn(req, res))
+            let json = await this.singleHandlers.map(fn => fn(req, res)).at(-1)
+            this.send(res, json?200:404, json?json:[])
+        } catch(err) {
+            next(err)
+        }
+
     }
 
     /**
@@ -52,11 +58,16 @@ class ControllerChild {
      *
      * @param req - Express Request Object
      * @param res - Express Response Object
+     * @param next - Express Next Function
      */
-    async all(req: Request, res: Response) {
-        this.handlers.forEach(fn => fn(req, res))
-        let json = await this.allHandlers.map(fn => fn(req, res)).at(-1)
-        this.send(res, json?200:404, json?json:[])
+    async all(req: Request, res: Response, next: NextFunction) {
+        try {
+            this.handlers.forEach(fn => fn(req, res))
+            let json = await this.allHandlers.map(fn => fn(req, res)).at(-1)
+            this.send(res, json?200:404, json?json:[])
+        } catch (err) {
+            next(err)
+        }
     }
 
     /**

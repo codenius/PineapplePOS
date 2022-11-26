@@ -24,7 +24,6 @@ function validate(validator: Function|Array<Function>, input: any) {
     }
     // Case: both are non-arrays
     else if (!Array.isArray(validator) && !Array.isArray(input)) {
-        let out;
         try {
             return validator(input)
         } catch (e) {

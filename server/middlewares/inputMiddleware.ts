@@ -15,6 +15,7 @@ function mapJSON(value: object | Array<any> | number | string | boolean, fn: (va
     switch (typeof value) {
         case "object": {
             Object.keys(value).forEach((_key) => {
+                // disallow keys with _ to disallow changes of internal values
                 if (_key.startsWith("_")) {
                     delete value[_key]
                 } else {
