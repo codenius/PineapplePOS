@@ -1,4 +1,3 @@
-import InputError from "../types/errors/inputError";
 import SimpleController from "./simpleController";
 import {Request, Response} from "express";
 
@@ -42,10 +41,10 @@ class ControllerChild {
      * @param req - Express Request Object
      * @param res - Express Response Object
      */
-    single(req: Request, res: Response) {
+    async single(req: Request, res: Response) {
         this.handlers.forEach(fn => fn(req, res))
-        let json = this.singleHandlers.map(fn => fn(req, res)).at(-1)
-        this.send(res, 200, json)
+        let json = await this.singleHandlers.map(fn => fn(req, res)).at(-1)
+        this.send(res, json?200:404, json?json:[])
     }
 
     /**
@@ -54,10 +53,10 @@ class ControllerChild {
      * @param req - Express Request Object
      * @param res - Express Response Object
      */
-    all(req: Request, res: Response) {
+    async all(req: Request, res: Response) {
         this.handlers.forEach(fn => fn(req, res))
-        let json = this.allHandlers.map(fn => fn(req, res)).at(-1)
-        this.send(res, 200, json)
+        let json = await this.allHandlers.map(fn => fn(req, res)).at(-1)
+        this.send(res, json?200:404, json?json:[])
     }
 
     /**
