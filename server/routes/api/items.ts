@@ -42,6 +42,19 @@ itemRouter.get("/categories", [
 ])
 
 /**
+ * Get all item companies
+ *
+ * @access - Level:Read
+ */
+itemRouter.get("/companies", [
+    (req, res, next) => Authenticator.read(req, res, next),
+    async (req, res) => {
+        let items = await ItemController.model.find().exec()
+        res.status(200).json([...new Set(items.map(item => item["company"]))])
+    }
+])
+
+/**
  * Gets a single Item from id
  * 
  * @access - Level:Read
