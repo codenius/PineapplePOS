@@ -43,11 +43,10 @@ app.use((err, req, res, next) => {
     } else {
         let json: ErrorJson = {
             type: err.name,
-            source: "internal",
-            msg: DEBUG?err.stack:"internal server error"
+            source: "unknown",
+            msg: DEBUG ? err.stack : err.message
         }
-        logger.error("\n"+err.stack)
-        res.sendStatus(500).json(json)
+        res.status(500).json(json)
     }
 })
 
