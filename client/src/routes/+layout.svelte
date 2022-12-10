@@ -3,7 +3,12 @@
 	import SidebarNav from '$lib/components/nav/SidebarNav.svelte';
 	import { beforeNavigate, afterNavigate } from '$app/navigation';
 	import ProgressBar from 'svelte-progress-bar';
-	import { QueryClient, QueryClientProvider } from '@sveltestack/svelte-query';
+	import {
+		QueryClient,
+		QueryClientProvider,
+		useQuery
+	} from '@sveltestack/svelte-query';
+	import { getDatabase } from '$lib/data';
 
 	let progress: any;
 	beforeNavigate(() => {

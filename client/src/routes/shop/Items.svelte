@@ -3,12 +3,12 @@
 	import { zoomFactor } from '$lib/stores/itemsZoom';
 	import { Accordion, AccordionItem, Spinner } from 'sveltestrap';
 	import { useQuery } from '@sveltestack/svelte-query';
-	import { getDatabase } from '$lib/data';
 	import { shoppingBag } from '$lib/stores/shoppingBag';
 	import type { Item } from '$lib/types/Item';
 	import type { ShoppingBagEntry } from '$lib/types/ShoppingBagEntry';
+	import { getDatabase } from '$lib/data';
 
-	export const queryResult = useQuery('items', async () => {
+	const queryResult = useQuery('items', async () => {
 		return getDatabase();
 	});
 
