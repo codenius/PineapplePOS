@@ -60,17 +60,20 @@
 </script>
 
 {#if $queryResult.isSuccess}
-	<Accordion stayOpen={true} class="ItemGroup">
-		{#each itemsByCategory as category}
-			<AccordionItem active={true} header={category.category}>
-				<div style="font-size: {($zoomFactor / 1.5) * 0.2}rem" id="wrapper">
-					{#each category.items as item}
-						<ItemCard {...item} />
-					{/each}
-				</div>
-			</AccordionItem>
-		{/each}
-	</Accordion>
+	<div style="font-size: {($zoomFactor / 1.5) * 0.2}rem">
+		<Accordion stayOpen={true} class="ItemGroup">
+			{#each itemsByCategory as category}
+				<AccordionItem active={true}>
+					<span class="ACCORDIONHEADER" slot="header">{category.category}</span>
+					<div id="wrapper">
+						{#each category.items as item}
+							<ItemCard {...item} />
+						{/each}
+					</div>
+				</AccordionItem>
+			{/each}
+		</Accordion>
+	</div>
 {:else}
 	<div class="h-100 d-flex justify-content-center align-items-center">
 		{#if $queryResult.isLoading}
@@ -88,6 +91,20 @@
 		grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
 		grid-auto-rows: min-content;
 	}
+	:global(.ItemGroup .accordion-header) {
+		font-size: inherit;
+	}
+	:global(.ItemGroup .accordion-item .accordion-button) {
+		font-size: inherit;
+		padding: 1em 1.25em;
+	}
+	:global(.ItemGroup .accordion-item .accordion-button::after) {
+		width: 1.25em;
+		height: 1.25em;
+		background-size: inherit;
+		background-position: center;
+	}
+
 	:global(.ItemGroup .accordion-body) {
 		padding: 0.2em;
 	}
