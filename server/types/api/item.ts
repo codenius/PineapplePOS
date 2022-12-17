@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import versioning from "mongoose-versioned";
 
 export const Item = new Schema({
     name: {
@@ -37,5 +38,7 @@ export const Item = new Schema({
         default: ""
     }
 })
+
+Item.plugin(versioning, {collection: "items.versioning"})
 
 export default model("Item", Item, "items")

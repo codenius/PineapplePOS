@@ -1,7 +1,5 @@
-import {Model, SchemaTypeOptions} from "mongoose";
 import InputError from "./errors/inputError";
 import BaseError from "./errors/baseError";
-import logger from "../utils/logger";
 
 /**
  * a function to validates mongoose SchemaTypes (ObjectId, String, ...) arrays and non arrays
