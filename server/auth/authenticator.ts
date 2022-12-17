@@ -25,7 +25,7 @@ class Authenticator {
     }
 
     /**
-     * Second highest access level
+     * Second-highest access level
      * 
      * @access - Level:Edit
      * @static
@@ -35,7 +35,7 @@ class Authenticator {
     }
     
     /**
-     * Third highest access level
+     * Third-highest access level
      * 
      * @access - Level:Sell
      * @static 
