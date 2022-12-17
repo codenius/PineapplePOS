@@ -13,7 +13,7 @@
         "esbuild-node-tsc": "^2.0.4",
         "express": "^4.18.1",
         "mongoose": "^6.6.5",
-        "mysql": "^2.18.1",
+        "mongoose-versioned": "^1.2.4",
         "ts-jest": "^29.0.3",
         "winston": "^3.8.2",
         "winston-daily-rotate-file": "^4.7.1"
