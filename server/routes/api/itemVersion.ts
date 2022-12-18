@@ -15,7 +15,8 @@ itemVersionRouter.get("/:version", [
     (req, res, next) => Authenticator.read(req, res, next),
     (req, res, next) => {
         validate(Number, req.params.version)
-        req.body["_id._version"] = req.params.version
+        req.body["_id._version"] = Number(req.params.version)
+        console.log(req.body)
         next()
     },
     (req, res, next) => itemVersioningController.select.all(req, res, next)
