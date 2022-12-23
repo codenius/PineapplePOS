@@ -1,9 +1,25 @@
+<script context="module" lang="ts">
+	export function calculateTotal(
+		bag: ShoppingBagEntry[],
+		items: Item[]
+	): number {
+		let total: number = 0;
+		for (let index = 0; index < bag.length; index++) {
+			const shoppingBagEntry = bag[index];
+			let item = items.find((item) => item.id == shoppingBagEntry.id);
+			total += shoppingBagEntry.amount * item!.price;
+		}
+		return total;
+	}
+</script>
+
 <script lang="ts">
 	import { Pane, Splitpanes } from 'svelte-splitpanes';
 	import Items from './Items.svelte';
 	import ShoppingBag from './ShoppingBag.svelte';
 	import Toolbar from './Toolbar.svelte';
 	import FloatingButtons from './FloatingButtons.svelte';
+	import PayModal from './PayModal.svelte';
 	import type { ShoppingBagEntry } from '$lib/types/ShoppingBagEntry';
 	import type { Item } from '$lib/types/Item';
 </script>
@@ -20,21 +36,7 @@
 	</Splitpanes>
 </div>
 <FloatingButtons />
-
-<script context="module" lang="ts">
-	export function calculateTotal(
-		bag: ShoppingBagEntry[],
-		items: Item[]
-	): number {
-		let total: number = 0;
-		for (let index = 0; index < bag.length; index++) {
-			const shoppingBagEntry = bag[index];
-			let item = items.find((item) => item.id == shoppingBagEntry.id);
-			total += shoppingBagEntry.amount * item.price;
-		}
-		return total;
-	}
-</script>
+<PayModal />
 
 <style global>
 	.Splitpanes {
