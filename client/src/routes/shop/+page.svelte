@@ -4,6 +4,8 @@
 	import ShoppingBag from './ShoppingBag.svelte';
 	import Toolbar from './Toolbar.svelte';
 	import FloatingButtons from './FloatingButtons.svelte';
+	import type { ShoppingBagEntry } from '$lib/types/ShoppingBagEntry';
+	import type { Item } from '$lib/types/Item';
 </script>
 
 <div id="wrapper" class="h-100 d-flex flex-column">
@@ -18,6 +20,21 @@
 	</Splitpanes>
 </div>
 <FloatingButtons />
+
+<script context="module" lang="ts">
+	export function calculateTotal(
+		bag: ShoppingBagEntry[],
+		items: Item[]
+	): number {
+		let total: number = 0;
+		for (let index = 0; index < bag.length; index++) {
+			const shoppingBagEntry = bag[index];
+			let item = items.find((item) => item.id == shoppingBagEntry.id);
+			total += shoppingBagEntry.amount * item.price;
+		}
+		return total;
+	}
+</script>
 
 <style global>
 	.Splitpanes {
