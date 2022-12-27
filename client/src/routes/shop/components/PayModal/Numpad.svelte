@@ -3,19 +3,36 @@
 	import { NumberParser } from '$lib/numberParser';
 	import { onMount } from 'svelte';
 	import Keyboard from 'svelte-keyboard';
-	import { Form, Input } from 'sveltestrap';
+	import { Form } from 'sveltestrap';
 
 	let value: string = '';
 	let prevValue: string = '';
-	$: {
-		if (
-			!new RegExp(
-				`^[0-9]*\\${new NumberParser($language).decimalSeperator}?[0-9]{0,2}$`
-			).test(value)
-		) {
+
+	let selectionStartGlobal: number | null = 0;
+	let prevSelectionStart: number | null = 0;
+	let selectionEndGlobal: number | null = 0;
+	let prevSelectionEnd: number | null = 0;
+
+	function updateSelection() {
+		setTimeout(() => {
+			input?.setSelectionRange(selectionStartGlobal, selectionEndGlobal);
+		}, 0);
+	}
+
+	$: value, checkValue();
+	function checkValue() {
+		const isMatch = new RegExp(
+			`^[0-9]*\\${new NumberParser($language).decimalSeperator}?[0-9]{0,2}$`
+		).test(value);
+		if (!isMatch) {
 			value = prevValue;
+			selectionStartGlobal = prevSelectionStart;
+			selectionEndGlobal = prevSelectionEnd;
+			updateSelection();
 		}
 		prevValue = value;
+		prevSelectionStart = selectionStartGlobal;
+		prevSelectionEnd = selectionEndGlobal;
 	}
 
 	export let numericValue: number | undefined;
@@ -32,7 +49,7 @@
 		let textbefore = currentValue.substring(0, selectionStart); //text in front of selected text
 		let textafter = currentValue.substring(selectionEnd, length); //text following selected text
 		if (key == 'Backspace') {
-			({ newValue, selectionStart } = backspace(
+			({ newValue, selectionStart, selectionEnd } = backspace(
 				selectionStart,
 				selectionEnd,
 				currentValue,
@@ -41,10 +58,13 @@
 			));
 		} else {
 			selectionStart += 1;
+			selectionEnd = selectionStart;
 			newValue = textbefore + key + textafter;
 		}
 		value = newValue;
-		input.setSelectionRange(selectionStart, selectionStart);
+		selectionStartGlobal = selectionStart;
+		selectionEndGlobal = selectionEnd;
+		updateSelection();
 		input.focus();
 	}
 
@@ -60,22 +80,78 @@
 			// if no text is selected
 			newValue = currentValue.substring(0, selectionStart - 1) + textafter;
 			selectionStart -= 1;
+			selectionEnd -= 1;
 		} // if some text is selected
 		else {
 			newValue = textbefore + textafter;
+			selectionEnd = selectionStart;
 		}
-		return { newValue, selectionStart };
+		return { newValue, selectionStart, selectionEnd };
 	}
 	onMount(() => {
 		setTimeout(() => {
 			input.focus();
 		}, 0);
 	});
+
+	function onselectionchange(node: HTMLInputElement) {
+		let mousedown = false;
+		let prevValue: string;
+
+		function handleMousedown(event: Event) {
+			mousedown = true;
+		}
+
+		function handleMouseup(event: Event) {
+			if (mousedown) {
+				mousedown = false;
+				dispatchEvent();
+			}
+		}
+
+		function dispatchEvent() {
+			if (node.value == prevValue) {
+				node.dispatchEvent(new CustomEvent('selectionchange'));
+			}
+			prevValue = node.value;
+		}
+
+		node.addEventListener('mousedown', handleMousedown);
+		document.addEventListener('mouseup', handleMouseup);
+		node.addEventListener('keyup', dispatchEvent);
+
+		return {
+			destroy() {
+				node.removeEventListener('mousedown', handleMousedown);
+				document.removeEventListener('mouseup', handleMouseup);
+				node.removeEventListener('keyup', dispatchEvent);
+			}
+		};
+	}
 </script>
 
 <div style="max-width: 25rem" class="m-auto">
 	<Form class="mb-2" on:submit={(e) => e.preventDefault()}>
-		<Input placeholder="Given" inputmode="none" bind:value bind:inner={input} />
+		<input
+			use:onselectionchange
+			on:selectionchange={() => {
+				selectionStartGlobal = input.selectionStart;
+				selectionEndGlobal = input.selectionEnd;
+				prevSelectionStart = input.selectionStart;
+				prevSelectionEnd = input.selectionEnd;
+			}}
+			on:keyup={() => {
+				selectionStartGlobal = input.selectionStart;
+				selectionEndGlobal = input.selectionEnd;
+				prevSelectionStart = input.selectionStart;
+				prevSelectionEnd = input.selectionEnd;
+			}}
+			class="form-control"
+			placeholder="Given"
+			inputmode="none"
+			bind:value
+			bind:this={input}
+		/>
 	</Form>
 	<Keyboard
 		on:keydown={onNumpadClick}
