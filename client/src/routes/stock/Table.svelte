@@ -12,6 +12,7 @@
 	import type { Item } from '$lib/types/Item';
 	import ItemImage from './ItemImage.svelte';
 	import { Icon, Table } from 'sveltestrap';
+	import ActionButtons from './ActionButtons.svelte';
 
 	let queryResult = useQuery<Item[], Error>('Stock', async () => {
 		return getDatabase();
@@ -48,6 +49,14 @@
 		table.column({
 			header: 'Amount',
 			accessor: 'amount'
+		}),
+		table.column({
+			header: '',
+			accessor: 'id',
+			cell: ({ value }) => createRender(ActionButtons, {id: value}),
+			plugins: {
+				sort: { disable: true }
+			}
 		})
 	]);
 
@@ -90,7 +99,7 @@
 		<tbody {...$tableBodyAttrs}>
 			{#each $rows as row (row.id)}
 				<Subscribe rowAttrs={row.attrs()} let:rowAttrs>
-					<tr {...rowAttrs}>
+					<tr on:click={()=>{alert()}} {...rowAttrs}>
 						{#each row.cells as cell (cell.id)}
 							<Subscribe attrs={cell.attrs()} let:attrs>
 								<td {...attrs}>
