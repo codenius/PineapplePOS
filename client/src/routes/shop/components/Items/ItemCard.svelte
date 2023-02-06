@@ -2,6 +2,8 @@
 	import { shoppingBag } from '$lib/stores/shoppingBag';
 	import { CardImg, Card, CardSubtitle, CardFooter, Icon } from 'sveltestrap';
 	import type { Item } from '$lib/types/Item';
+	import { formatCurrency } from '$lib/currencyHelpers';
+	import { language } from '$lib/i18n';
 
 	export let id: Item['id'];
 	export let name: Item['name'];
@@ -117,7 +119,7 @@
 					>
 				</CardSubtitle>
 			</span>
-			<span class="text-nowrap">{price}</span>
+			<span class="text-nowrap">{formatCurrency(price, $language)}</span>
 		</CardFooter>
 	</Card>
 </div>

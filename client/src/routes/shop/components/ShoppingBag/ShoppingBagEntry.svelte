@@ -5,6 +5,8 @@
 	import type { Item } from '$lib/types/Item';
 	import { shoppingBag } from '$lib/stores/shoppingBag';
 	import type { ShoppingBagEntry } from '$lib/types/ShoppingBagEntry';
+	import { formatCurrency } from '$lib/currencyHelpers';
+	import { language } from '$lib/i18n';
 
 	export let id: Item['id'];
 	export let name: Item['name'];
@@ -42,7 +44,7 @@
 	</span>
 	<span class="d-flex align-items-center flex-shrink-0 gap-2">
 		<Counter max={amount} bind:value={shoppingBagAmount} />
-		<span>{price}</span>
+		<span>{formatCurrency(price, $language)}</span>
 		<Button
 			on:click={() => {
 				shoppingBagAmount = 0;

@@ -16,9 +16,9 @@
 		Icon
 	} from 'sveltestrap';
 	import Receipt from './components/PayModal/Receipt.svelte';
-	import { formatCurrency } from '$lib/formatCurrency';
-	import { language } from '$lib/i18n';
+	import { formatCurrency } from '$lib/currencyHelpers';
 	import { calculateTotal } from './+page.svelte';
+	import { language } from '$lib/i18n';
 	function toggle() {
 		$payModal = !payModal;
 	}
@@ -46,7 +46,7 @@
 							class="text-truncate"
 							style="font-weight: initial; max-width: 15rem;"
 						>
-							{formatCurrency(total, 'EUR', $language)}
+							{formatCurrency(total, $language)}
 						</h3>
 					</div>
 					<div class="mb-3">
@@ -59,7 +59,7 @@
 								{#if given < total}
 									<Icon name="exclamation-triangle" class="text-warning" />
 								{/if}
-								{formatCurrency(given, 'EUR', $language)}
+								{formatCurrency(given, $language)}
 							{:else}
 								–
 							{/if}
@@ -72,7 +72,7 @@
 							style="font-weight: initial; max-width: 15rem;"
 						>
 							{#if given != undefined && given - total >= 0}
-								{formatCurrency(given - total, 'EUR', $language)}
+								{formatCurrency(given - total, $language)}
 							{:else}
 								–
 							{/if}

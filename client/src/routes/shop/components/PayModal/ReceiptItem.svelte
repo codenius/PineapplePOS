@@ -3,7 +3,7 @@
 	import ListItemImage from '$lib/components/ListItemImage.svelte';
 	import { ListGroupItem } from 'sveltestrap';
 	import { language } from '$lib/i18n';
-	import { formatCurrency } from '$lib/formatCurrency';
+	import { formatCurrency } from '$lib/currencyHelpers';
 
 	export let item: Item;
 	export let shoppingBagAmount: Item['amount'];
@@ -17,10 +17,10 @@
 
 	<span class="flex-shrink-0">
 		<div>
-			{shoppingBagAmount} x {formatCurrency(item.price, 'EUR', $language)}
+			{shoppingBagAmount} x {formatCurrency(item.price, $language)}
 		</div>
 		<div>
-			= {formatCurrency(shoppingBagAmount * item.price, 'EUR', $language)}
+			= {formatCurrency(shoppingBagAmount * item.price, $language)}
 		</div>
 	</span>
 </ListGroupItem>
