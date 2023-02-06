@@ -32,6 +32,16 @@
 		height: 100%;
 		overflow-y: hidden;
 	}
+	:global(*, *::before, *::after) {
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		user-select: none;
+	}
+	:global(input, textarea) {
+		-webkit-user-select: auto;
+		-moz-user-select: auto;
+		user-select: auto;
+	}
 	#wrapper {
 		height: 100%;
 		display: flex;
