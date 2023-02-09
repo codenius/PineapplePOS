@@ -50,7 +50,6 @@ class ControllerChild {
         } catch(err) {
             next(err)
         }
-
     }
 
     /**

@@ -1,4 +1,4 @@
-import i18next from 'i18next';
+import i18next, { type TFunction } from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import HttpBackend from 'i18next-http-backend';
 import { createI18nStore } from 'svelte-i18next';
@@ -24,8 +24,14 @@ i18next
 
 export const i18n = createI18nStore(i18next);
 
-let tInitial: any;
+let tInitial!: TFunction;
 export const t = writable(tInitial);
 i18n.subscribe((writable) => {
 	t.set(writable.t);
+});
+
+let languageInitial!: string;
+export const language = writable(languageInitial);
+i18n.subscribe((i18n) => {
+	language.set(i18n.language);
 });

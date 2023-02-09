@@ -12,8 +12,7 @@ const config = {
 			pages: 'build', // path to public directory
 			assets: 'build', // path to public directory
 			fallback: null
-		}),
-		trailingSlash: 'always'
+		})
 	}
 };
 

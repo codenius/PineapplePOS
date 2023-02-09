@@ -1,8 +1,5 @@
-/* Escape Function, that escapes every type that is possible for json responses */
-import logger from "../utils/logger";
-
 /**
- * JSON mapper
+ * recursive JSON mapper
  * 
  * @param value - a Json object of any type, that is allowed by json
  * @param fn - a function that gets a single type
@@ -16,7 +13,8 @@ function mapJSON(value: object | Array<any> | number | string | boolean, fn: (va
         case "object": {
             Object.keys(value).forEach((_key) => {
                 // disallow keys with _ to disallow changes of internal values
-                if (_key.startsWith("_")) {
+                // disallow keys with $ to disallow mongodb command executions
+                if (_key.startsWith("_") || _key.startsWith("$")) {
                     delete value[_key]
                 } else {
                     value[_key] = mapJSON(value[_key])

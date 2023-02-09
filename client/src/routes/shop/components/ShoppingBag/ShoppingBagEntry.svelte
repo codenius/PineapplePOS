@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ListItemImage from '$lib/components/ListItemImage.svelte';
 	import { ListGroupItem, Button, Icon } from 'sveltestrap';
 	import Counter from './Counter.svelte';
 	import type { Item } from '$lib/types/Item';
@@ -30,14 +31,7 @@
 
 <ListGroupItem class="d-flex justify-content-between align-items-center">
 	<span class="d-flex justify-content-between align-items-center gap-2">
-		<span class="rounded border p-1" style="height: 3rem; aspect-ratio: 1 / 1;">
-			<img
-				class="h-100 w-100"
-				style="object-fit: contain;"
-				src={image}
-				alt=""
-			/>
-		</span>
+		<ListItemImage {image} />
 		<span
 			style="overflow-y:hidden; 
 			word-break: break-word;  

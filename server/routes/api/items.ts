@@ -1,10 +1,9 @@
 import ItemController from "../../controllers/api/itemController";
 import {Router} from "express";
 import Authenticator from "../../auth/authenticator";
-import ActionController from "../../controllers/api/actionController";
+import itemVersionRouter from "./itemVersion";
+import { Types } from "mongoose";
 import validate from "../../types/validator";
-import {Types} from "mongoose";
-import actionRouter from "./actions";
 
 const itemRouter = Router();
 
@@ -84,12 +83,15 @@ itemRouter.put('/:id', [
     (req,res,next) => ItemController.update.single(req,res,next)
 ])
 
-itemRouter.use("/:item_id/actions/", [(req, res, next) => {
-    if (req.method == "GET") {
-        validate(Types.ObjectId, req.params.item_id)
-        req.body.original_item_id = req.params.item_id
-    }
+/**
+ * Get Versions of a single Item from id
+ * 
+ * @access - Level:Read
+ */
+itemRouter.use("/:item_id/versions/", [(req, res, next) => {
+    validate(Types.ObjectId, req.params.item_id)
+    req.body["_id._id"] = new Types.ObjectId(req.params.item_id)
     next()
-}, actionRouter])
+}, itemVersionRouter])
 
 export default itemRouter

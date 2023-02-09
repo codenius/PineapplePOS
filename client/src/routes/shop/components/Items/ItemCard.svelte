@@ -8,6 +8,9 @@
 	export let price: Item['price'];
 	export let amount: Item['amount'];
 	export let image: Item['image'];
+	let active: boolean = false;
+	let timeoutPassed: boolean = false;
+	let timeout: Promise<void>;
 
 	const amountWarn: number = 15;
 	const amountError: number = 5;
@@ -45,30 +48,93 @@
 	}
 </script>
 
-<Card
-	on:click={increaseInShoppingBag}
-	class="m-1 card {checkAmount(amount, '', 'border-warning', 'border-danger')}"
-	><CardImg style="height: 8em; object-fit: contain" src={image} />
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<div
+	class="CARD"
+	class:active
+	on:mousedown={() => {
+		active = true;
+		timeout = new Promise((resolve) =>
+			setTimeout(() => {
+				timeoutPassed = true;
+				resolve();
+			}, 150)
+		);
+	}}
+	on:click={() => {
+		if (timeoutPassed) {
+			active = false;
+			timeoutPassed = false;
+		} else {
+			timeout.then(() => {
+				active = false;
+				timeoutPassed = false;
+			});
+		}
+	}}
+	on:mouseleave={() => {
+		if (timeoutPassed) {
+			active = false;
+			timeoutPassed = false;
+		} else {
+			timeout?.then(() => {
+				active = false;
+				timeoutPassed = false;
+			});
+		}
+	}}
+>
+	<Card
+		on:click={increaseInShoppingBag}
+		class="m-1 card {checkAmount(
+			amount,
+			'',
+			'border-warning',
+			'border-danger'
+		)}"
+		><CardImg
+			draggable={false}
+			style="height: 8em; object-fit: contain"
+			src={image}
+		/>
 
-	<CardFooter class="d-flex justify-content-between gap-2 h-100">
-		<span class="d-flex align-items-baseline gap-2">
-			<span>{name}</span>
-			<CardSubtitle style="font-size: inherit">
-				<small
-					class="{checkAmount(
-						amount,
-						'text-muted',
-						'text-warning',
-						'text-danger'
-					)} text-nowrap"
-				>
-					{#if checkAmount(amount, false, true, true)}
-						<Icon name="exclamation-triangle" />
-					{/if}
-					{amount} aval.</small
-				>
-			</CardSubtitle>
-		</span>
-		<span class="text-nowrap">{price}</span>
-	</CardFooter>
-</Card>
+		<CardFooter class="d-flex justify-content-between gap-2 h-100">
+			<span class="d-flex align-items-baseline gap-2">
+				<span>{name}</span>
+				<CardSubtitle style="font-size: inherit">
+					<small
+						class="{checkAmount(
+							amount,
+							'text-muted',
+							'text-warning',
+							'text-danger'
+						)} text-nowrap"
+					>
+						{#if checkAmount(amount, false, true, true)}
+							<Icon name="exclamation-triangle" />
+						{/if}
+						{amount} aval.</small
+					>
+				</CardSubtitle>
+			</span>
+			<span class="text-nowrap">{price}</span>
+		</CardFooter>
+	</Card>
+</div>
+
+<style>
+	.CARD {
+		transition: opacity, transform 75ms;
+		transition-timing-function: ease-out;
+	}
+
+	.CARD:hover {
+		opacity: 0.85;
+	}
+
+	.CARD.active {
+		transform: scale(0.9);
+		opacity: 0.8;
+		transition-timing-function: ease-in;
+	}
+</style>
