@@ -6,17 +6,28 @@
 		Render,
 		createRender
 	} from 'svelte-headless-table';
-	import { addSortBy } from 'svelte-headless-table/plugins';
+	import {
+		addColumnFilters,
+		addSortBy,
+		matchFilter
+	} from 'svelte-headless-table/plugins';
 	import { writable } from 'svelte/store';
 	import { useQuery } from '@sveltestack/svelte-query';
 	import type { Item } from '$lib/types/Item';
 	import ItemImage from './ItemImage.svelte';
-	import { Icon, Table } from 'sveltestrap';
+	import { Icon, Spinner, Table } from 'sveltestrap';
 	import ActionButtons from './ActionButtons.svelte';
+	import SortSelect from './SortSelect.svelte';
+	import { goto } from '$app/navigation';
+	import { fade } from 'svelte/transition';
 
-	let queryResult = useQuery<Item[], Error>('Stock', async () => {
-		return getDatabase();
-	});
+	let queryResult = useQuery<Item[], Error>(
+		'items',
+		async () => {
+			return getDatabase();
+		},
+		{ refetchOnMount: 'always' }
+	);
 
 	const data = writable<Item[]>([]);
 	$: if ($queryResult.isSuccess) {
@@ -26,7 +37,8 @@
 		sort: addSortBy({
 			toggleOrder: ['asc', 'desc'],
 			initialSortKeys: [{ id: 'name', order: 'asc' }]
-		})
+		}),
+		colFilter: addColumnFilters()
 	});
 
 	const columns = table.createColumns([
@@ -44,7 +56,14 @@
 		}),
 		table.column({
 			header: 'Category',
-			accessor: 'category'
+			accessor: 'category',
+			plugins: {
+				colFilter: {
+					fn: matchFilter,
+					render: ({ filterValue, preFilteredValues }) =>
+						createRender(SortSelect, { filterValue, preFilteredValues })
+				}
+			}
 		}),
 		table.column({
 			header: 'Amount',
@@ -53,7 +72,7 @@
 		table.column({
 			header: '',
 			accessor: 'id',
-			cell: ({ value }) => createRender(ActionButtons, {id: value}),
+			cell: ({ value }) => createRender(ActionButtons, { id: value }),
 			plugins: {
 				sort: { disable: true }
 			}
@@ -64,7 +83,17 @@
 		table.createViewModel(columns);
 </script>
 
-{#if $queryResult.isSuccess}
+<div class="d-flex flex-column" style="height: 100%;">
+	{#if $queryResult.isRefetching}
+		<div
+			transition:fade
+			class="right-0 bottom-0 position-fixed m-2 p-2 px-3 text-primary bg-light rounded-pill border shadow-lg"
+		>
+			<Spinner size="sm" />
+			Refreshing...
+		</div>
+	{/if}
+
 	<Table striped hover {...$tableAttrs}>
 		<thead class="sticky-top bg-white shadow-sm">
 			{#each $headerRows as headerRow (headerRow.id)}
@@ -77,18 +106,31 @@
 								props={cell.props()}
 								let:props
 							>
-								<th {...attrs} on:click={props.sort.toggle}>
-									<Render of={cell.render()} />
-									<Icon
-										class="d-inline-block {props.sort.order === undefined
-											? 'invisible'
-											: ''}"
-										name={props.sort.order === 'asc'
-											? 'sort-down'
-											: props.sort.order === 'desc'
-											? 'sort-up'
-											: 'filter-left'}
-									/>
+								<th {...attrs}>
+									<span class="d-flex align-items-center gap-1">
+										<button
+											style="height: 2rem;"
+											class="d-flex align-items-center gap-1 text-dark bg-transparent p-0 border-0"
+											on:click={props.sort.toggle}
+											disabled={props.sort.disabled}
+										>
+											<Render of={cell.render()} />
+											<Icon
+												class="d-inline-block {props.sort.order === undefined
+													? 'invisible'
+													: ''}"
+												name={props.sort.order === 'asc'
+													? 'sort-down'
+													: props.sort.order === 'desc'
+													? 'sort-up'
+													: 'filter-left'}
+											/>
+										</button>
+
+										{#if props.colFilter?.render}
+											<Render of={props.colFilter.render} />
+										{/if}
+									</span>
 								</th>
 							</Subscribe>
 						{/each}
@@ -97,21 +139,33 @@
 			{/each}
 		</thead>
 		<tbody {...$tableBodyAttrs}>
-			{#each $rows as row (row.id)}
-				<Subscribe rowAttrs={row.attrs()} let:rowAttrs>
-					<tr on:click={()=>{alert()}} {...rowAttrs}>
-						{#each row.cells as cell (cell.id)}
-							<Subscribe attrs={cell.attrs()} let:attrs>
-								<td {...attrs}>
-									<Render of={cell.render()} />
-								</td>
-							</Subscribe>
-						{/each}
-					</tr>
-				</Subscribe>
-			{/each}
+			{#if $queryResult.isSuccess}
+				{#each $rows as row (row.id)}
+					<Subscribe rowAttrs={row.attrs()} let:rowAttrs>
+						<tr
+							on:click={() => {
+								goto(`/stock/item?id=${row.original.id}`);
+							}}
+							{...rowAttrs}
+						>
+							{#each row.cells as cell (cell.id)}
+								<Subscribe attrs={cell.attrs()} let:attrs>
+									<td {...attrs}>
+										<Render of={cell.render()} />
+									</td>
+								</Subscribe>
+							{/each}
+						</tr>
+					</Subscribe>
+				{/each}
+			{/if}
 		</tbody>
 	</Table>
-{:else}
-	Loading...
-{/if}
+	{#if $queryResult.isLoading}
+		<div
+			class="flex-grow-1 m-auto d-flex justify-content-center align-items-center"
+		>
+			<Spinner type="grow" />
+		</div>
+	{/if}
+</div>

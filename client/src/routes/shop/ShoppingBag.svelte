@@ -30,8 +30,8 @@
 				{#each $shoppingBag as { id, amount } (id)}
 					<span
 						animate:flip={{ duration: 200 }}
-						in:fly={{ y: -10, duration: 300 }}
-						out:fly={{ y: 5, duration: 100 }}
+						in:fly|local={{ y: -10, duration: 300 }}
+						out:fly|local={{ y: 5, duration: 100 }}
 					>
 						<ShoppingBagEntry
 							{...$queryResult.data.find((item) => item.id == id)}
@@ -41,7 +41,7 @@
 				{/each}
 			</ListGroup>
 			<div
-				transition:fade={{ duration: 100 }}
+				transition:fade|local={{ duration: 100 }}
 				class="text-muted text-center p-2"
 			>
 				{totalPices} pices from {$shoppingBag.length} items

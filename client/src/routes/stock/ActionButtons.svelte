@@ -1,8 +1,26 @@
 <script lang="ts">
-    import { Button, Icon } from "sveltestrap";
-    import type { Item } from "$lib/types/Item";
+	import type { Item } from '$lib/types/Item';
+	import { Button, Icon } from 'sveltestrap';
+	import DeleteModal from './DeleteModal.svelte';
 
-    export let id: Item['id']
+	export let id: Item['id'];
+
+	let isDeleteModalOpen = false;
 </script>
-<Button color="primary" outline><Icon name="pencil"></Icon></Button>
-<Button on:click={(e)=>{e.stopPropagation()}} color="danger" outline><Icon name="trash"></Icon></Button>
+
+<span class="d-flex gap-1 flex-wrap">
+	<Button color="primary" outline href={`/stock/item?id=${Number(id) + 1}`}
+		><Icon name="pencil" /></Button
+	>
+	<Button
+		on:click={(e) => {
+			e.stopPropagation();
+			isDeleteModalOpen = true;
+		}}
+		color="danger"
+		outline
+		><Icon name="trash" />
+	</Button>
+</span>
+
+<DeleteModal bind:open={isDeleteModalOpen} {id} />
