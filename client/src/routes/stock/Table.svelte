@@ -9,6 +9,7 @@
 	import {
 		addColumnFilters,
 		addSortBy,
+		addTableFilter,
 		matchFilter
 	} from 'svelte-headless-table/plugins';
 	import { writable } from 'svelte/store';
@@ -20,6 +21,8 @@
 	import SortSelect from './SortSelect.svelte';
 	import { goto } from '$app/navigation';
 	import { fade } from 'svelte/transition';
+	import TableSearch from './TableSearch.svelte';
+	import { searchTerm } from './searchTerm';
 
 	let queryResult = useQuery<Item[], Error>(
 		'items',
@@ -38,7 +41,11 @@
 			toggleOrder: ['asc', 'desc'],
 			initialSortKeys: [{ id: 'name', order: 'asc' }]
 		}),
-		colFilter: addColumnFilters()
+		colFilter: addColumnFilters(),
+		tableFilter: addTableFilter({
+			fn: ({ filterValue, value }) =>
+				value.toLocaleLowerCase().includes(filterValue.toLocaleLowerCase())
+		})
 	});
 
 	const columns = table.createColumns([
@@ -47,7 +54,8 @@
 			accessor: 'image',
 			cell: ({ value }) => createRender(ItemImage, { image: value }),
 			plugins: {
-				sort: { disable: true }
+				sort: { disable: true },
+				tableFilter: { exclude: true }
 			}
 		}),
 		table.column({
@@ -70,17 +78,20 @@
 			accessor: 'amount'
 		}),
 		table.column({
-			header: '',
+			header: () => createRender(TableSearch),
 			accessor: 'id',
 			cell: ({ value }) => createRender(ActionButtons, { id: value }),
 			plugins: {
-				sort: { disable: true }
+				sort: { disable: true },
+				tableFilter: { exclude: true }
 			}
 		})
 	]);
 
-	const { headerRows, rows, tableAttrs, tableBodyAttrs } =
+	const { headerRows, rows, tableAttrs, tableBodyAttrs, pluginStates } =
 		table.createViewModel(columns);
+	const { filterValue } = pluginStates.tableFilter;
+	$: $filterValue = $searchTerm;
 </script>
 
 <div class="d-flex flex-column" style="height: 100%;">
@@ -149,7 +160,12 @@
 							{...rowAttrs}
 						>
 							{#each row.cells as cell (cell.id)}
-								<Subscribe attrs={cell.attrs()} let:attrs>
+								<Subscribe
+									attrs={cell.attrs()}
+									let:attrs
+									props={cell.props()}
+									let:props
+								>
 									<td {...attrs}>
 										<Render of={cell.render()} />
 									</td>
@@ -161,6 +177,11 @@
 			{/if}
 		</tbody>
 	</Table>
+	{#if $queryResult.isSuccess}
+		{#if !$rows.length}
+			<h4 class="m-auto">No products found.</h4>
+		{/if}
+	{/if}
 	{#if $queryResult.isLoading}
 		<div
 			class="flex-grow-1 m-auto d-flex justify-content-center align-items-center"
