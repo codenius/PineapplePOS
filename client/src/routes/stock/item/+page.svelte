@@ -14,7 +14,7 @@
 
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { addItem, setItem } from '$lib/data';
+	import { addItem, getCategories, setItem } from '$lib/data';
 	import type { Item } from '$lib/types/Item';
 	import { useMutation } from '@sveltestack/svelte-query';
 	import {
@@ -32,6 +32,7 @@
 		TabContent,
 		TabPane
 	} from 'sveltestrap';
+	import Select from 'svelte-select';
 	import DeleteModal from '../DeleteModal.svelte';
 	import type { PageData } from './$types';
 	import ProductSearch from './ProductSearch.svelte';
@@ -87,6 +88,11 @@
 	);
 
 	let isDeleteModalOpen = false;
+	const initCategories = getCategories();
+	let categories = initCategories;
+	$: newCategory ? (categories = [...initCategories, newCategory]) : {};
+	let newCategory: string;
+	let categoryFilterText: string;
 </script>
 
 <div class="p-3">
@@ -135,6 +141,7 @@
 					id="item_form"
 					on:submit={(event) => {
 						event.preventDefault();
+						!item.category ? (item.category = '') : {};
 						$saveItemMutation.mutate(item);
 					}}
 				>
@@ -161,7 +168,26 @@
 					</FormGroup>
 					<FormGroup>
 						<Label>Category</Label>
-						<Input bind:value={item.category} />
+						<Select
+							on:filter={() => {
+								newCategory = categoryFilterText;
+							}}
+							on:blur={() => {
+								!item.category ? (categories = initCategories) : {};
+							}}
+							on:clear={() => {
+								categories = initCategories;
+							}}
+							bind:filterText={categoryFilterText}
+							value={item.category}
+							bind:justValue={item.category}
+							items={categories}
+							--font-size="1rem"
+							--padding="0 0 0 .75rem"
+							--input-padding=".375rem 0"
+							--border-focused="1px solid #86b7fe"
+							--border-hover="1px solid #ced4da"
+						/>
 					</FormGroup>
 				</Form>
 			</Col>
@@ -201,3 +227,18 @@
 		<Row />
 	</Container>
 </div>
+
+<style>
+	:global(.svelte-select:hover, .svelte-select input:hover) {
+		cursor: text !important;
+	}
+	:global(.svelte-select .indicators:hover) {
+		cursor: default;
+	}
+	:global(.svelte-select) {
+		transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+	}
+	:global(.svelte-select.focused) {
+		box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%);
+	}
+</style>

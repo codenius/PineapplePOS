@@ -11,6 +11,10 @@ export function getDatabase() {
 	return database;
 }
 
+export function getCategories() {
+	return Array.from(new Set(database.map((item) => item.category)));
+}
+
 export function setItem(item: Item) {
 	const index = database.findIndex((dbItem) => dbItem.id == item.id);
 	const newDb = database.slice();
