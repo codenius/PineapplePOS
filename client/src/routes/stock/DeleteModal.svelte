@@ -22,8 +22,6 @@
 		{
 			onSuccess: () => {
 				open = false;
-				queryClient.invalidateQueries('items');
-				dispatch('deleted');
 			}
 		}
 	);
@@ -37,6 +35,12 @@
 	isOpen={open}
 	on:open={() => {
 		deleteButton.focus();
+	}}
+	on:close={() => {
+		if ($deleteItemMutation.isSuccess) {
+			dispatch('deleted');
+			queryClient.invalidateQueries('items');
+		}
 	}}
 >
 	<ModalBody>Are you sure you want to delete this item?</ModalBody>
