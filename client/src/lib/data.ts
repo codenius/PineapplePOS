@@ -43,6 +43,7 @@ function sellItem(shoppingBagEntry: ShoppingBagEntry) {
 	if (newDb[index].amount >= shoppingBagEntry.amount) {
 		newDb[index].amount -= shoppingBagEntry.amount;
 	}
+	itemsStore.set(newDb);
 }
 
 export function sellItems(shoppingBag: ShoppingBagEntry[]) {
