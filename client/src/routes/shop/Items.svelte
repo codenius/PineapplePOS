@@ -6,11 +6,11 @@
 	import { shoppingBag } from '$lib/stores/shoppingBag';
 	import type { Item } from '$lib/types/Item';
 	import type { ShoppingBagEntry } from '$lib/types/ShoppingBagEntry';
-	import { getDatabase } from '$lib/data';
 	import { searchResults, searchTerm } from './SearchInput.svelte';
+	import { ItemsController } from '$lib/ItemsController';
 
 	const queryResult = useQuery('items', async () => {
-		return getDatabase();
+		return ItemsController.getItems();
 	});
 
 	interface categoryItems {

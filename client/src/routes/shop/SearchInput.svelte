@@ -16,7 +16,7 @@
 	} from 'sveltestrap';
 	import Fuse from 'fuse.js';
 	import type { Item } from '$lib/types/Item';
-	import { getDatabase } from '$lib/data';
+	import { ItemsController } from '$lib/ItemsController';
 
 	const SEARCH_RESULTS_LIMIT = 10
 	const options = { keys: ['name', 'category', 'company'] };
@@ -26,7 +26,7 @@
 	const queryResult = useQuery(
 		'items',
 		async () => {
-			return getDatabase();
+			return ItemsController.getItems();
 		},
 		{
 			onSuccess: (data) => {

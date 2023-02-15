@@ -26,6 +26,7 @@
 	import { language } from '$lib/i18n';
 	import type { ShoppingBagEntry } from '$lib/types/ShoppingBagEntry';
 	import { sellItems } from '$lib/data';
+	import { ItemsController } from '$lib/ItemsController';
 
 	function toggle() {
 		$payModal = !$payModal;
@@ -42,7 +43,7 @@
 
 	const sellMutation = useMutation(
 		async (shoppingBag: ShoppingBagEntry[]) => {
-			return sellItems(shoppingBag);
+			return ItemsController.sellItems(shoppingBag);
 		},
 		{
 			onSuccess: () => {

@@ -37,6 +37,7 @@
 	import type { PageData } from './$types';
 	import ProductSearch from './ProductSearch.svelte';
 	import ScanBarcode from './ScanBarcode.svelte';
+	import { ItemsController } from '$lib/ItemsController';
 
 	export let data: PageData;
 	let item: Item = data as Item;
@@ -75,9 +76,9 @@
 	const saveItemMutation = useMutation(
 		async (item: Item) => {
 			if (isNewItem) {
-				addItem(item);
+				ItemsController.addItem(item);
 			} else {
-				setItem(item);
+				ItemsController.setItem(item);
 			}
 		},
 		{

@@ -4,6 +4,7 @@
 	import { deleteItem } from '$lib/data';
 	import { useMutation, useQueryClient } from '@sveltestack/svelte-query';
 	import { createEventDispatcher } from 'svelte';
+	import { ItemsController } from '$lib/ItemsController';
 
 	export let id: Item['id'];
 	export let open = false;
@@ -17,7 +18,7 @@
 
 	const deleteItemMutation = useMutation<void, void, Item['id']>(
 		async (id: Item['id']) => {
-			deleteItem(id);
+			ItemsController.deleteItem(id);
 		},
 		{
 			onSuccess: () => {

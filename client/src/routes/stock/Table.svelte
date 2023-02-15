@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { getDatabase } from '$lib/data';
 	import {
 		createTable,
 		Subscribe,
@@ -23,12 +22,11 @@
 	import { fade } from 'svelte/transition';
 	import TableSearch from './TableSearch.svelte';
 	import { searchTerm } from './searchTerm';
+	import { ItemsController } from '$lib/ItemsController';
 
 	let queryResult = useQuery<Item[], Error>(
 		'items',
-		async () => {
-			return getDatabase();
-		},
+		async () => {return ItemsController.getItems()},
 		{ refetchOnMount: 'always' }
 	);
 
