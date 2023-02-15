@@ -7,6 +7,7 @@
 	import type { Item } from '$lib/types/Item';
 	import type { ShoppingBagEntry } from '$lib/types/ShoppingBagEntry';
 	import { getDatabase } from '$lib/data';
+	import { searchResults, searchTerm } from './SearchInput.svelte';
 
 	const queryResult = useQuery('items', async () => {
 		return getDatabase();
@@ -61,11 +62,28 @@
 
 {#if $queryResult.isSuccess}
 	<div style="font-size: {($zoomFactor / 1.5) * 0.2}rem">
+		{#if $searchTerm.length}
+			<div
+				on:wheel={(event) => {
+					if (Math.abs(event.deltaX) == 0) {
+						event.preventDefault();
+						event.currentTarget.scrollLeft += event.deltaY;
+					}
+				}}
+				class="p-2 w-100"
+				id="searchWrapper"
+			>
+				{#each $searchResults as item}
+					<ItemCard {...item} isSearchItemCard={true} />
+				{:else}
+					<h4 class="m-auto my-5">Nothing found.</h4>
+				{/each}
+			</div>{/if}
 		<Accordion stayOpen={true} class="ItemGroup">
 			{#each itemsByCategory as category}
 				<AccordionItem active={true}>
 					<span class="ACCORDIONHEADER" slot="header">{category.category}</span>
-					<div id="wrapper">
+					<div class="p-1" id="wrapper">
 						{#each category.items as item}
 							<ItemCard {...item} />
 						{/each}
@@ -86,10 +104,19 @@
 {/if}
 
 <style>
+	#searchWrapper {
+		display: grid;
+		overflow-x: auto;
+		grid-template-columns: repeat(auto-fill, minmax(15em, 15em));
+		gap: 0.5em;
+		grid-auto-rows: min-content;
+		/* grid-auto-flow: column; */
+	}
 	#wrapper {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
 		grid-auto-rows: min-content;
+		gap: 0.5em;
 	}
 	:global(.ItemGroup .accordion-header) {
 		font-size: inherit;
