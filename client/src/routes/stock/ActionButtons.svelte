@@ -9,7 +9,7 @@
 </script>
 
 <span class="d-flex gap-1 flex-wrap">
-	<Button color="primary" outline href={`/stock/item?id=${Number(id) + 1}`}
+	<Button color="primary" outline href={`/stock/item?id=${id}`}
 		><Icon name="pencil" /></Button
 	>
 	<Button
