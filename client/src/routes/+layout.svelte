@@ -3,12 +3,7 @@
 	import SidebarNav from '$lib/components/nav/SidebarNav.svelte';
 	import { beforeNavigate, afterNavigate } from '$app/navigation';
 	import ProgressBar from 'svelte-progress-bar';
-	import {
-		QueryClient,
-		QueryClientProvider,
-		useQuery
-	} from '@sveltestack/svelte-query';
-	import { getDatabase } from '$lib/data';
+	import { QueryClient, QueryClientProvider } from '@sveltestack/svelte-query';
 
 	let progress: any;
 	beforeNavigate(() => {
@@ -54,6 +49,7 @@
 	}
 	main {
 		width: 100%;
+		overflow-x: auto;
 	}
 	:global(.svelte-progress-bar, .svelte-progress-bar-leader) {
 		background-color: var(--bs-primary);
