@@ -23,6 +23,9 @@
 	import TableSearch from './TableSearch.svelte';
 	import { searchTerm } from './searchTerm';
 	import { ItemsController } from '$lib/ApiControllers';
+	import Price from './Price.svelte';
+	import { formatCurrency } from '$lib/currencyHelpers';
+	import { language } from '$lib/i18n';
 
 	let queryResult = useQuery<Item[], Error>(
 		'items',
@@ -31,6 +34,13 @@
 		},
 		{ refetchOnMount: 'always' }
 	);
+
+	function checkEmpty<T>({ value }: { value: T }) {
+		if (value !== null) {
+			return value;
+		}
+		return '–';
+	}
 
 	const data = writable<Item[]>([]);
 	$: if ($queryResult.isSuccess) {
@@ -65,6 +75,7 @@
 		table.column({
 			header: 'Category',
 			accessor: 'category',
+			cell: checkEmpty,
 			plugins: {
 				colFilter: {
 					fn: matchFilter,
@@ -75,7 +86,18 @@
 		}),
 		table.column({
 			header: 'Amount',
-			accessor: 'amount'
+			accessor: 'amount',
+			cell: checkEmpty
+		}),
+		table.column({
+			header: 'Price',
+			accessor: 'price',
+			cell: ({ value }) => createRender(Price, { price: value }),
+			plugins: {
+				tableFilter: {
+					getFilterValue: (price) => formatCurrency(price, $language)
+				}
+			}
 		}),
 		table.column({
 			header: () => createRender(TableSearch),
@@ -121,9 +143,10 @@
 									<span class="d-flex align-items-center gap-1">
 										<button
 											style="height: 2rem;"
-											class="d-flex align-items-center gap-1 text-dark bg-transparent p-0 border-0"
+											class="d-flex align-items-center gap-1 text-dark font-bold bg-transparent p-0 border-0"
 											on:click={props.sort.toggle}
 											disabled={props.sort.disabled}
+											type="button"
 										>
 											<Render of={cell.render()} />
 											<Icon

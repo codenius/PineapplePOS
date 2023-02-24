@@ -3,7 +3,13 @@
 		return Array.from(new Set(items));
 	}
 
-	export function matchFilter({ filterValue, value }) {
+	export function matchFilter({
+		filterValue,
+		value
+	}: {
+		filterValue: string;
+		value: string;
+	}) {
 		if (filterValue === undefined) return true;
 		return filterValue === value;
 	}
@@ -33,14 +39,18 @@
 </select> -->
 
 <Dropdown size="sm">
-	<DropdownToggle caret
-		>{$filterValue || $filterValue === undefined
-			? 'All'
-			: 'Uncategorized'}</DropdownToggle
-	>
+	<DropdownToggle caret>
+		{#if $filterValue}
+			{$filterValue}
+		{:else if $filterValue === undefined}
+			All
+		{:else if $filterValue === null}
+			Uncategorized
+		{/if}
+	</DropdownToggle>
 	<DropdownMenu>
 		<DropdownItem
-			active={$filterValue == undefined}
+			active={$filterValue === undefined}
 			on:click={() => {
 				$filterValue = undefined;
 			}}
@@ -49,7 +59,7 @@
 		</DropdownItem>
 		{#each options as option}
 			<DropdownItem
-				active={$filterValue == option}
+				active={$filterValue === option}
 				on:click={() => {
 					$filterValue = option;
 				}}>{option || 'Uncategorized'}</DropdownItem

@@ -82,7 +82,9 @@
 		<Accordion stayOpen={true} class="ItemGroup">
 			{#each itemsByCategory as category}
 				<AccordionItem active={true}>
-					<span class="ACCORDIONHEADER" slot="header">{category.category}</span>
+					<span class="ACCORDIONHEADER" slot="header"
+						>{category.category || 'Uncategorized'}</span
+					>
 					<div class="p-1" id="wrapper">
 						{#each category.items as item}
 							<ItemCard {...item} />
