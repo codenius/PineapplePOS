@@ -18,6 +18,7 @@
 		</div>
 		<ButtonToolbar class="gap-2">
 			<Button
+				color="primary"
 				on:click={() => {
 					callback(product, 'all');
 				}}>Load product data</Button

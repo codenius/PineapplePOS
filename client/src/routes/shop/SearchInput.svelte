@@ -18,7 +18,7 @@
 	import type { Item } from '$lib/types/Item';
 	import { ItemsController } from '$lib/ApiControllers';
 
-	const SEARCH_RESULTS_LIMIT = 10
+	const SEARCH_RESULTS_LIMIT = 10;
 	const options = { keys: ['name', 'category', 'company'] };
 
 	let fuse = new Fuse([] as Item[], options);
