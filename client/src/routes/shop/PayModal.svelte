@@ -25,8 +25,7 @@
 	import { calculateTotal } from './+page.svelte';
 	import { language } from '$lib/i18n';
 	import type { ShoppingBagEntry } from '$lib/types/ShoppingBagEntry';
-	import { sellItems } from '$lib/data';
-	import { ItemsController } from '$lib/ItemsController';
+	import { ItemsController } from '$lib/ApiControllers';
 
 	function toggle() {
 		$payModal = !$payModal;

@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { Button, Modal, ModalBody, ModalFooter, Spinner } from 'sveltestrap';
 	import type { Item } from '$lib/types/Item';
-	import { deleteItem } from '$lib/data';
 	import { useMutation, useQueryClient } from '@sveltestack/svelte-query';
 	import { createEventDispatcher } from 'svelte';
-	import { ItemsController } from '$lib/ItemsController';
+	import { ItemsController } from '$lib/ApiControllers';
 
 	export let id: Item['id'];
 	export let open = false;

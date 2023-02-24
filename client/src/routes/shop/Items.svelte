@@ -7,7 +7,7 @@
 	import type { Item } from '$lib/types/Item';
 	import type { ShoppingBagEntry } from '$lib/types/ShoppingBagEntry';
 	import { searchResults, searchTerm } from './SearchInput.svelte';
-	import { ItemsController } from '$lib/ItemsController';
+	import { ItemsController } from '$lib/ApiControllers';
 
 	const queryResult = useQuery('items', async () => {
 		return ItemsController.getItems();

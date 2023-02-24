@@ -16,7 +16,7 @@
 	} from 'sveltestrap';
 	import Fuse from 'fuse.js';
 	import type { Item } from '$lib/types/Item';
-	import { ItemsController } from '$lib/ItemsController';
+	import { ItemsController } from '$lib/ApiControllers';
 
 	const SEARCH_RESULTS_LIMIT = 10
 	const options = { keys: ['name', 'category', 'company'] };

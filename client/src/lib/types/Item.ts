@@ -5,6 +5,7 @@ export interface Item {
 	category: string;
 	company: string;
 	price: number;
+	sell_price?: number;
 	amount: number;
 	image: string;
 }

@@ -14,9 +14,8 @@
 
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { addItem, getCategories, setItem } from '$lib/data';
 	import type { Item } from '$lib/types/Item';
-	import { useMutation } from '@sveltestack/svelte-query';
+	import { useMutation, useQueryClient } from '@sveltestack/svelte-query';
 	import {
 		Button,
 		ButtonToolbar,
@@ -37,7 +36,7 @@
 	import type { PageData } from './$types';
 	import ProductSearch from './ProductSearch.svelte';
 	import ScanBarcode from './ScanBarcode.svelte';
-	import { ItemsController } from '$lib/ItemsController';
+	import { ItemsController } from '$lib/ApiControllers';
 
 	export let data: PageData;
 	let item: Item = data as Item;
@@ -73,24 +72,29 @@
 			: {};
 	}
 
+	const queryClient = useQueryClient();
+
 	const saveItemMutation = useMutation(
-		async (item: Item) => {
-			if (isNewItem) {
-				ItemsController.addItem(item);
-			} else {
-				ItemsController.setItem(item);
-			}
-		},
+		async (item: Item) =>
+			isNewItem ? ItemsController.addItem(item) : ItemsController.setItem(item),
+
 		{
 			onSuccess: () => {
+				queryClient.invalidateQueries('items');
 				goto('/stock');
 			}
 		}
 	);
 
 	let isDeleteModalOpen = false;
-	const initCategories = getCategories();
+
+	let initCategories: string[] = [];
+	ItemsController.getCategories().then((categories) => {
+		initCategories = categories;
+	});
 	let categories = initCategories;
+	$: categories = initCategories;
+
 	$: newCategory ? (categories = [...initCategories, newCategory]) : {};
 	let newCategory: string;
 	let categoryFilterText: string;
@@ -142,21 +146,27 @@
 					id="item_form"
 					on:submit={(event) => {
 						event.preventDefault();
-						!item.category ? (item.category = '') : {};
+						!item.category ? (item.category = null) : {};
 						$saveItemMutation.mutate(item);
 					}}
 				>
 					<FormGroup>
 						<Label>Name</Label>
-						<Input bind:value={item.name} />
+						<Input required bind:value={item.name} />
 					</FormGroup>
 					<FormGroup>
 						<Label>Amount</Label>
-						<Input type="number" inputmode="numeric" bind:value={item.amount} />
+						<Input
+							min={0}
+							type="number"
+							inputmode="numeric"
+							bind:value={item.amount}
+						/>
 					</FormGroup>
 					<FormGroup>
 						<Label>Price</Label>
 						<Input
+							min={0}
 							type="number"
 							inputmode="numeric"
 							step="any"
@@ -182,7 +192,7 @@
 							bind:filterText={categoryFilterText}
 							value={item.category}
 							bind:justValue={item.category}
-							items={categories}
+							items={categories.filter((category) => !!category)}
 							--font-size="1rem"
 							--padding="0 0 0 .75rem"
 							--input-padding=".375rem 0"

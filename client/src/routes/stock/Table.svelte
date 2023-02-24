@@ -22,11 +22,13 @@
 	import { fade } from 'svelte/transition';
 	import TableSearch from './TableSearch.svelte';
 	import { searchTerm } from './searchTerm';
-	import { ItemsController } from '$lib/ItemsController';
+	import { ItemsController } from '$lib/ApiControllers';
 
 	let queryResult = useQuery<Item[], Error>(
 		'items',
-		async () => {return ItemsController.getItems()},
+		async () => {
+			return ItemsController.getItems();
+		},
 		{ refetchOnMount: 'always' }
 	);
 
