@@ -54,8 +54,8 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div
-	class="CARD"
+<button
+	class="CARD rounded"
 	style={isSearchItemCard ? 'grid-row: 1; width: 15em' : ''}
 	class:active
 	on:mousedown={() => {
@@ -68,6 +68,7 @@
 		);
 	}}
 	on:click={() => {
+		increaseInShoppingBag();
 		if (timeoutPassed) {
 			active = false;
 			timeoutPassed = false;
@@ -91,7 +92,6 @@
 	}}
 >
 	<Card
-		on:click={increaseInShoppingBag}
 		class="h-100 {checkAmount(amount, '', 'border-warning', 'border-danger')}"
 	>
 		<CardImg
@@ -131,16 +131,21 @@
 			<span class="text-nowrap">{formatCurrency(price, $language)}</span>
 		</CardFooter>
 	</Card>
-</div>
+</button>
 
 <style>
 	.CARD {
+		all: unset;
 		transition: opacity, transform 75ms;
 		transition-timing-function: ease-out;
 	}
 
 	.CARD:hover {
 		opacity: 0.85;
+	}
+
+	.CARD:focus-visible {
+		outline: solid 0.12rem;
 	}
 
 	.CARD.active {
