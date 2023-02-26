@@ -48,6 +48,5 @@
 	}
 	.Splitpanes .splitpanes__splitter {
 		width: 1rem !important;
-		cursor: w-resize !important;
 	}
 </style>
