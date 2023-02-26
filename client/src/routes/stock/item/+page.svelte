@@ -37,6 +37,7 @@
 	import ProductSearch from './ProductSearch.svelte';
 	import ScanBarcode from './ScanBarcode.svelte';
 	import { ItemsController } from '$lib/ApiControllers';
+	import div, { filedrop } from 'filedrop-svelte';
 
 	export let data: PageData;
 	let item: Item = data as Item;
@@ -65,11 +66,11 @@
 		});
 	}
 
-	async function setBase64Image(event: Event) {
-		const fileInput = event.target as HTMLInputElement;
-		fileInput.files
-			? (item.image = await convertBase64(fileInput.files[0]))
-			: {};
+	async function setBase64Image(files: FileList) {
+		if (files) {
+			fileName = files[0].name;
+			item.image = await convertBase64(files[0]);
+		}
 	}
 
 	const queryClient = useQueryClient();
@@ -85,6 +86,21 @@
 			}
 		}
 	);
+
+	let fileName: string = '';
+	let isFileOver: boolean = false;
+
+	function setDragOver(isDragOver: boolean) {
+		return (event: Event) => {
+			if (isDragOver == false && !event.currentTarget.contains(event.relatedTarget)) {
+				isFileOver = false;
+			} else if (isDragOver == true) {
+				isFileOver = true;
+			}
+			/* isFileOver = isDragOver
+			console.log(isDragOver) */
+		};
+	}
 
 	let isDeleteModalOpen = false;
 
@@ -210,9 +226,53 @@
 				</div>
 				<h2>Image</h2>
 				<TabContent>
-					<TabPane class="p-2 border-start" tabId="file" active tab="File">
-						<Label>Select or Drag'n'Drop an image file</Label>
-						<Input type="file" on:input={setBase64Image} />
+					<TabPane
+						class="p-2 border-start FILE_TAB"
+						tabId="file"
+						active
+						tab="File"
+					>
+						<div
+							use:filedrop={{multiple: false, windowDrop: false}}
+							on:filedrop={(event) => {
+								isFileOver = false
+								setBase64Image(event.detail.files.accepted);
+							}}
+							on:filedragenter={setDragOver(true)}
+							on:dragleave={setDragOver(false)}
+						>
+							<div
+								class="p-3 bg-light rounded w-100 border DROPZONE {isFileOver && 'hover'} d-flex align-items-center justify-content-center"
+								style="border-style: dashed !important; border-width: 0.15rem !important;"
+							>
+								<div class="d-flex gap-1 text-secondary">
+									{#if isFileOver}
+										<div class="text-black h5">
+											<Icon name="plus-circle-dotted"></Icon>
+											Drop image</div>
+									{:else if fileName}
+										<img
+											style="object-fit: contain; height: 2rem;"
+											src={item.image}
+											alt=""
+										/>
+										<span>{fileName} selected</span>
+									{:else}
+										Click to select or Drag'n'Drop a image
+									{/if}
+								</div>
+							</div>
+						</div>
+						<!-- <Dropzone multiple={false} containerClasses="mb-2" on:drop={(event)=>{setBase64Image(event.detail.acceptedFiles)}}>
+							{#if fileName}
+								<div class="d-flex align-items-center gap-1">
+									<img style="object-fit: contain; height: 2rem;" src="{item.image}" alt="">
+									<span>{fileName} selected</span>
+								</div>
+							{:else}
+								Click to select or Drag'n'Drop a image
+							{/if}
+						</Dropzone> -->
 					</TabPane>
 					<TabPane class="p-2 border-start" tabId="url" tab="URL">
 						<Label>Enter an image url from the public web</Label>
@@ -251,5 +311,16 @@
 	}
 	:global(.svelte-select.focused) {
 		box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%);
+	}
+
+	:global(.DROPZONE) {
+		min-height: 10rem;
+		transition: border-color 0.2s;
+	}
+	:global(.DROPZONE:hover, .DROPZONE.hover) {
+		border-color: var(--bs-primary) !important;
+	}
+	:global(.FILE_TAB label) {
+		display: unset;
 	}
 </style>
