@@ -23,15 +23,26 @@
 
 	$: {
 		if ($queryResult.isSuccess) {
-			items = $queryResult.data.map((item: Item) => {
-				let shoppingBagEntry = $shoppingBag.find(
-					(shoppingBagEntry: ShoppingBagEntry) => shoppingBagEntry.id == item.id
-				);
-				let shoppingBagAmount = shoppingBagEntry ? shoppingBagEntry.amount : 0;
-				return { ...item, amount: item.amount - shoppingBagAmount };
-			});
+			items = substracteShoppingBagAmount($queryResult.data, $shoppingBag)
 			itemsByCategory = splitItemsToCategorys(items);
 		}
+	}
+
+
+	let searchItems: Item[]
+	
+	$: {
+		searchItems = substracteShoppingBagAmount($searchResults, $shoppingBag)
+	}
+
+	function substracteShoppingBagAmount(items: Item[], shoppingBag: ShoppingBagEntry[]): Item[] {
+		return items.map((item: Item) => {
+			let shoppingBagEntry = shoppingBag.find(
+				(shoppingBagEntry: ShoppingBagEntry) => shoppingBagEntry.id == item.id
+			);
+			let shoppingBagAmount = shoppingBagEntry ? shoppingBagEntry.amount : 0;
+			return { ...item, amount: item.amount - shoppingBagAmount };
+		});
 	}
 
 	function splitItemsToCategorys(items: Item[]) {
@@ -73,7 +84,7 @@
 				class="p-2 w-100"
 				id="searchWrapper"
 			>
-				{#each $searchResults as item}
+				{#each searchItems as item}
 					<ItemCard {...item} isSearchItemCard={true} />
 				{:else}
 					<h4 class="m-auto my-5">Nothing found.</h4>
