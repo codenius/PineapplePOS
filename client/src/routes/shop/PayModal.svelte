@@ -26,6 +26,7 @@
 	import { language } from '$lib/i18n';
 	import type { ShoppingBagEntry } from '$lib/types/ShoppingBagEntry';
 	import { ItemsController } from '$lib/ApiControllers';
+	import Kbd from '$lib/Kbd.svelte';
 
 	function toggle() {
 		$payModal = !$payModal;
@@ -52,7 +53,24 @@
 			}
 		}
 	);
+
+	function sell() {
+		$sellMutation.mutate($shoppingBag);
+	}
 </script>
+
+<!-- <svelte:window
+	use:shortcut={{ trigger: { key: 'Enter', modifier: 'ctrl', callback: sell } }}
+/>
+ -->
+
+<svelte:window
+	on:keydown={(e) => {
+		if (e.key == 'Enter' && e.ctrlKey && $payModal) {
+			sell();
+		}
+	}}
+/>
 
 <Modal scrollable={true} size="xl" isOpen={$payModal} {toggle}>
 	<ModalHeader {toggle}>Pay</ModalHeader>
@@ -108,28 +126,29 @@
 			</Row>
 		</Container>
 	</ModalBody>
-	<ModalFooter>
-		<Button
-			on:click={() => {
-				$payModal = false;
-			}}
-			color="secondary">Cancel</Button
+	<ModalFooter class="justify-content-between">
+		<span class="text-secondary"
+			>Hit <Kbd>Ctrl</Kbd> + <Kbd>Enter</Kbd> to proceed.</span
 		>
-		<Button
-			on:click={() => {
-				$sellMutation.mutate($shoppingBag);
-			}}
-			color="primary"
-			>Done
-			{#if $sellMutation.isLoading}
-				<Spinner size="sm" />
-			{/if}
-		</Button>
+		<div>
+			<Button
+				on:click={() => {
+					$payModal = false;
+				}}
+				color="secondary">Cancel</Button
+			>
+			<Button on:click={sell} color="primary"
+				>Done
+				{#if $sellMutation.isLoading}
+					<Spinner size="sm" />
+				{/if}
+			</Button>
+		</div>
 	</ModalFooter>
 </Modal>
 
 <style global>
-	.Modal {
+	/* 	.Modal {
 		width: initial;
 		height: max-content;
 	}
@@ -138,5 +157,11 @@
 	}
 	.modal-dialog.modal-xl {
 		max-width: 80%;
+	} */
+	@media (max-width: 1024px) {
+		.modal-dialog {
+			max-width: 100%;
+			margin: 1.75rem 1rem;
+		}
 	}
 </style>

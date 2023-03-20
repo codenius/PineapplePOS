@@ -1,3 +1,11 @@
+<script context="module">
+	export function openPayModal() {
+		if (get(shoppingBag).length) {
+			payModal.set(true);
+		}
+	}
+</script>
+
 <script lang="ts">
 	import { payModal } from '$lib/stores/payModal';
 	import { shoppingBag } from '$lib/stores/shoppingBag';
@@ -7,6 +15,7 @@
 	import { formatCurrency } from '$lib/currencyHelpers';
 	import { calculateTotal } from './+page.svelte';
 	import { language } from '$lib/i18n';
+	import { get } from 'svelte/store';
 
 	let queryResult = useQuery<Item[], Error>('items');
 
@@ -25,9 +34,7 @@
 
 	<Button
 		disabled={!$shoppingBag.length}
-		on:click={() => {
-			$payModal = true;
-		}}
+		on:click={openPayModal}
 		size="lg"
 		color="primary"
 		class="shadow-lg rounded-pill">Pay <Icon name="arrow-right" /></Button

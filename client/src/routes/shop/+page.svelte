@@ -22,7 +22,10 @@
 	import PayModal from './PayModal.svelte';
 	import type { ShoppingBagEntry } from '$lib/types/ShoppingBagEntry';
 	import type { Item } from '$lib/types/Item';
+	import CommandPalette from '$lib/CommandPalette.svelte';
 </script>
+
+<CommandPalette />
 
 <div id="wrapper" class="h-100 d-flex flex-column">
 	<Toolbar />

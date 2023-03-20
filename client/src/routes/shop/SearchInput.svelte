@@ -2,6 +2,12 @@
 	import { writable, type Writable } from 'svelte/store';
 	export const searchResults: Writable<Item[]> = writable([]);
 	export const searchTerm: Writable<string> = writable('');
+
+	let input: HTMLInputElement;
+
+	export function focusSearch() {
+		input.focus();
+	}
 </script>
 
 <script lang="ts">
@@ -58,6 +64,15 @@
 			disabled={!$queryResult.isSuccess}
 			bind:value={$searchTerm}
 			on:input={search}
+			on:keydown={(e) => {
+				if (e.key == 'Escape') {
+					input.blur();
+					e.preventDefault();
+				}
+				e.stopPropagation(); /* prevent global shortcuts from firing  */
+			}}
+			on:focus={input.select}
+			bind:inner={input}
 			type="search"
 			placeholder="search..."
 		/>
@@ -67,6 +82,7 @@
                        border-bottom-left-radius: 0;"
 				on:click={() => {
 					$searchTerm = '';
+					focusSearch();
 				}}><Icon name="x-lg" /></Button
 			>
 		</InputGroupText>

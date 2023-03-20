@@ -36,6 +36,7 @@
 		"i18next": "^22.0.2",
 		"i18next-browser-languagedetector": "^7.0.1",
 		"i18next-http-backend": "^1.4.4",
+		"svelte-command-palette": "^1.2.1",
 		"svelte-headless-table": "^0.15.3",
 		"svelte-i18next": "github:codenius/svelte-i18next",
 		"svelte-keyboard": "^0.5.5",
