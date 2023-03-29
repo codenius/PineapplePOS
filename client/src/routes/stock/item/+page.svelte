@@ -184,7 +184,7 @@
 						<Input
 							min={0}
 							type="number"
-							inputmode="numeric"
+							inputmode="decimal"
 							step="any"
 							bind:value={item.price}
 						/>
