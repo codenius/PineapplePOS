@@ -16,6 +16,7 @@ import loggerMiddleware from "./middlewares/loggerMiddleware";
 import apiRouter from "./routes/api";
 import BaseError from "./types/errors/baseError";
 import {ErrorJson} from "./types/errors/commons";
+import { corsMiddleware } from "./middlewares/corsMiddleware";
 
 const DATABASE_URL = process.env.DB_URL || "mongodb://localhost:27017"
 const DEBUG = process.env.DEBUG || true
@@ -32,6 +33,7 @@ app.use(urlencoded({ extended: true }))
 app.use(json())
 app.use(inputMiddleware)
 app.use(loggerMiddleware)
+app.use(corsMiddleware)
 
 /* Routes */
 app.use("/api", apiRouter)
