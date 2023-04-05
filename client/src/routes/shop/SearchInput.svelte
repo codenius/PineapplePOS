@@ -69,7 +69,10 @@
 					input.blur();
 					e.preventDefault();
 				}
-				e.stopPropagation(); /* prevent global shortcuts from firing  */
+				if (e.key != 'Enter') {
+					/* pass Enter, to prevent form default */
+					e.stopPropagation(); /* prevent global shortcuts from firing  */
+				}
 			}}
 			on:focus={input.select}
 			bind:inner={input}
