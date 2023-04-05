@@ -31,9 +31,9 @@
 	"type": "module",
 	"dependencies": {
 		"@sveltestack/svelte-query": "^1.6.0",
+		"@undecaf/barcode-detector-polyfill": "^0.9.15",
 		"filedrop-svelte": "^0.1.2",
 		"fuse.js": "^6.6.2",
-		"html5-qrcode": "^2.3.7",
 		"i18next": "^22.0.2",
 		"i18next-browser-languagedetector": "^7.0.1",
 		"i18next-http-backend": "^1.4.4",

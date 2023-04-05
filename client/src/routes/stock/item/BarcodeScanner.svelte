@@ -1,89 +1,113 @@
 <script lang="ts">
-	import { Html5Qrcode } from 'html5-qrcode';
 	import { createEventDispatcher, onDestroy, onMount } from 'svelte';
 	import { Button, Icon } from 'sveltestrap';
 
+	import { BarcodeDetectorPolyfill } from '@undecaf/barcode-detector-polyfill';
+
+	type plolyfillWindow = typeof window & {
+		BarcodeDetector: typeof BarcodeDetectorPolyfill;
+	};
+
+	try {
+		(window as plolyfillWindow).BarcodeDetector.getSupportedFormats();
+	} catch {
+		(window as plolyfillWindow).BarcodeDetector = BarcodeDetectorPolyfill;
+	}
+
 	export let code: string = '';
 
-	let scanning = false;
+	let scanning = true;
 	let error = false;
-
-	let html5Qrcode: Html5Qrcode;
+	let video: HTMLVideoElement;
+	let stream: MediaStream;
+	let interval: NodeJS.Timer;
+	let barcodeDetector: BarcodeDetectorPolyfill;
 
 	const dispatch = createEventDispatcher();
 
-	onMount(() => {
-		init();
-		start();
-	});
-	onDestroy(() => {
-		stop();
-	});
+	onMount(init);
+	onDestroy(stop);
 
-	function init() {
-		html5Qrcode = new Html5Qrcode('reader');
-	}
-
-	async function start() {
-		error = false;
-		scanning = true;
-		await Html5Qrcode.getCameras()
-			.then()
-			.catch(() => {
-				error = true;
-				scanning = false;
+	async function init() {
+		try {
+			stream = await navigator.mediaDevices.getUserMedia({
+				video: {
+					facingMode: { ideal: 'environment' }
+				},
+				audio: false
 			});
-		await html5Qrcode.start(
-			{ facingMode: 'environment' },
-			{
-				fps: 20,
-				qrbox: 1000
-			},
-			onScanSuccess,
-			undefined
-		);
+			video.srcObject = stream;
+			await video.play();
+			scanning = true;
+			barcodeDetector = new (window as plolyfillWindow).BarcodeDetector();
+
+			resume();
+		} catch (errMsg) {
+			error = true;
+			scanning = false;
+		}
 	}
 
-	async function stop() {
-		await html5Qrcode.stop();
+	function pause() {
+		stream.getVideoTracks()[0].enabled = false;
+		clearInterval(interval);
 		scanning = false;
+	}
+
+	function resume() {
+		if (!video.paused) {
+			stream.getVideoTracks()[0].enabled = true;
+			scanning = true;
+
+			interval = setInterval(async () => {
+				if (scanning) {
+					const barcodes = await barcodeDetector.detect(video);
+					if (barcodes.length != 0) {
+						onScanSuccess(barcodes[0].rawValue);
+					}
+				}
+			}, 500);
+		}
+	}
+
+	function stop() {
+		if (!video.paused) {
+			pause();
+			stream.getVideoTracks()[0].stop();
+		}
 	}
 
 	async function onScanSuccess(decodedText: string) {
 		code = decodedText;
 		dispatch('scan');
-		stop();
+		pause();
 	}
 </script>
 
-<div class="mb-2">
-	<reader class="rounded overflow-hidden" id="reader" />
-	<div style="position: absolute;">
-		{#if !scanning}
-			<Button color="light" on:click={start}>
+<div
+	class="mb-2 position-relative rounded overflow-hidden d-flex justify-content-center"
+>
+	<!-- svelte-ignore a11y-media-has-caption -->
+	<video class="rounded" bind:this={video} />
+	{#if !scanning}
+		<div
+			class="bg-light position-absolute h-100 w-100 d-flex flex-column justify-content-center align-items-center"
+		>
+			<Button outline color="secondary" on:click={resume}>
 				<Icon name="arrow-clockwise" />
 				Scan again</Button
 			>
 			{#if error}
-				<span class="text-light m-2">Please allow camera access</span>
+				<span class="text-dark m-2">Please grant camera access.</span>
 			{/if}
-		{/if}
-	</div>
+		</div>
+	{/if}
 </div>
 
 <style>
-	div {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		object-fit: contain;
-	}
-	reader {
-		position: relative;
+	video {
 		min-height: 20rem;
-		max-height: 100%;
-		width: 100%;
-		background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+		max-height: 30rem;
+		object-fit: contain;
 	}
 </style>
