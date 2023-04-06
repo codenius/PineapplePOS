@@ -1,0 +1,34 @@
+{
+	"image": "Bild",
+	"name": "Name",
+	"category": "Kategorie",
+	"company": "Hersteller",
+	"amount": "Anzahl",
+	"price": "Preis",
+
+	"search_table": "$t(search) table",
+	"add_item": "$(item) hinzuzufügen",
+
+	"create_item": "Neues $(item) hinzuzufügen",
+	"edit_item": "$(item) bearbeiten",
+
+	"item_data": "Produktdaten",
+	"load_product_data": "$t(stock:product_data) laden",
+	"scan_barcode": "Barcode scannen",
+	"search_item": "$t(item) suchen",
+
+	"select_category": "Kategorie auswählen",
+
+	"load": "Laden",
+	"scan_again": "Erneut scannen",
+	"camera_permission": "Auf die Kamera konnte nicht zugegriffen werden. Bitte Berechtigungen überprüfen.",
+	"no_items_found": "Es wurden keine Ergebnisse gefunden.",
+
+	"result_other": "Ergebnisse",
+
+	"file": "Datei",
+	"select_file": "Klicken um Datei auszuwählen oder ein Bild hier draufziehen",
+	"url": "Link",
+	"enter_image_url": "$t(stock) zu einem Bild eingeben",
+	"image_preview": "Bildvorschau"
+}
