@@ -4,13 +4,13 @@
  * @param value - a Json object of any type, that is allowed by json
  * @param fn - a function that gets a single type
  */
-function mapJSON(value: object | Array<any> | number | string | boolean, fn: (val) => {} = encodeURIComponent) {
+function mapJSON(value: object | Array<any> | number | string | boolean, fn: (val) => {} = i => i) {
     if (Array.isArray(value)) {
         return value.map(item => mapJSON(item))
     }
 
     switch (typeof value) {
-        case "object": {
+        case "object": if (value !== null) {
             Object.keys(value).forEach((_key) => {
                 // disallow keys with _ to disallow changes of internal values
                 // disallow keys with $ to disallow mongodb command executions
@@ -38,6 +38,6 @@ function mapJSON(value: object | Array<any> | number | string | boolean, fn: (va
  * This is our defender against injections from input.
  */
 export function inputMiddleware(req, res, next) {
-    req.body = mapJSON(req.body, encodeURIComponent) || {}
+    req.body = mapJSON(req.body) || {}
     next()
 }

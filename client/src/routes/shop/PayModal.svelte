@@ -3,7 +3,11 @@
 	import { shoppingBag } from '$lib/stores/shoppingBag';
 	import Numpad from './components/PayModal/Numpad.svelte';
 	import type { Item } from '$lib/types/Item';
-	import { useQuery } from '@sveltestack/svelte-query';
+	import {
+		useMutation,
+		useQuery,
+		useQueryClient
+	} from '@sveltestack/svelte-query';
 	import {
 		Modal,
 		ModalHeader,
@@ -13,14 +17,18 @@
 		Row,
 		Col,
 		Button,
-		Icon
+		Icon,
+		Spinner
 	} from 'sveltestrap';
 	import Receipt from './components/PayModal/Receipt.svelte';
-	import { formatCurrency } from '$lib/formatCurrency';
-	import { language } from '$lib/i18n';
+	import { formatCurrency } from '$lib/currencyHelpers';
 	import { calculateTotal } from './+page.svelte';
+	import { language } from '$lib/i18n';
+	import type { ShoppingBagEntry } from '$lib/types/ShoppingBagEntry';
+	import { sellItems } from '$lib/data';
+
 	function toggle() {
-		$payModal = !payModal;
+		$payModal = !$payModal;
 	}
 
 	let queryResult = useQuery<Item[], Error>('items');
@@ -29,6 +37,21 @@
 
 	let total: number;
 	$: total = calculateTotal($shoppingBag, $queryResult.data || []);
+
+	const queryClient = useQueryClient();
+
+	const sellMutation = useMutation(
+		async (shoppingBag: ShoppingBagEntry[]) => {
+			return sellItems(shoppingBag);
+		},
+		{
+			onSuccess: () => {
+				$shoppingBag = [];
+				$payModal = false;
+				queryClient.invalidateQueries('items');
+			}
+		}
+	);
 </script>
 
 <Modal scrollable={true} size="xl" isOpen={$payModal} {toggle}>
@@ -46,7 +69,7 @@
 							class="text-truncate"
 							style="font-weight: initial; max-width: 15rem;"
 						>
-							{formatCurrency(total, 'EUR', $language)}
+							{formatCurrency(total, $language)}
 						</h3>
 					</div>
 					<div class="mb-3">
@@ -59,7 +82,7 @@
 								{#if given < total}
 									<Icon name="exclamation-triangle" class="text-warning" />
 								{/if}
-								{formatCurrency(given, 'EUR', $language)}
+								{formatCurrency(given, $language)}
 							{:else}
 								–
 							{/if}
@@ -72,7 +95,7 @@
 							style="font-weight: initial; max-width: 15rem;"
 						>
 							{#if given != undefined && given - total >= 0}
-								{formatCurrency(given - total, 'EUR', $language)}
+								{formatCurrency(given - total, $language)}
 							{:else}
 								–
 							{/if}
@@ -92,8 +115,17 @@
 			}}
 			color="secondary">Cancel</Button
 		>
-		<Button color="primary">Done</Button></ModalFooter
-	>
+		<Button
+			on:click={() => {
+				$sellMutation.mutate($shoppingBag);
+			}}
+			color="primary"
+			>Done
+			{#if $sellMutation.isLoading}
+				<Spinner size="sm" />
+			{/if}
+		</Button>
+	</ModalFooter>
 </Modal>
 
 <style global>

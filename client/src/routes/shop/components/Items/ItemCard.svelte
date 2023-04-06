@@ -2,12 +2,17 @@
 	import { shoppingBag } from '$lib/stores/shoppingBag';
 	import { CardImg, Card, CardSubtitle, CardFooter, Icon } from 'sveltestrap';
 	import type { Item } from '$lib/types/Item';
+	import { formatCurrency } from '$lib/currencyHelpers';
+	import { language } from '$lib/i18n';
 
 	export let id: Item['id'];
 	export let name: Item['name'];
 	export let price: Item['price'];
 	export let amount: Item['amount'];
 	export let image: Item['image'];
+
+	export let isSearchItemCard: boolean = false;
+
 	let active: boolean = false;
 	let timeoutPassed: boolean = false;
 	let timeout: Promise<void>;
@@ -51,6 +56,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
 	class="CARD"
+	style={isSearchItemCard ? 'grid-row: 1; width: 15em' : ''}
 	class:active
 	on:mousedown={() => {
 		active = true;
@@ -86,21 +92,26 @@
 >
 	<Card
 		on:click={increaseInShoppingBag}
-		class="m-1 card {checkAmount(
-			amount,
-			'',
-			'border-warning',
-			'border-danger'
-		)}"
-		><CardImg
+		class="h-100 {checkAmount(amount, '', 'border-warning', 'border-danger')}"
+	>
+		<CardImg
 			draggable={false}
-			style="height: 8em; object-fit: contain"
+			class="w-auto flex-grow-1"
+			style="min-height: 8em; max-height: 8em; object-fit: contain"
 			src={image}
 		/>
 
 		<CardFooter class="d-flex justify-content-between gap-2 h-100">
 			<span class="d-flex align-items-baseline gap-2">
-				<span>{name}</span>
+				<span
+					style="overflow-y:hidden; 
+				word-break: break-word;  
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-line-clamp: 3;"
+				>
+					{name}
+				</span>
 				<CardSubtitle style="font-size: inherit">
 					<small
 						class="{checkAmount(
@@ -117,7 +128,7 @@
 					>
 				</CardSubtitle>
 			</span>
-			<span class="text-nowrap">{price}</span>
+			<span class="text-nowrap">{formatCurrency(price, $language)}</span>
 		</CardFooter>
 	</Card>
 </div>

@@ -4,7 +4,7 @@
 	import { useQuery } from '@sveltestack/svelte-query';
 	import { Button, ButtonToolbar, Icon } from 'sveltestrap';
 	import type { Item } from '$lib/types/Item';
-	import { formatCurrency } from '$lib/formatCurrency';
+	import { formatCurrency } from '$lib/currencyHelpers';
 	import { calculateTotal } from './+page.svelte';
 	import { language } from '$lib/i18n';
 
@@ -20,7 +20,7 @@
 	class="fixed-bottom m-4 gap-2"
 >
 	<span class="shadow-lg rounded-pill bg-secondary text-white btn-lg">
-		{formatCurrency(total, 'EUR', $language)}</span
+		{formatCurrency(total, $language)}</span
 	>
 
 	<Button
