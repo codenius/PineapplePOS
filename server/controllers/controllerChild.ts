@@ -81,7 +81,7 @@ class ControllerChild {
         if (!(json instanceof Promise)) {
             _send(json)
         } else {
-            json.then((j) => {_send(j)})
+            json.then(_send)
         }
     }
 }
