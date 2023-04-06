@@ -1,4 +1,4 @@
-import {CastError, Model, QueryOptions, Schema, Types} from "mongoose";
+import { Model, QueryOptions, Types} from "mongoose";
 import InputError from "../types/errors/inputError";
 import DatabaseError from "../types/errors/databaseError";
 import validate, {validateModel} from "../types/validator";
@@ -43,12 +43,12 @@ class SimpleController {
         ],[
             async (req, res) => {
                 validate(Types.ObjectId, req.params.id)
-                return await this.model.findById(req.params.id).exec()
+                return await this.model.findById(req.params.id).lean()
             }
         ], [
             async (req, res) => {
                 let filter = req.body || {}
-                return await this.model.find(filter).exec()
+                return await this.model.find(filter).lean()
             }
         ]);
     }
@@ -67,16 +67,16 @@ class SimpleController {
                 validate(Types.ObjectId, req.params.id)
                 validateModel(this.model, req.body)
                 if (Object.keys(req.body).length != 0) {
-                    return await this.model.findByIdAndUpdate(req.params.id, req.body, this.options).exec()
+                    return await this.model.findByIdAndUpdate(req.params.id, req.body, this.options).lean()
                 } else {
-                    return await this.model.findById(req.params.id).exec()
+                    return await this.model.findById(req.params.id).lean()
                 }
             }
         ], [
             async (req, res) => {
                 return await req.body.map(async elem => {
                     validateModel(this.model, elem)
-                    await this.model.findByIdAndUpdate(elem.id, elem, this.options).exec()
+                    await this.model.findByIdAndUpdate(elem.id, elem, this.options).lean()
                 })
             }
         ]);
@@ -94,13 +94,13 @@ class SimpleController {
             async (req, res) => {
                 validate(Types.ObjectId, req.params.id)
                 req.body._id = req.params.id
-                return await this.model.findOneAndDelete(req.body, this.options).exec()
+                return await this.model.findOneAndDelete(req.body, this.options).lean()
             }
         ], [
             async (req, res) => {
                 validate([Types.ObjectId], req.body)
                 return await req.body.map(async elem => {
-                    await this.model.findOneAndDelete(elem, this.options).exec()
+                    await this.model.findOneAndDelete(elem, this.options).lean()
                 })
             }
         ]);
