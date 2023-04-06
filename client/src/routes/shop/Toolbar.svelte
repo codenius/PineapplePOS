@@ -14,6 +14,8 @@
 	import SearchInput from './SearchInput.svelte';
 	import { get } from 'svelte/store';
 	import { createStoreMethods } from 'svelte-command-palette';
+	import { t } from '$lib/i18n';
+	import Kbd from '$lib/Kbd';
 </script>
 
 <div
@@ -33,17 +35,21 @@
 				event.preventDefault();
 				createStoreMethods().openPalette();
 			}}
-			>Open help with <kbd
-				class="bg-light text-black border text-decoration-none">h</kbd
-			> or click here</a
 		>
-		<Button><Icon name="arrow-counterclockwise" /> Undo last purchase</Button>
+			{@html $t('shop:open_help', {
+				help_key: Kbd('h', 'text-black'),
+				interpolation: { escapeValue: false }
+			})}
+		</a>
+		<Button
+			><Icon name="arrow-counterclockwise" /> {$t('shop:undo_purchase')}</Button
+		>
 		<Button
 			disabled={!$shoppingBag.length}
 			outline={true}
 			color="danger"
 			on:click={clearShoppingBag}
-			><Icon name="x-lg" /> Clear shopping bag</Button
+			><Icon name="x-lg" /> {$t('shop:clear_shoppingBag')}</Button
 		>
 	</ButtonToolbar>
 </div>

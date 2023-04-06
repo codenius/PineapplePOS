@@ -23,10 +23,10 @@
 	import Receipt from './components/PayModal/Receipt.svelte';
 	import { formatCurrency } from '$lib/currencyHelpers';
 	import { calculateTotal } from './+page.svelte';
-	import { language } from '$lib/i18n';
+	import { language, t } from '$lib/i18n';
 	import type { ShoppingBagEntry } from '$lib/types/ShoppingBagEntry';
 	import { ItemsController } from '$lib/ApiControllers';
-	import Kbd from '$lib/Kbd.svelte';
+	import Kbd from '$lib/Kbd';
 
 	function toggle() {
 		$payModal = !$payModal;
@@ -73,7 +73,7 @@
 />
 
 <Modal scrollable={true} size="xl" isOpen={$payModal} {toggle}>
-	<ModalHeader {toggle}>Pay</ModalHeader>
+	<ModalHeader {toggle}>{$t('shop:pay')}</ModalHeader>
 	<ModalBody>
 		<Container fluid class="m-0 p-0">
 			<Row class="gap-3 flex-nowrap">
@@ -82,7 +82,7 @@
 				</Col>
 				<Col class="flex-shrink-0">
 					<div class="mb-3">
-						<h2 class="m-0">Total</h2>
+						<h2 class="m-0">{$t('shop:total')}</h2>
 						<h3
 							class="text-truncate"
 							style="font-weight: initial; max-width: 15rem;"
@@ -91,7 +91,7 @@
 						</h3>
 					</div>
 					<div class="mb-3">
-						<h2>Given</h2>
+						<h2>{$t('shop:given')}</h2>
 						<h3
 							class="text-truncate"
 							style="font-weight: initial; max-width: 15rem;"
@@ -107,7 +107,7 @@
 						</h3>
 					</div>
 					<div class="mb-3">
-						<h2>Change</h2>
+						<h2>{$t('shop:change')}</h2>
 						<h3
 							class="text-truncate"
 							style="font-weight: initial; max-width: 15rem;"
@@ -127,18 +127,21 @@
 		</Container>
 	</ModalBody>
 	<ModalFooter class="justify-content-between">
-		<span class="text-secondary"
-			>Hit <Kbd>Ctrl</Kbd> + <Kbd>Enter</Kbd> to proceed.</span
-		>
+		<span class="text-secondary">
+			{@html $t('shop:pay_proceed', {
+				key: `${Kbd('Ctrl')} + ${Kbd('Enter')}`,
+				interpolation: { escapeValue: false }
+			})}
+		</span>
 		<div>
 			<Button
 				on:click={() => {
 					$payModal = false;
 				}}
-				color="secondary">Cancel</Button
+				color="secondary">{$t('cancel')}</Button
 			>
 			<Button on:click={sell} color="primary"
-				>Done
+				>{$t('done')}
 				{#if $sellMutation.isLoading}
 					<Spinner size="sm" />
 				{/if}

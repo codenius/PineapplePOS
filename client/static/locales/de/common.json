@@ -5,5 +5,13 @@
 	"home": "Start",
 	"shop": "Shop",
 	"stock": "Lager",
-	"settings": "Einstellungen"
+	"settings": "Einstellungen",
+	"item_one": "Produkt",
+	"item_other": "Produkte",
+
+	"search": "Suchen",
+	"done": "Bestätigen",
+	"cancel": "Abbrechen",
+	"delete": "Löschen",
+	"save": "Speichern"
 }

@@ -1,0 +1,19 @@
+{
+	"pay": "Bezahlen",
+	"shoppingBag": "Warenkorb",
+	"total_items": "$t(shop:piece, {'count': {{pieces}}}) von $t(shop:item, {'count': {{items}}})",
+	"item_one": "einem $t(item)",
+	"item_other": "{{count}} $t(item, {'count': {{count}}})n",
+	"piece_one": "ein Stück",
+	"piece_other": "{{count}} Stück",
+	"open_help": "für Tastaturbefehle klicken oder {{help_key}} drücken",
+	"undo_purchase": "Letzten Kauf bearbeiten",
+	"clear_shoppingBag": "$t(shop:shoppingBag) leeren",
+	"not_items_in_shoppingBag": "Es sind keine $t(item_other) im $t(shop:shoppingBag). Klicke welche an, um sie hinzuzufügen.",
+	"restore_shoppingBag": "$t(shop:shoppingBag) wiederherstellen",
+
+	"total": "Gesamt",
+	"given": "Gegeben",
+	"change": "Rückgeld",
+	"pay_proceed": "{{key}} drücken, um fortzufahren."
+}

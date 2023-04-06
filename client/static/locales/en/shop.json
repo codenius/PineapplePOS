@@ -1,0 +1,19 @@
+{
+	"pay": "Pay",
+	"shoppingBag": "shopping bag",
+	"total_items": "$t(shop:piece, {'count': {{pieces}}}) out of $t(shop:item, {'count': {{items}}})",
+	"item_one": "one $t(item)",
+	"item_other": "{{count}} $t(item, {'count': {{count}}})",
+	"piece_one": "one piece",
+	"piece_other": "{{count}} pieces",
+	"open_help": "view keyboard shortcuts with {{help_key}} or click here",
+	"undo_purchase": "Undo last purchase",
+	"clear_shoppingBag": "Clear $t(shop:shoppingBag)",
+	"not_items_in_shoppingBag": "There are no $t(item_other) in $t(shop:shoppingBag), yet. Click one on the left to add it.",
+	"restore_shoppingBag": "Restore $t(shop:shoppingBag)",
+
+	"total": "Total",
+	"given": "Given",
+	"change": "Change",
+	"pay_proceed": "Hit {{key}} to proceed."
+}

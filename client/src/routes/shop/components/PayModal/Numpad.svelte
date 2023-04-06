@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { language } from '$lib/i18n';
+	import { language, t } from '$lib/i18n';
 	import { NumberParser } from '$lib/numberParser';
 	import { onMount } from 'svelte';
 	import Keyboard from 'svelte-keyboard';
@@ -152,7 +152,7 @@
 				prevSelectionEnd = input.selectionEnd;
 			}}
 			class="form-control"
-			placeholder="Given"
+			placeholder={$t('shop:given')}
 			inputmode="none"
 			bind:value
 			bind:this={input}

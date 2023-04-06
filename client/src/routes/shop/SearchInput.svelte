@@ -23,6 +23,7 @@
 	import Fuse from 'fuse.js';
 	import type { Item } from '$lib/types/Item';
 	import { ItemsController } from '$lib/ApiControllers';
+	import { t } from '$lib/i18n';
 
 	const SEARCH_RESULTS_LIMIT = 10;
 	const options = { keys: ['name', 'category', 'company'] };
@@ -77,7 +78,7 @@
 			on:focus={input.select}
 			bind:inner={input}
 			type="search"
-			placeholder="search..."
+			placeholder="{$t('search')}..."
 		/>
 		<InputGroupText class="p-0">
 			<Button

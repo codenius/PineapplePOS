@@ -5,5 +5,13 @@
 	"home": "Home",
 	"shop": "Shop",
 	"stock": "Stock",
-	"settings": "Settings"
+	"settings": "Settings",
+	"item_one": "item",
+	"item_other": "items",
+
+	"search": "Search",
+	"done": "Done",
+	"cancel": "Cancel",
+	"delete": "Delete",
+	"save": "Save"
 }

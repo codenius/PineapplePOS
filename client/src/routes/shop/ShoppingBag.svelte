@@ -16,14 +16,15 @@
 	import ShoppingBagEntry from './components/ShoppingBag/ShoppingBagEntry.svelte';
 	import type { Item } from '$lib/types/Item';
 	import { get } from 'svelte/store';
+	import { t } from '$lib/i18n';
 
 	let queryResult = useQuery<Item[], Error>('items');
 
-	let totalPices: number;
+	let totalPieces: number;
 	$: {
-		totalPices = 0;
+		totalPieces = 0;
 		for (let index = 0; index < $shoppingBag.length; index++) {
-			totalPices += $shoppingBag[index].amount;
+			totalPieces += $shoppingBag[index].amount;
 		}
 	}
 
@@ -53,7 +54,10 @@
 				transition:fade|local={{ duration: 100 }}
 				class="text-muted text-center p-2"
 			>
-				{totalPices} pices from {$shoppingBag.length} items
+				{$t('shop:total_items', {
+					pieces: totalPieces,
+					items: $shoppingBag.length
+				})}
 			</div>
 		{/if}
 	{:else}
@@ -63,11 +67,12 @@
 		>
 			<div class="m-3"><Icon class="h1" name="cart-x" /></div>
 			<h6 class="text-muted">
-				No items in shopping bag yet. Click one on the left to add it.
+				{$t('shop:not_items_in_shoppingBag')}
 			</h6>
 			{#if $clearedShoppingBag.length}
 				<Button outline={true} color="secondary" on:click={restoreShoppingBag}>
-					<Icon name="arrow-counterclockwise" /> Restore cleared shopping bag</Button
+					<Icon name="arrow-counterclockwise" />
+					{$t('shop:restore_shoppingBag')}</Button
 				>
 			{/if}
 		</div>
