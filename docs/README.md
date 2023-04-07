@@ -4,7 +4,7 @@
 - [Customer Specifications](./customer_specification.md)
 - [Performance Specifications](./performance_specification.md)
 
-## For Developer
+## For Developers
 
 - [architecture](./architecture.md)
 - [database structure](./database.md)
