@@ -4,7 +4,10 @@ import type { UserConfig } from 'vite';
 
 const config: UserConfig = {
 	plugins: [sveltekit()],
-	resolve: { alias: { $routes: path.resolve('./src/routes') } }
+	resolve: { alias: { $routes: path.resolve('./src/routes') } },
+	ssr: {
+		noExternal: ['@popperjs/core']
+	}
 };
 
 export default config;

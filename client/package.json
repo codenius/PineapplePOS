@@ -45,6 +45,6 @@
 		"svelte-progress-bar": "^3.0.2",
 		"svelte-select": "^5.2.1",
 		"svelte-splitpanes": "^0.7.0",
-		"sveltestrap": "github:ClapClap-app/sveltestrap"
+		"sveltestrap": "^5.10.0"
 	}
 }

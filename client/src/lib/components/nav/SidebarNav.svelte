@@ -22,7 +22,7 @@
 		: ''} h-100 sticky-top border-end bg-light d-flex flex-column flex-shrink-0 justify-content-between"
 >
 	<nav class="d-flex flex-column gap-5">
-		<div class="list-unstyled">
+		<div class="list-unstyled nav d-block">
 			<NavPart
 				on:click={toogleSidebar}
 				icon="list"

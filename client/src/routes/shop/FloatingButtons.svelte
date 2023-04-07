@@ -28,7 +28,9 @@
 	style="left: initial; right: 0"
 	class="fixed-bottom m-4 gap-2"
 >
-	<span class="shadow-lg rounded-pill bg-secondary text-white btn-lg">
+	<span
+		class="shadow-lg rounded-pill bg-secondary text-white btn btn-lg disabled opacity-100 border-0"
+	>
 		{formatCurrency(total, $language)}</span
 	>
 

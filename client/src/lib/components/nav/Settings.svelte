@@ -16,7 +16,7 @@
 
 <ButtonDropdown class="Settings" {isOpen} toggle={() => (isOpen = !isOpen)}>
 	<DropdownToggle color="transparent" class="p-0">
-		<ul class="list-unstyled mb-1">
+		<ul class="list-unstyled mb-1 nav d-block">
 			<NavPart icon="gear" class="border-bottom-0" bind:expanded
 				>{$t('settings')}</NavPart
 			>
