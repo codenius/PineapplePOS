@@ -8,6 +8,7 @@
 	import type { ShoppingBagEntry } from '$lib/types/ShoppingBagEntry';
 	import { searchResults, searchTerm } from './SearchInput.svelte';
 	import { ItemsController } from '$lib/ApiControllers';
+	import { t } from '$lib/i18n';
 
 	const queryResult = useQuery('items', async () => {
 		return ItemsController.getItems();
@@ -23,19 +24,21 @@
 
 	$: {
 		if ($queryResult.isSuccess) {
-			items = substracteShoppingBagAmount($queryResult.data, $shoppingBag)
+			items = substracteShoppingBagAmount($queryResult.data, $shoppingBag);
 			itemsByCategory = splitItemsToCategorys(items);
 		}
 	}
 
+	let searchItems: Item[];
 
-	let searchItems: Item[]
-	
 	$: {
-		searchItems = substracteShoppingBagAmount($searchResults, $shoppingBag)
+		searchItems = substracteShoppingBagAmount($searchResults, $shoppingBag);
 	}
 
-	function substracteShoppingBagAmount(items: Item[], shoppingBag: ShoppingBagEntry[]): Item[] {
+	function substracteShoppingBagAmount(
+		items: Item[],
+		shoppingBag: ShoppingBagEntry[]
+	): Item[] {
 		return items.map((item: Item) => {
 			let shoppingBagEntry = shoppingBag.find(
 				(shoppingBagEntry: ShoppingBagEntry) => shoppingBagEntry.id == item.id
@@ -87,18 +90,20 @@
 				{#each searchItems as item}
 					<ItemCard {...item} isSearchItemCard={true} />
 				{:else}
-					<h4 class="m-auto my-5">Nothing found.</h4>
+					<h4 class="m-auto my-5">{$t('no_items_found')}</h4>
 				{/each}
 			</div>{/if}
 		<Accordion stayOpen={true} class="ItemGroup">
 			{#each itemsByCategory as category}
 				<AccordionItem active={true}>
 					<span class="ACCORDIONHEADER" slot="header"
-						>{category.category || 'Uncategorized'}</span
+						>{category.category || $t('uncategorized')}</span
 					>
 					<div class="p-1" id="wrapper">
 						{#each category.items as item}
 							<ItemCard {...item} />
+						{:else}
+							<span class="m-auto my-5">{$t('no_items')}</span>
 						{/each}
 					</div>
 				</AccordionItem>
@@ -106,14 +111,22 @@
 		</Accordion>
 	</div>
 {:else}
-	<div class="h-100 d-flex justify-content-center align-items-center">
+	<div class="h-100 d-flex justify-content-center align-items-center px-4">
 		{#if $queryResult.isLoading}
 			<Spinner type="grow" />
 		{/if}
 		{#if $queryResult.isError}
-			<span class="h4">Error: While loading the data an error occured.</span>
+			<span class="h4">{$t('loading_error')}</span>
 		{/if}
 	</div>
+{/if}
+
+{#if $queryResult.isSuccess}
+	{#if !itemsByCategory.length}
+		<div class="h-100 d-flex justify-content-center align-items-center px-4">
+			<span class="h4">{$t('no_items')}</span>
+		</div>
+	{/if}
 {/if}
 
 <style>

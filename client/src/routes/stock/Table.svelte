@@ -25,7 +25,7 @@
 	import { ItemsController } from '$lib/ApiControllers';
 	import Price from './Price.svelte';
 	import { formatCurrency } from '$lib/currencyHelpers';
-	import { language } from '$lib/i18n';
+	import { language, t } from '$lib/i18n';
 
 	let queryResult = useQuery<Item[], Error>(
 		'items',
@@ -60,7 +60,7 @@
 
 	const columns = table.createColumns([
 		table.column({
-			header: 'Image',
+			header: $t('stock:image') as string,
 			accessor: 'image',
 			cell: ({ value }) => createRender(ItemImage, { image: value }),
 			plugins: {
@@ -69,11 +69,11 @@
 			}
 		}),
 		table.column({
-			header: 'Name',
+			header: $t('stock:name') as string,
 			accessor: 'name'
 		}),
 		table.column({
-			header: 'Category',
+			header: $t('stock:category') as string,
 			accessor: 'category',
 			cell: checkEmpty,
 			plugins: {
@@ -85,12 +85,12 @@
 			}
 		}),
 		table.column({
-			header: 'Amount',
+			header: $t('stock:amount') as string,
 			accessor: 'amount',
 			cell: checkEmpty
 		}),
 		table.column({
-			header: 'Price',
+			header: $t('stock:price') as string,
 			accessor: 'price',
 			cell: ({ value }) => createRender(Price, { price: value }),
 			plugins: {
@@ -202,7 +202,7 @@
 	</Table>
 	{#if $queryResult.isSuccess}
 		{#if !$rows.length}
-			<h4 class="m-auto">No products found.</h4>
+			<h4 class="m-auto px-4">{$t('no_items')}</h4>
 		{/if}
 	{/if}
 	{#if $queryResult.isLoading}
@@ -211,5 +211,8 @@
 		>
 			<Spinner type="grow" />
 		</div>
+	{/if}
+	{#if $queryResult.isError}
+		<h4 class="m-auto px-4">{$t('loading_error')}</h4>
 	{/if}
 </div>

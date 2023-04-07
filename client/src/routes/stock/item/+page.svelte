@@ -38,6 +38,7 @@
 	import ScanBarcode from './ScanBarcode.svelte';
 	import { ItemsController } from '$lib/ApiControllers';
 	import div, { filedrop } from 'filedrop-svelte';
+	import { t } from '$lib/i18n';
 
 	export let data: PageData;
 	let item: Item = data as Item;
@@ -92,7 +93,10 @@
 
 	function setDragOver(isDragOver: boolean) {
 		return (event: Event) => {
-			if (isDragOver == false && !event.currentTarget.contains(event.relatedTarget)) {
+			if (
+				isDragOver == false &&
+				!event.currentTarget.contains(event.relatedTarget)
+			) {
 				isFileOver = false;
 			} else if (isDragOver == true) {
 				isFileOver = true;
@@ -120,29 +124,33 @@
 	<Container xl>
 		<Row>
 			<Col class="p-0">
-				<a href="/stock" class="p-0"><Icon name="chevron-left" />Back</a>
+				<a href="/stock" class="p-0"><Icon name="chevron-left" />{$t('back')}</a
+				>
 			</Col>
 		</Row>
 		<Row class="mb-2">
 			<Col class="p-0">
-				<h1 class="p-0 m-0">{isNewItem ? 'Create new item' : 'Edit item'}</h1>
+				<h1 class="p-0 m-0">
+					{isNewItem ? $t('stock:create_item') : $t('stock:edit_item')}
+				</h1>
 			</Col>
 			<Col class="p-0 d-flex align-items-center justify-content-end">
 				<ButtonToolbar class="gap-2">
 					<Button type="submit" form="item_form" color="primary">
-						Save
+						{$t('save')}
 						{#if $saveItemMutation.isLoading}
 							<Spinner size="sm" />
 						{/if}
 					</Button>
-					<Button href="/stock">Cancel</Button>
+					<Button href="/stock">{$t('cancel')}</Button>
 					<Button
 						color="danger"
 						disabled={isNewItem}
 						on:click={() => {
 							isDeleteModalOpen = true;
 						}}
-						>Delete
+					>
+						{$t('delete')}
 					</Button>
 					<DeleteModal
 						on:deleted={() => {
@@ -157,7 +165,7 @@
 		<Row><hr /></Row>
 		<Row class="gap-3">
 			<Col class="p-0">
-				<h2>Product data</h2>
+				<h2>{$t('stock:item_data')}</h2>
 				<Form
 					id="item_form"
 					on:submit={(event) => {
@@ -167,11 +175,11 @@
 					}}
 				>
 					<FormGroup>
-						<Label>Name</Label>
+						<Label>{$t('stock:name')}</Label>
 						<Input required bind:value={item.name} />
 					</FormGroup>
 					<FormGroup>
-						<Label>Amount</Label>
+						<Label>{$t('stock:amount')}</Label>
 						<Input
 							min={0}
 							type="number"
@@ -180,7 +188,7 @@
 						/>
 					</FormGroup>
 					<FormGroup>
-						<Label>Price</Label>
+						<Label>{$t('stock:price')}</Label>
 						<Input
 							min={0}
 							type="number"
@@ -190,12 +198,13 @@
 						/>
 					</FormGroup>
 					<FormGroup>
-						<Label>Company</Label>
+						<Label>{$t('stock:company')}</Label>
 						<Input bind:value={item.company} />
 					</FormGroup>
 					<FormGroup>
-						<Label>Category</Label>
+						<Label>{$t('stock:category')}</Label>
 						<Select
+							placeholder={$t('stock:select_category')}
 							on:filter={() => {
 								newCategory = categoryFilterText;
 							}}
@@ -219,46 +228,50 @@
 				</Form>
 			</Col>
 			<Col class="p-0">
-				<h2>Load product data</h2>
+				<h2>{$t('stock:load_item_data')}</h2>
 				<div class="d-flex gap-2">
 					<ScanBarcode callback={insertProductData} />
 					<ProductSearch callback={insertProductData} />
 				</div>
-				<h2>Image</h2>
+				<h2>{$t('stock:image')}</h2>
 				<TabContent>
 					<TabPane
 						class="p-2 border-start FILE_TAB"
 						tabId="file"
 						active
-						tab="File"
+						tab={$t('stock:file')}
 					>
 						<div
-							use:filedrop={{multiple: false, windowDrop: false}}
+							use:filedrop={{ multiple: false, windowDrop: false }}
 							on:filedrop={(event) => {
-								isFileOver = false
+								isFileOver = false;
 								setBase64Image(event.detail.files.accepted);
 							}}
 							on:filedragenter={setDragOver(true)}
 							on:dragleave={setDragOver(false)}
 						>
 							<div
-								class="p-3 bg-light rounded w-100 border DROPZONE {isFileOver && 'hover'} d-flex align-items-center justify-content-center"
+								class="p-3 bg-light rounded w-100 border DROPZONE {isFileOver &&
+									'hover'} d-flex align-items-center justify-content-center"
 								style="border-style: dashed !important; border-width: 0.15rem !important;"
 							>
 								<div class="d-flex gap-1 text-secondary">
 									{#if isFileOver}
 										<div class="text-black h5">
-											<Icon name="plus-circle-dotted"></Icon>
-											Drop image</div>
+											<Icon name="plus-circle-dotted" />
+											{$t('stock:drop_image')}
+										</div>
 									{:else if fileName}
 										<img
 											style="object-fit: contain; height: 2rem;"
 											src={item.image}
 											alt=""
 										/>
-										<span>{fileName} selected</span>
+										<span
+											>{$t('stock:file_selected', { filename: fileName })}</span
+										>
 									{:else}
-										Click to select or Drag'n'Drop a image
+										{$t('stock:select_file')}
 									{/if}
 								</div>
 							</div>
@@ -274,13 +287,13 @@
 							{/if}
 						</Dropzone> -->
 					</TabPane>
-					<TabPane class="p-2 border-start" tabId="url" tab="URL">
-						<Label>Enter an image url from the public web</Label>
+					<TabPane class="p-2 border-start" tabId="url" tab={$t('stock:url')}>
+						<Label>{$t('stock:enter_image_url')}</Label>
 						<Input type="url" bind:value={item.image} />
 					</TabPane>
 				</TabContent>
 				<div class="my-2">
-					<i>Image preview</i>
+					<i>{$t('stock:image_preview')}</i>
 					<figure
 						class="bg-secondary bg-opacity-25 border border-dark rounded d-flex justify-content-center align-items-center p-2 my-2"
 						style="height: 15rem; aspect-ratio: 1/1;"

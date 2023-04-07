@@ -13,5 +13,10 @@
 	"done": "Bestätigen",
 	"cancel": "Abbrechen",
 	"delete": "Löschen",
-	"save": "Speichern"
+	"save": "Speichern",
+	"back": "Zurück",
+	"uncategorized": "Unkategorisiert",
+	"loading_error": "Beim laden der $t(item_other) ist ein Fehler aufgetreten.",
+	"no_items_found": "Es wurden keine $t(item_other) gefunden.",
+	"no_items": "Es sind keine $t(item_other) vorhanden."
 }

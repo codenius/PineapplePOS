@@ -1,0 +1,42 @@
+{
+	"image": "Image",
+	"name": "Name",
+	"category": "Category",
+	"company": "Company",
+	"amount": "Amount",
+	"price": "Price",
+
+	"all": "All",
+
+	"search_table": "Search table",
+	"add_item": "Add $t(item, {'count': 1})",
+
+	"confirm_deletion": "Confirm deletion",
+	"delete_prompt": "Are you sure you want to delete this $t(item, {'count': 1})?",
+
+	"create_item": "Add new $t(item, {'count': 1})",
+	"edit_item": "Edit $t(item, {'count': 1})",
+
+	"item_data": "Item data",
+	"load_item_data": "Load $t(stock:item_data)",
+	"scan_barcode": "Scan barcode",
+	"search_item": "Search $t(item, {'count': 1})",
+
+	"select_category": "Select $t(stock:category)",
+
+	"load": "Load",
+	"scan_again": "Scan again",
+	"camera_permission_warning": "Can't access the camera. Please check permissions.",
+	"no_items_found": "No results found.",
+	"search_provider_info": "Search {{provider}} for $t(item_other).",
+
+	"result_other": "{{count}} results",
+
+	"file": "File",
+	"select_file": "Click to select a file or drag and drop an image.",
+	"drop_image": "Drop image",
+	"file_selected": "{{filename}} selected",
+	"url": "URL",
+	"enter_image_url": "Enter $t(stock:url) to an image",
+	"image_preview": "Image preview"
+}

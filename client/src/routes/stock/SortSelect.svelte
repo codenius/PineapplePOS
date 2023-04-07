@@ -16,6 +16,8 @@
 </script>
 
 <script lang="ts">
+	import { t } from '$lib/i18n';
+
 	import type { Writable } from 'svelte/store';
 
 	import {
@@ -43,9 +45,9 @@
 		{#if $filterValue}
 			{$filterValue}
 		{:else if $filterValue === undefined}
-			All
+			{$t('stock:all')}
 		{:else if $filterValue === null}
-			Uncategorized
+			{$t('uncategorized')}
 		{/if}
 	</DropdownToggle>
 	<DropdownMenu>
@@ -55,14 +57,14 @@
 				$filterValue = undefined;
 			}}
 		>
-			<strong>All</strong>
+			<strong>{$t('stock:all')}</strong>
 		</DropdownItem>
 		{#each options as option}
 			<DropdownItem
 				active={$filterValue === option}
 				on:click={() => {
 					$filterValue = option;
-				}}>{option || 'Uncategorized'}</DropdownItem
+				}}>{option || $t('uncategorized')}</DropdownItem
 			>
 		{/each}
 	</DropdownMenu>

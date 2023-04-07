@@ -13,5 +13,10 @@
 	"done": "Done",
 	"cancel": "Cancel",
 	"delete": "Delete",
-	"save": "Save"
+	"save": "Save",
+	"back": "Back",
+	"uncategorized": "Uncategorized",
+	"loading_error": "Loading the $t(item_other), an error occurred.",
+	"no_items_found": "No $t(item_other) found.",
+	"no_items": "No $t(item_other) available."
 }

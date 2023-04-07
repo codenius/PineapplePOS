@@ -3,6 +3,7 @@
 	import { Button, Icon } from 'sveltestrap';
 
 	import { BarcodeDetectorPolyfill } from '@undecaf/barcode-detector-polyfill';
+	import { t } from '$lib/i18n';
 
 	type plolyfillWindow = typeof window & {
 		BarcodeDetector: typeof BarcodeDetectorPolyfill;
@@ -95,10 +96,12 @@
 		>
 			<Button outline color="secondary" on:click={resume}>
 				<Icon name="arrow-clockwise" />
-				Scan again</Button
-			>
+				{$t('stock:scan_again')}
+			</Button>
 			{#if error}
-				<span class="text-dark m-2">Please grant camera access.</span>
+				<span class="text-dark m-2"
+					>{$t('stock:camera_permission_warning')}</span
+				>
 			{/if}
 		</div>
 	{/if}

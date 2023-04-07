@@ -6,29 +6,37 @@
 	"amount": "Anzahl",
 	"price": "Preis",
 
-	"search_table": "$t(search) table",
-	"add_item": "$(item) hinzuzufügen",
+	"all": "Alle",
 
-	"create_item": "Neues $(item) hinzuzufügen",
-	"edit_item": "$(item) bearbeiten",
+	"search_table": "Tabelle durchsuchen",
+	"add_item": "$t(item, {'count': 1}) hinzuzufügen",
+
+	"confirm_deletion": "Löschen bestätigen",
+	"delete_prompt": "Sicher, dass dieses $t(item, {'count': 1}) gelöscht werden soll?",
+
+	"create_item": "Neues $t(item, {'count': 1}) hinzuzufügen",
+	"edit_item": "$t(item, {'count': 1}) bearbeiten",
 
 	"item_data": "Produktdaten",
-	"load_product_data": "$t(stock:product_data) laden",
+	"load_item_data": "$t(stock:item_data) laden",
 	"scan_barcode": "Barcode scannen",
-	"search_item": "$t(item) suchen",
+	"search_item": "$t(item, {'count': 1}) suchen",
 
-	"select_category": "Kategorie auswählen",
+	"select_category": "$t(stock:category) auswählen",
 
 	"load": "Laden",
 	"scan_again": "Erneut scannen",
-	"camera_permission": "Auf die Kamera konnte nicht zugegriffen werden. Bitte Berechtigungen überprüfen.",
+	"camera_permission_warning": "Auf die Kamera konnte nicht zugegriffen werden. Bitte Berechtigungen überprüfen.",
 	"no_items_found": "Es wurden keine Ergebnisse gefunden.",
+	"search_provider_info": "Durchsuche {{provider}} nach $t(item_other)n.",
 
-	"result_other": "Ergebnisse",
+	"result_other": "{{count}} Ergebnisse",
 
 	"file": "Datei",
 	"select_file": "Klicken um Datei auszuwählen oder ein Bild hier draufziehen",
+	"drop_image": "Bild ablegen",
+	"file_selected": "{{filename}} ausgewählt",
 	"url": "Link",
-	"enter_image_url": "$t(stock) zu einem Bild eingeben",
+	"enter_image_url": "$t(stock:url) zu einem Bild eingeben",
 	"image_preview": "Bildvorschau"
 }

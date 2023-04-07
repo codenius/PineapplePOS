@@ -4,6 +4,7 @@
 	import { useMutation, useQueryClient } from '@sveltestack/svelte-query';
 	import { createEventDispatcher } from 'svelte';
 	import { ItemsController } from '$lib/ApiControllers';
+	import { t } from '$lib/i18n';
 
 	export let id: Item['id'];
 	export let open = false;
@@ -30,7 +31,7 @@
 </script>
 
 <Modal
-	header="Confirm deletion"
+	header={$t('stock:confirm_deletion')}
 	{toggle}
 	isOpen={open}
 	on:open={() => {
@@ -43,7 +44,7 @@
 		}
 	}}
 >
-	<ModalBody>Are you sure you want to delete this item?</ModalBody>
+	<ModalBody>{$t('stock:delete_prompt')}</ModalBody>
 	<ModalFooter>
 		<Button
 			bind:inner={deleteButton}
@@ -52,14 +53,15 @@
 			}}
 			color="danger"
 		>
-			Delete {#if $deleteItemMutation.isLoading}
+			{$t('delete')}
+			{#if $deleteItemMutation.isLoading}
 				<Spinner size="sm" />
 			{/if}
 		</Button>
 		<Button
 			on:click={() => {
 				open = false;
-			}}>Cancel</Button
+			}}>{$t('cancel')}</Button
 		>
 	</ModalFooter>
 </Modal>

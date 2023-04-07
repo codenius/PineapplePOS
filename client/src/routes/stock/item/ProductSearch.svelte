@@ -14,6 +14,7 @@
 
 	import type { Product, ProductSelectCallback } from './+page.svelte';
 	import ProductResultCard from './ProductResultCard.svelte';
+	import { t } from '$lib/i18n';
 
 	export let callback: ProductSelectCallback;
 
@@ -48,12 +49,12 @@
 	let input: HTMLInputElement;
 </script>
 
-<Button on:click={toggle}>Search item</Button>
+<Button on:click={toggle}>{$t('stock:search_item')}</Button>
 <Modal
 	isOpen={open}
 	{toggle}
 	body
-	header="Search products"
+	header={$t('stock:search_item')}
 	size="lg"
 	on:open={() => {
 		input.focus();
@@ -68,7 +69,9 @@
 	>
 		<Input bind:inner={input} bind:value={searchTerm} type="search" />
 		<Dropdown>
-			<DropdownToggle caret>{resultCount} results</DropdownToggle>
+			<DropdownToggle caret
+				>{$t('stock:result', { count: resultCount })}</DropdownToggle
+			>
 			<DropdownMenu>
 				{#each resultCounts as count}
 					<DropdownItem
@@ -81,7 +84,7 @@
 				{/each}
 			</DropdownMenu>
 		</Dropdown>
-		<Button type="submit">Search</Button>
+		<Button type="submit">{$t('search')}</Button>
 	</Form>
 
 	<div class="my-2">
@@ -101,12 +104,16 @@
 							{product}
 						/>
 					{:else}
-						<small>No products found.</small>
+						<small>{$t('stock:no_items_found')}</small>
 					{/each}
 				</ListGroup>
 			{/await}
 		{:else}
-			<small>Search OpenFoodFacts.org for a product.</small>
+			<small
+				>{$t('stock:search_provider_info', {
+					provider: 'OpenFoodFacts.org'
+				})}</small
+			>
 		{/if}
 	</div>
 </Modal>
