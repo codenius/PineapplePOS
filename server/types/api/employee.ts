@@ -1,31 +1,21 @@
 import { Schema, model } from "mongoose";
+import passwordLocalMongoosePlugin from "passport-local-mongoose";
 
 export const Employee = new Schema({
-    first_name: {
-        type: String,
-        required: true
-    },
-    last_name: {
-        type: String,
-        required: true
-    },
+    username: String,
+    password: String,
     created: {
         type: Date,
-        default: Date.now()
+        default: Date.now(),
+        immutable: true
     },
     level: {
-        type: ["read", "sell", "edit", "admin"],
+        type: String,
         required: true,
         default: "read"
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    deleted: {
-        type: Boolean,
-        default: false
     }
 })
+
+Employee.plugin(passwordLocalMongoosePlugin)
 
 export default model("Employee", Employee, "employees")

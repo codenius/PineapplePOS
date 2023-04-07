@@ -17,6 +17,10 @@ import apiRouter from "./routes/api";
 import BaseError from "./types/errors/baseError";
 import {ErrorJson} from "./types/errors/commons";
 import { corsMiddleware } from "./middlewares/corsMiddleware";
+import passport from "passport";
+import session from "express-session"
+import employee from "./types/api/employee";
+import { Strategy as LocalStrategy } from "passport-local"
 
 const DATABASE_URL = process.env.DB_URL || "mongodb://localhost:27017"
 const DEBUG = process.env.DEBUG || true
@@ -34,6 +38,19 @@ app.use(json())
 app.use(inputMiddleware)
 app.use(loggerMiddleware)
 app.use(corsMiddleware)
+app.use(session({
+    secret: "secret",
+    resave: false,
+    saveUninitialized: false
+}))
+
+/* Authentication middlewares */
+app.use(passport.initialize())
+app.use(passport.session())
+
+passport.use(employee.createStrategy());
+passport.serializeUser(employee.serializeUser());
+passport.deserializeUser(employee.deserializeUser());
 
 /* Routes */
 app.use("/api", apiRouter)
