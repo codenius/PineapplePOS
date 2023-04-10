@@ -18,5 +18,15 @@
 	"uncategorized": "Uncategorized",
 	"loading_error": "Loading the $t(item_other), an error occurred.",
 	"no_items_found": "No $t(item_other) found.",
-	"no_items": "No $t(item_other) available."
+	"no_items": "No $t(item_other) available.",
+
+	"not_logged_in": "Not logged in",
+	"logged_in_as": "Logged in as {{user}}",
+	"change_password": "Change password",
+	"logout": "Log out",
+	"login": "Login",
+	"name": "Name",
+	"password": "Password",
+	"password_error": "An error occurred. Please check name and password.",
+	"password_forgotten": "Forgot password? Ask your administrator for help."
 }

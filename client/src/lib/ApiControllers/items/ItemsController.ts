@@ -1,7 +1,7 @@
 import type { Item } from '$lib/types/Item';
 import type { ShoppingBagEntry } from '$lib/types/ShoppingBagEntry';
 
-export class Controller {
+export class ItemsController {
 	private BACKEND_URL: string;
 	constructor(BACKEND_URL: string) {
 		if (BACKEND_URL.endsWith('/')) {
@@ -31,6 +31,9 @@ export class Controller {
 		}
 		const response = await fetch(this.url(path), options);
 		if (!response.ok) {
+			if (response.status == 401) {
+			} else {
+			}
 			throw new Error(`${response.status}: ${response.statusText}`);
 		}
 		const data = json ? response.json() : response.text();

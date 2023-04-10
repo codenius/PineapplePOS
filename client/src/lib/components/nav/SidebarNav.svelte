@@ -4,6 +4,7 @@
 	import Settings from './Settings.svelte';
 	import { beforeNavigate } from '$app/navigation';
 	import { t } from '$lib/i18n';
+	import Account from './Account.svelte';
 
 	let expanded: boolean = false;
 
@@ -39,6 +40,7 @@
 	</nav>
 
 	<div>
+		<Account bind:expanded />
 		<Settings bind:expanded />
 	</div>
 </aside>

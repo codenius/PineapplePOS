@@ -3,7 +3,7 @@ import type { ShoppingBagEntry } from '$lib/types/ShoppingBagEntry';
 import { persisted } from 'svelte-local-storage-store';
 import type { Writable } from 'svelte/store';
 
-export class Controller {
+export class ItemsController {
 	database!: Item[];
 	store: Writable<Item[]>;
 

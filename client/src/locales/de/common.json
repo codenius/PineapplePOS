@@ -18,5 +18,15 @@
 	"uncategorized": "Unkategorisiert",
 	"loading_error": "Beim laden der $t(item_other) ist ein Fehler aufgetreten.",
 	"no_items_found": "Es wurden keine $t(item_other) gefunden.",
-	"no_items": "Es sind keine $t(item_other) vorhanden."
+	"no_items": "Es sind keine $t(item_other) vorhanden.",
+
+	"not_logged_in": "Nicht angemeldet",
+	"logged_in_as": "Angemeldet als {{user}}",
+	"change_password": "Passwort ändern",
+	"logout": "Abmelden",
+	"login": "Anmelden",
+	"name": "Name",
+	"password": "Passwort",
+	"password_error": "Es ist ein Fehler aufgetreten. Bitte Name und Passwort überprüfen.",
+	"password_forgotten": "Passwort vergessen? Bitte den zuständigen Adminstrator um Hilfe."
 }
