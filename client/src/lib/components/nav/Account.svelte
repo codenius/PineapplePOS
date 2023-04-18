@@ -1,10 +1,14 @@
 <script lang="ts">
 	import {
+		Button,
 		ButtonDropdown,
 		DropdownItem,
 		DropdownMenu,
 		DropdownToggle,
-		Icon
+		Icon,
+		Modal,
+		ModalBody,
+		ModalFooter
 	} from 'sveltestrap';
 	import NavPart from './NavPart.svelte';
 	import { t } from '$lib/i18n';
@@ -14,12 +18,20 @@
 		useQueryClient
 	} from '@sveltestack/svelte-query';
 	import { EmployeesController } from '$lib/ApiControllers';
-	import LoginModal from './LoginModal.svelte';
+	import LoginModal from '../modals/LoginModal.svelte';
+	import { page } from '$app/stores';
+	import { allowedRoutes } from '$lib/permissons';
+	import type { Employee } from '$lib/types/Employee';
+	import AccessDeniedModal from '../modals/AccessDeniedModal.svelte';
 
 	export let expanded: boolean = false;
 	let isOpen: boolean = false;
 
 	let loggedOut: boolean = false;
+
+	function isUnauthenticated(error: Error) {
+		return error.toString().includes('401');
+	}
 
 	const queryResult = useQuery(
 		'currentEmployee',
@@ -28,7 +40,19 @@
 		},
 		{
 			onError: (error) => {
-				loggedOut = (error as Error).toString().includes('401');
+				loggedOut = isUnauthenticated(error as Error);
+			},
+			onSuccess: () => {
+				loggedOut = false;
+			},
+			retry: (failes, error) => {
+				if (isUnauthenticated(error as Error)) {
+					return false;
+				}
+				if (failes >= 3) {
+					return false;
+				}
+				return true;
 			}
 		}
 	);
@@ -39,10 +63,19 @@
 		{
 			onSuccess: () => {
 				loggedOut = true;
+				queryClient.invalidateQueries('currentEmployee');
 				queryClient.invalidateQueries();
 			}
 		}
 	);
+
+	let isDisallowedRoute = false;
+
+	$: isDisallowedRoute = $queryResult.isSuccess
+		? !(
+				allowedRoutes[($queryResult.data as Employee).role] as string[]
+		  ).includes($page.url.pathname.split('/')[1])
+		: false;
 </script>
 
 <ButtonDropdown direction="up" {isOpen} toggle={() => (isOpen = !isOpen)}>
@@ -84,6 +117,6 @@
 	{/if}
 </ButtonDropdown>
 
-{#if loggedOut}
-	<LoginModal bind:open={loggedOut} />
-{/if}
+<LoginModal open={loggedOut} />
+
+<AccessDeniedModal open={isDisallowedRoute} />

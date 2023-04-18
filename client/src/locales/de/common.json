@@ -6,6 +6,7 @@
 	"shop": "Shop",
 	"stock": "Lager",
 	"settings": "Einstellungen",
+	"manage_employees": "$t(employees:employee) verwalten",
 	"item_one": "Produkt",
 	"item_other": "Produkte",
 
@@ -28,5 +29,8 @@
 	"name": "Name",
 	"password": "Passwort",
 	"password_error": "Es ist ein Fehler aufgetreten. Bitte Name und Passwort überprüfen.",
-	"password_forgotten": "Passwort vergessen? Bitte den zuständigen Adminstrator um Hilfe."
+	"password_forgotten": "Passwort vergessen? Bitte den zuständigen Adminstrator um Hilfe.",
+	"access_denied": "Kein Zugriff möglich",
+	"user_not_allowed": "Der zur Zeit angemeldete Benutzer darf diesen Bereich nicht benutzen.",
+	"return_to_home": "Zur Startseite gehen"
 }

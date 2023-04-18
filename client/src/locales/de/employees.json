@@ -1,0 +1,22 @@
+{
+	"employee": "Benutzer",
+	"name": "Name",
+	"password": "Passwort",
+	"role": "Rolle",
+	"all": "Alle",
+	"search_table": "Tabelle durchsuchen",
+
+	"add_employee": "$t(employees:employee) hinzufügen",
+	"edit_employee": "$t(employees:employee) bearbeiten",
+	"employee_data": "$t(employees:employee)daten",
+	"select_role": "$t(employees:role) auswählen",
+
+	"confirm_deletion": "$t(employees:employee) löschen",
+	"delete_prompt": "Sicher, dass dieser $t(employees:employee) gelöscht werden soll?",
+	"roles": {
+		"read": "Lesen",
+		"sell": "Verkaufen",
+		"edit": "Bearbeiten (Lagerverwaltung)",
+		"admin": "Admin (Benutzerverwaltung)"
+	}
+}

@@ -9,9 +9,13 @@
 	} from 'sveltestrap';
 	import NavPart from './NavPart.svelte';
 	import { i18n, t } from '$lib/i18n';
+	import { useQuery } from '@sveltestack/svelte-query';
+	import type { Employee } from '$lib/types/Employee';
 
 	export let expanded: boolean = false;
 	let isOpen: boolean = false;
+
+	const currentEmployee = useQuery<Employee>('currentEmployee');
 </script>
 
 <ButtonDropdown class="Settings" {isOpen} toggle={() => (isOpen = !isOpen)}>
@@ -23,6 +27,11 @@
 		</ul></DropdownToggle
 	>
 	<DropdownMenu class="shadow-sm mx-2">
+		{#if $currentEmployee.isSuccess && $currentEmployee.data.role == 'admin'}
+			<DropdownItem href="/employees"
+				><Icon name="people-fill" /> {$t('manage_employees')}</DropdownItem
+			>
+		{/if}
 		<Dropdown direction="right">
 			<DropdownToggle
 				caret

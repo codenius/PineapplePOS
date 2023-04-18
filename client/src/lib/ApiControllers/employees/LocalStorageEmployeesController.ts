@@ -44,6 +44,10 @@ export class EmployeesController {
 		this.setStore();
 	}
 
+	async getRoles() {
+		return ['admin', 'edit', 'sell', 'read'];
+	}
+
 	async loginEmployee({ name, password }: Credentials) {
 		const index = this.database.findIndex(
 			(dbEmployee) => dbEmployee.name == name

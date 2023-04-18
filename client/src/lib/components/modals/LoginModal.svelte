@@ -5,6 +5,7 @@
 	import { useMutation, useQueryClient } from '@sveltestack/svelte-query';
 	import {
 		Button,
+		Form,
 		FormGroup,
 		Icon,
 		Input,
@@ -21,10 +22,9 @@
 	export let open: boolean = true;
 	let input: HTMLInputElement;
 	let passwordVisible: boolean = false;
-	let form: HTMLFormElement;
 
 	const defaultCredentials: Credentials = { name: '', password: '' };
-	let credentials: Credentials = defaultCredentials;
+	let credentials: Credentials = { ...defaultCredentials };
 
 	const queryClient = useQueryClient();
 	const loginMutation = useMutation(
@@ -32,10 +32,8 @@
 			EmployeesController.loginEmployee(credentials),
 		{
 			onSuccess: () => {
+				credentials = { ...defaultCredentials };
 				queryClient.invalidateQueries();
-				form.reset();
-				credentials = defaultCredentials;
-				open = false;
 			}
 		}
 	);
@@ -58,7 +56,7 @@
 >
 	<ModalHeader>{$t('login')}</ModalHeader>
 	<ModalBody>
-		<form id="login_form" bind:this={form} on:submit={login}>
+		<Form id="login_form" on:submit={login}>
 			<FormGroup>
 				<Label>{$t('name')}</Label>
 				<Input
@@ -90,7 +88,7 @@
 					</InputGroupText>
 				</InputGroup>
 			</FormGroup>
-		</form>
+		</Form>
 
 		{#if $loginMutation.isError}
 			<div class="text-danger">

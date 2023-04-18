@@ -6,6 +6,7 @@
 	"shop": "Shop",
 	"stock": "Stock",
 	"settings": "Settings",
+	"manage_employees": "Manage employees",
 	"item_one": "item",
 	"item_other": "items",
 
@@ -28,5 +29,8 @@
 	"name": "Name",
 	"password": "Password",
 	"password_error": "An error occurred. Please check name and password.",
-	"password_forgotten": "Forgot password? Ask your administrator for help."
+	"password_forgotten": "Forgot password? Ask your administrator for help.",
+	"access_denied": "Access denied",
+	"user_not_allowed": "The currently logged in user is not allowed in this place.",
+	"return_to_home": "Return to home"
 }
