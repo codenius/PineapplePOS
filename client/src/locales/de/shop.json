@@ -12,6 +12,8 @@
 	"not_items_in_shoppingBag": "Es sind keine $t(item_other) im $t(shop:shoppingBag). Klicke welche an, um sie hinzuzufügen.",
 	"restore_shoppingBag": "$t(shop:shoppingBag) wiederherstellen",
 
+	"available_items": "{{amount}} verfüg.",
+
 	"total": "Gesamt",
 	"given": "Gegeben",
 	"change": "Rückgeld",

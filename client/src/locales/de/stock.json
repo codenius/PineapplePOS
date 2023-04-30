@@ -19,6 +19,7 @@
 
 	"item_data": "Produktdaten",
 	"load_item_data": "$t(stock:item_data) laden",
+	"only_load_image": "Nur Bild laden",
 	"scan_barcode": "Barcode scannen",
 	"search_item": "$t(item, {'count': 1}) suchen",
 

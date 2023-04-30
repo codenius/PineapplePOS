@@ -3,7 +3,7 @@
 	import { CardImg, Card, CardSubtitle, CardFooter, Icon } from 'sveltestrap';
 	import type { Item } from '$lib/types/Item';
 	import { formatCurrency } from '$lib/currencyHelpers';
-	import { language } from '$lib/i18n';
+	import { language, t } from '$lib/i18n';
 
 	export let id: Item['id'];
 	export let name: Item['name'];
@@ -124,8 +124,8 @@
 						{#if checkAmount(amount, false, true, true)}
 							<Icon name="exclamation-triangle" />
 						{/if}
-						{amount} aval.</small
-					>
+						{$t('shop:available_items', { amount })}
+					</small>
 				</CardSubtitle>
 			</span>
 			<span class="text-nowrap">{formatCurrency(price, $language)}</span>

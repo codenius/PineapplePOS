@@ -1,5 +1,6 @@
 <script lang="ts">
 	import ListItemImage from '$lib/components/ListItemImage.svelte';
+	import { t } from '$lib/i18n';
 	import { Button, ButtonToolbar, ListGroupItem } from 'sveltestrap';
 	import type { Product } from './+page.svelte';
 
@@ -21,12 +22,12 @@
 				color="primary"
 				on:click={() => {
 					callback(product, 'all');
-				}}>Load product data</Button
+				}}>{$t('stock:load_item_data')}</Button
 			>
 			<Button
 				on:click={() => {
 					callback(product, 'image');
-				}}>Only load image</Button
+				}}>{$t('stock:only_load_image')}</Button
 			></ButtonToolbar
 		>
 	</div>

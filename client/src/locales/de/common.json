@@ -9,6 +9,7 @@
 	"manage_employees": "$t(employees:employee) verwalten",
 	"item_one": "Produkt",
 	"item_other": "Produkte",
+	"refreshing": "Aktualisieren",
 
 	"search": "Suchen",
 	"done": "Bestätigen",

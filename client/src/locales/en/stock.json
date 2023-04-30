@@ -19,6 +19,7 @@
 
 	"item_data": "Item data",
 	"load_item_data": "Load $t(item, {'count': 1}) data",
+	"only_load_image": "Only load image",
 	"scan_barcode": "Scan barcode",
 	"search_item": "Search $t(item, {'count': 1})",
 

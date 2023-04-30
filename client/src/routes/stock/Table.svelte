@@ -123,7 +123,7 @@
 			class="right-0 bottom-0 position-fixed m-2 p-2 px-3 text-primary bg-light rounded-pill border shadow-lg"
 		>
 			<Spinner size="sm" />
-			Refreshing...
+			{$t('refreshing')}...
 		</div>
 	{/if}
 
