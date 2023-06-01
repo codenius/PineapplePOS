@@ -39,5 +39,5 @@
 	"file_selected": "{{filename}} selected",
 	"url": "URL",
 	"enter_image_url": "Enter $t(stock:url) to an image",
-	"image_preview": "Image preview"
+	"preview": "Preview"
 }

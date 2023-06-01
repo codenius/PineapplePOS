@@ -39,6 +39,7 @@
 	import { ItemsController } from '$lib/ApiControllers';
 	import div, { filedrop } from 'filedrop-svelte';
 	import { t } from '$lib/i18n';
+	import ItemCard from '$routes/shop/components/Items/ItemCard.svelte';
 
 	export let data: PageData;
 	let item: Item = data as Item;
@@ -293,18 +294,10 @@
 					</TabPane>
 				</TabContent>
 				<div class="my-2">
-					<i>{$t('stock:image_preview')}</i>
-					<figure
-						class="bg-secondary bg-opacity-25 border border-dark rounded d-flex justify-content-center align-items-center p-2 my-2"
-						style="height: 15rem; aspect-ratio: 1/1;"
-					>
-						<img
-							style="height: 100%; width: 100%; 
-						object-fit: contain;"
-							src={item.image}
-							alt=""
-						/>
-					</figure>
+					<i>{$t('stock:preview')}</i>
+					<div>
+						<ItemCard style="width: 15rem" {...item}></ItemCard>
+					</div>
 				</div>
 			</Col>
 		</Row>

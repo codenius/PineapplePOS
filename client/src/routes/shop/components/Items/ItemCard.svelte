@@ -90,6 +90,7 @@
 			});
 		}
 	}}
+	{...$$restProps}
 >
 	<Card
 		class="h-100 {checkAmount(amount, '', 'border-warning', 'border-danger')}"
@@ -110,7 +111,7 @@
 				-webkit-box-orient: vertical;
 				-webkit-line-clamp: 3;"
 				>
-					{name}
+					{name || '–'}
 				</span>
 				<CardSubtitle style="font-size: inherit">
 					<small
@@ -124,7 +125,7 @@
 						{#if checkAmount(amount, false, true, true)}
 							<Icon name="exclamation-triangle" />
 						{/if}
-						{$t('shop:available_items', { amount })}
+						{$t('shop:available_items', { amount: amount || 0 })}
 					</small>
 				</CardSubtitle>
 			</span>
