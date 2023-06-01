@@ -230,7 +230,7 @@
 			</Col>
 			<Col class="p-0">
 				<h2>{$t('stock:load_item_data')}</h2>
-				<div class="d-flex gap-2">
+				<div class="d-flex gap-2 mb-2">
 					<ScanBarcode callback={insertProductData} />
 					<ProductSearch callback={insertProductData} />
 				</div>
