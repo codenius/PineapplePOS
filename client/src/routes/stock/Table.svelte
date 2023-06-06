@@ -14,7 +14,7 @@
 	import { writable } from 'svelte/store';
 	import { useQuery } from '@sveltestack/svelte-query';
 	import type { Item } from '$lib/types/Item';
-	import ItemImage from './ItemImage.svelte';
+	import ListItemImage from '$lib/components/ListItemImage.svelte';
 	import { Icon, Spinner, Table } from 'sveltestrap';
 	import ActionButtons from './ActionButtons.svelte';
 	import SortSelect from './SortSelect.svelte';
@@ -62,7 +62,7 @@
 		table.column({
 			header: $t('stock:image') as string,
 			accessor: 'image',
-			cell: ({ value }) => createRender(ItemImage, { image: value }),
+			cell: ({ value }) => createRender(ListItemImage, { image: value }),
 			plugins: {
 				sort: { disable: true },
 				tableFilter: { exclude: true }
