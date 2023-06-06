@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { shoppingBag } from '$lib/stores/shoppingBag';
-	import { CardImg, Card, CardSubtitle, CardFooter, Icon } from 'sveltestrap';
+	import { Card, CardSubtitle, CardFooter, Icon } from 'sveltestrap';
 	import type { Item } from '$lib/types/Item';
 	import { formatCurrency } from '$lib/currencyHelpers';
 	import { language, t } from '$lib/i18n';
+	import ItemCardImage from './ItemCardImage.svelte';
 
 	export let id: Item['id'];
 	export let name: Item['name'];
@@ -95,12 +96,7 @@
 	<Card
 		class="h-100 {checkAmount(amount, '', 'border-warning', 'border-danger')}"
 	>
-		<CardImg
-			draggable={false}
-			class="w-auto flex-grow-1"
-			style="min-height: 8em; max-height: 8em; object-fit: contain"
-			src={image}
-		/>
+		<ItemCardImage {image} {name} />
 
 		<CardFooter class="d-flex justify-content-between gap-2 h-100">
 			<span class="d-flex align-items-baseline gap-2">
