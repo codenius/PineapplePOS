@@ -1,7 +1,13 @@
 <script lang="ts">
 	import ItemCard from './components/Items/ItemCard.svelte';
 	import { zoomFactor } from '$lib/stores/itemsZoom';
-	import { Accordion, AccordionItem, Spinner } from 'sveltestrap';
+	import {
+		Accordion,
+		AccordionItem,
+		Button,
+		ButtonToolbar,
+		Spinner
+	} from 'sveltestrap';
 	import { useQuery } from '@sveltestack/svelte-query';
 	import { shoppingBag } from '$lib/stores/shoppingBag';
 	import type { Item } from '$lib/types/Item';
@@ -26,6 +32,13 @@
 		if ($queryResult.isSuccess) {
 			items = substracteShoppingBagAmount($queryResult.data, $shoppingBag);
 			itemsByCategory = splitItemsToCategorys(items);
+
+			let index = itemsByCategory.findIndex(
+				(categoryItems) => categoryItems.category === null
+			);
+			if (index != -1) {
+				itemsByCategory[index].category = $t('uncategorized');
+			}
 		}
 	}
 
@@ -72,10 +85,43 @@
 		});
 		return itemsByCategory;
 	}
+
+	let activeSection: string;
 </script>
 
 {#if $queryResult.isSuccess}
-	<div style="font-size: {($zoomFactor / 1.5) * 0.2}rem">
+	<div id={$t('stock:all')} style="font-size: {($zoomFactor / 1.5) * 0.2}rem">
+		<ButtonToolbar
+			class="position-sticky top-0 bg-white p-2 d-flex flex-nowrap overflow-auto gap-1 shadow-sm"
+			style="
+				z-index: 2;
+				/* scroll shadows */
+				background-image: 
+					linear-gradient(to right, white, white), 
+					linear-gradient(to right, white, white), 
+					linear-gradient(to right, rgba(0, 0, 0, 0.25), rgba(255, 255, 255, 0)), 
+					linear-gradient(to left, rgba(0, 0, 0, 0.25), rgba(255, 255, 255, 0));
+				background-position: left center, right center, left center, right center;
+				background-repeat: no-repeat;
+				background-color: white;
+				background-size: 2rem 100%, 2rem 100%, 1rem 100%, 1rem 100%;
+				background-attachment: local, local, scroll, scroll;
+				"
+		>
+			{#each [{ category: $t('stock:all') }, ...itemsByCategory] as category}
+				<Button
+					class="rounded-pill"
+					color="primary"
+					outline={!(activeSection == category.category)}
+					size="sm"
+					href="#{category.category}"
+					on:click={() => {
+						activeSection = category.category;
+					}}>{category.category}</Button
+				>
+			{/each}
+		</ButtonToolbar>
+
 		{#if $searchTerm.length}
 			<div
 				on:wheel={(event) => {
@@ -92,12 +138,13 @@
 				{:else}
 					<h4 class="m-auto my-5">{$t('no_items_found')}</h4>
 				{/each}
-			</div>{/if}
+			</div>
+		{/if}
 		<Accordion stayOpen={true} class="ItemGroup">
 			{#each itemsByCategory as category}
 				<AccordionItem active={true}>
-					<span class="ACCORDIONHEADER" slot="header"
-						>{category.category || $t('uncategorized')}</span
+					<span class="ACCORDIONHEADER" slot="header" id={category.category}
+						>{category.category}</span
 					>
 					<div class="p-1" id="wrapper">
 						{#each category.items as item}

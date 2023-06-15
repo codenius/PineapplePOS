@@ -30,7 +30,7 @@
 <div id="wrapper" class="h-100 d-flex flex-column">
 	<Toolbar />
 	<Splitpanes class="Splitpanes" dblClickSplitter={false}>
-		<Pane minSize={30} class="scroll-pane overflow-auto">
+		<Pane minSize={30} class="scroll-pane overflow-auto scroll-padding">
 			<Items />
 		</Pane>
 		<Pane minSize={30} size={30} class="scroll-pane overflow-auto">
@@ -48,6 +48,9 @@
 	}
 	.scroll-pane {
 		overflow-y: auto;
+	}
+	.scroll-padding {
+		scroll-padding-top: 3.8em;
 	}
 	.Splitpanes .splitpanes__splitter {
 		width: 1rem !important;
