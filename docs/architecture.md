@@ -11,7 +11,7 @@ Deployment: Docker
 
 ## Backend
 
-Language: Typescript
+Language: [Typescript](https://www.typescriptlang.org)
 
 Server - Framework: [NodeJS/Express](https://expressjs.com/)
 

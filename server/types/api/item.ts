@@ -37,7 +37,7 @@ export const Item = new Schema({
         type: String,
         default: ""
     }
-})
+}, { skipVersioning: { amount: true }})
 
 Item.plugin(versioning, {collection: "items.versioning"})
 

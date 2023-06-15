@@ -1,3 +1,13 @@
+import passport from "passport"
+import AuthError from "../types/errors/authError"
+
+export const AuthenticationLevels = {
+    read: 0,
+    sell: 1,
+    edit: 2,
+    admin: 3
+}
+
 /**
  * ## Authenticator
  * 
@@ -21,7 +31,7 @@ class Authenticator {
      * @static 
      */
     static admin(req, res, next) {
-        next()
+        Authenticator.main(req, res, next, AuthenticationLevels.admin)
     }
 
     /**
@@ -31,7 +41,7 @@ class Authenticator {
      * @static
      */
     static edit(req, res, next) {
-        next()
+        Authenticator.main(req, res, next, AuthenticationLevels.edit)
     }
     
     /**
@@ -41,7 +51,7 @@ class Authenticator {
      * @static 
      */
     static sell(req, res, next) {
-        next()
+        Authenticator.main(req, res, next, AuthenticationLevels.sell)
     }
 
     /**
@@ -51,7 +61,19 @@ class Authenticator {
      * @static 
      */
     static read(req, res, next) {
-        next()
+        Authenticator.main(req, res, next, AuthenticationLevels.read)
+    }
+
+    static main(req, res, next, level: number) {
+        if (process.env.DEBUG) {next(); return }
+        passport.authenticate("local")(req, res, () => {    
+            const AUTHENTICATED = AuthenticationLevels[req.user.level] >= level
+            if (AUTHENTICATED) {
+                next()
+            } else {
+                next(new AuthError("AuthError: You don't have the permission to do that"))
+            }
+        })
     }
 }
 

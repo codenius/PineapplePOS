@@ -1,10 +1,10 @@
-import {CastError, Model, QueryOptions, Schema, Types} from "mongoose";
-import InputError from "../types/errors/inputError";
+import mongoose, { Model, QueryOptions, Types } from "mongoose";
 import DatabaseError from "../types/errors/databaseError";
-import validate, {validateModel} from "../types/validator";
+import validate, { validateModel } from "../types/validator";
 import MethodError from "../types/errors/methodError";
 import ControllerChild from "./controllerChild";
-import {Request, Response} from "express";
+import { Request, Response } from "express";
+import sells from "../types/api/sells";
 
 /**
  * ## Simple Controller
@@ -25,7 +25,7 @@ class SimpleController {
      */
     constructor(model: Model<any>) {
         this.model = model
-        this.options = {new: true, runValidators: true}
+        this.options = { new: true, runValidators: true }
     }
 
 
@@ -40,15 +40,15 @@ class SimpleController {
         return new ControllerChild(this, [
             /* Only allow GET methods */
             (req, res) => { this.allowMethod(req, res, ["GET"]) }
-        ],[
+        ], [
             async (req, res) => {
                 validate(Types.ObjectId, req.params.id)
-                return await this.model.findById(req.params.id).exec()
+                return await this.model.findById(req.params.id).lean()
             }
         ], [
             async (req, res) => {
                 let filter = req.body || {}
-                return await this.model.find(filter).exec()
+                return await this.model.find(filter).lean()
             }
         ]);
     }
@@ -61,22 +61,22 @@ class SimpleController {
      */
     get update() {
         return new ControllerChild(this, [
-            (req, res) => {this.allowMethod(req, res, ["PUT", "PATCH"])},
-        ],[
+            (req, res) => { this.allowMethod(req, res, ["PUT", "PATCH"]) },
+        ], [
             async (req, res) => {
                 validate(Types.ObjectId, req.params.id)
                 validateModel(this.model, req.body)
                 if (Object.keys(req.body).length != 0) {
-                    return await this.model.findByIdAndUpdate(req.params.id, req.body, this.options).exec()
+                    return await this.model.findByIdAndUpdate(req.params.id, req.body, this.options).lean()
                 } else {
-                    return await this.model.findById(req.params.id).exec()
+                    return await this.model.findById(req.params.id).lean()
                 }
             }
         ], [
             async (req, res) => {
                 return await req.body.map(async elem => {
                     validateModel(this.model, elem)
-                    await this.model.findByIdAndUpdate(elem.id, elem, this.options).exec()
+                    await this.model.findByIdAndUpdate(elem.id, elem, this.options).lean()
                 })
             }
         ]);
@@ -89,18 +89,18 @@ class SimpleController {
      */
     get delete() {
         return new ControllerChild(this, [
-            (req, res) => {this.allowMethod(req, res, ["DELETE"])}
+            (req, res) => { this.allowMethod(req, res, ["DELETE"]) }
         ], [
             async (req, res) => {
                 validate(Types.ObjectId, req.params.id)
                 req.body._id = req.params.id
-                return await this.model.findOneAndDelete(req.body, this.options).exec()
+                return await this.model.findOneAndDelete(req.body, this.options).lean()
             }
         ], [
             async (req, res) => {
                 validate([Types.ObjectId], req.body)
                 return await req.body.map(async elem => {
-                    await this.model.findOneAndDelete(elem, this.options).exec()
+                    await this.model.findOneAndDelete(elem, this.options).lean()
                 })
             }
         ]);
@@ -113,7 +113,7 @@ class SimpleController {
      */
     get create() {
         return new ControllerChild(this, [
-            (req, res) => {this.allowMethod(req, res, ["POST"])}
+            (req, res) => { this.allowMethod(req, res, ["POST"]) }
         ], [
             (req, res) => {
                 let document = new this.model(req.body)
@@ -123,8 +123,25 @@ class SimpleController {
                 return document
             }
         ], [
-            (req, res) => {
-                throw new InputError("Can't create multiple documents at the same time")
+            async (req, res) => {
+                const session = await this.model.startSession()
+                await session.withTransaction(async () => {
+                    for (const elem of req.body) {
+                        let document = new this.model(elem)
+                        let err = document.validateSync()
+                        if (err) {
+                            await session.abortTransaction()
+                            session.endSession()
+                            throw new DatabaseError(err._message)
+                        }
+                        await document.save()
+                    }    
+                })
+                await session.commitTransaction()
+                session.endSession()
+                return {
+                    note: "NOT IMPLEMENTED, BECAUSE OF https://jira.mongodb.org/browse/NODE-2014"
+                }
             }
         ])
     }
@@ -137,7 +154,7 @@ class SimpleController {
      * @param methods - An array of allowed http methods
      * @private
      */
-    private allowMethod(req: Request, res: Response, methods : Array<"GET"|"POST"|"PUT"|"DELETE"|"PATCH"|string>) {
+    private allowMethod(req: Request, res: Response, methods: Array<"GET" | "POST" | "PUT" | "DELETE" | "PATCH" | string>) {
         if (!methods.includes(req.method.toUpperCase())) {
             throw new MethodError(`${req.method} method is not allowed`)
         }
