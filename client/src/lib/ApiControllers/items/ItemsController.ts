@@ -70,16 +70,10 @@ export class ItemsController {
 		return categories;
 	}
 	sellItems(shoppingBag: ShoppingBagEntry[]) {
-		return Promise.all(
-			shoppingBag.map(async (shoppingBagEntry) => {
-				let item = (await this.getItem(shoppingBagEntry.id)) as Item;
-				item.amount -= shoppingBagEntry.amount;
-				return this.setItem(item);
-			})
-		);
-
-		/*         return this.fetch('/sell/',
-			{ method: 'PUT', body: JSON.stringify(shoppingBag) }) */
+		return this.fetch('/sellpoint/sell', {
+			method: 'POST',
+			body: JSON.stringify(shoppingBag)
+		});
 	}
 	addItem(item: Item) {
 		return this.fetch<Item>('/items/new', {
