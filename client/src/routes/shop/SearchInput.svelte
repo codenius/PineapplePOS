@@ -24,6 +24,7 @@
 	import type { Item } from '$lib/types/Item';
 	import { ItemsController } from '$lib/ApiControllers';
 	import { t } from '$lib/i18n';
+	import { searchResultsContainer } from './Items.svelte';
 
 	const SEARCH_RESULTS_LIMIT = 10;
 	const options = { keys: ['name', 'category', 'company'] };
@@ -48,6 +49,7 @@
 			$searchResults = fuse
 				.search(value, { limit: SEARCH_RESULTS_LIMIT })
 				.map((searchResult) => searchResult.item);
+			searchResultsContainer.scrollIntoView();
 		} else {
 			$searchResults = [];
 		}

@@ -1,3 +1,7 @@
+<script lang="ts" context="module">
+	export let searchResultsContainer: HTMLDivElement;
+</script>
+
 <script lang="ts">
 	import ItemCard from './components/Items/ItemCard.svelte';
 	import { zoomFactor } from '$lib/stores/itemsZoom';
@@ -124,6 +128,7 @@
 
 		{#if $searchTerm.length}
 			<div
+				bind:this={searchResultsContainer}
 				on:wheel={(event) => {
 					if (Math.abs(event.deltaX) == 0) {
 						event.preventDefault();
