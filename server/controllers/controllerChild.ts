@@ -46,7 +46,7 @@ class ControllerChild {
         try {
             this.handlers.forEach(fn => fn(req, res))
             let json = await this.singleHandlers.map(fn => fn(req, res)).at(-1)
-            this.send(res, json?200:404, json?json:[])
+            this.send(res, json?200:404, json?JSON.parse(json):[])
         } catch(err) {
             next(err)
         }

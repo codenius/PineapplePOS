@@ -38,6 +38,46 @@ employeeRouter.post('/logout', [
     }
 ])
 
+employeeRouter.post("/password/change", [
+    (req, res, next) => Authenticator.read(req, res, next),
+    (req, res, next) => {
+        req.user.changePassword(req.body.oldpassword, req.body.newpassword, (err) => next(err))
+        res.status(200).json({message: "password set successful"});
+    }
+])
+
+/**
+ * Reset password
+ * 
+ * @access - Level: Admin
+ */
+employeeRouter.post('/password/reset/:id', [
+    (req, res, next) => Authenticator.admin(req, res, next),
+    (req, res, next) => {
+        EmployeeModel.findById(req.params.id).then(function(sanitizedUser){
+            if (sanitizedUser){
+                sanitizedUser.setPassword("password", function(){
+                    sanitizedUser.save();
+                    res.status(200).json({message: "password reset successful"});
+                });
+            } else {
+                res.status(500).json({message: "This user does not exist"});
+            }
+        })
+    }
+])
+
+
+/**
+ * Get all employees
+ * 
+ * @access - Level: Admin
+ */
+employeeRouter.get("/", [
+    (req, res, next) => Authenticator.admin(req, res, next),
+    (req, res, next) => EmployeeController.select.all(req, res, next) 
+])
+
 /**
  * Deletes an employee from id
  * 
