@@ -19,14 +19,22 @@ import {ErrorJson} from "./types/errors/commons";
 import { corsMiddleware } from "./middlewares/corsMiddleware";
 import passport from "passport";
 import session from "express-session"
-import employee from "./types/api/employee";
+import EmployeeModel from "./types/api/employee";
 import { Strategy as LocalStrategy } from "passport-local"
 
 const DATABASE_URL = process.env.DB_URL || "mongodb://localhost:27017"
 const DEBUG = process.env.DEBUG || true
 
 mongoose.connect(DATABASE_URL).then(
-    () => logger.info("connected to database"),
+    () => {
+        logger.info("connected to database"),
+        EmployeeModel.count({level: "admin"}).then((count) => {
+            if (count == 0) {
+                EmployeeModel.register(new EmployeeModel({username: "admin", level: "admin"}), "admin")
+            }
+        })
+        
+    },
     () => { logger.error(`couldn't connect to database ${DATABASE_URL}, exit`); process.exit(1)}
 )
 
@@ -48,9 +56,9 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 
-passport.use(employee.createStrategy());
-passport.serializeUser(employee.serializeUser());
-passport.deserializeUser(employee.deserializeUser());
+passport.use(EmployeeModel.createStrategy());
+passport.serializeUser(EmployeeModel.serializeUser());
+passport.deserializeUser(EmployeeModel.deserializeUser());
 
 /* Routes */
 app.use("/api", apiRouter)
