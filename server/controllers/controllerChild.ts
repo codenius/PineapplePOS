@@ -46,7 +46,7 @@ class ControllerChild {
         try {
             this.handlers.forEach(fn => fn(req, res))
             let json = await this.singleHandlers.map(fn => fn(req, res)).at(-1)
-            this.send(res, json?200:404, json?JSON.parse(json):[])
+            this.send(res, json?200:404, json?json:[])
         } catch(err) {
             next(err)
         }
@@ -77,6 +77,7 @@ class ControllerChild {
      * @param json - Content of the response
      */
     private send(res, code, json) {
+        json = JSON.parse(JSON.stringify(json))
         const _send = (_json) => res.status(code).json(_json)
         if (!(json instanceof Promise)) {
             _send(json)
