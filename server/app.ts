@@ -30,7 +30,7 @@ mongoose.connect(DATABASE_URL).then(
         logger.info("connected to database"),
         EmployeeModel.count({level: "admin"}).then((count) => {
             if (count == 0) {
-                EmployeeModel.register(new EmployeeModel({username: "admin", level: "admin"}), "admin")
+                EmployeeModel.register(new EmployeeModel({username: "admin", level: "admin"}), "admin", (err) => console.log(err))
             }
         })
         

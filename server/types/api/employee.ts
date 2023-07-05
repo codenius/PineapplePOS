@@ -21,8 +21,8 @@ Employee.plugin(passwordLocalMongoosePlugin)
 
 Employee.set("toJSON", {
     transform: function(doc, ret, options) {
-        ret.remove("hash")
-        ret.remove("salt")
+        delete ret["hash"]
+        delete ret["salt"]
         return ret;
     }
 });
