@@ -77,6 +77,7 @@ class ControllerChild {
      * @param json - Content of the response
      */
     private send(res, code, json) {
+        json = JSON.parse(JSON.stringify(json))
         const _send = (_json) => res.status(code).json(_json)
         if (!(json instanceof Promise)) {
             _send(json)

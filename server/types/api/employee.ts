@@ -18,4 +18,14 @@ export const Employee = new Schema({
 
 Employee.plugin(passwordLocalMongoosePlugin)
 
+
+Employee.set("toJSON", {
+    transform: function(doc, ret, options) {
+        delete ret["hash"]
+        delete ret["salt"]
+        return ret;
+    }
+});
+
+
 export default model("Employee", Employee, "employees")

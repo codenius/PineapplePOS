@@ -65,15 +65,18 @@ class Authenticator {
     }
 
     static main(req, res, next, level: number) {
-        if (process.env.DEBUG) {next(); return }
-        passport.authenticate("local")(req, res, () => {    
+        // if (process.env.DEBUG.toLocaleLowerCase() == "true") {next(); return }
+        passport.authenticate("session");
+        if (req.user) {
             const AUTHENTICATED = AuthenticationLevels[req.user.level] >= level
             if (AUTHENTICATED) {
                 next()
             } else {
                 next(new AuthError("AuthError: You don't have the permission to do that"))
             }
-        })
+        } else {
+            next(new AuthError("AuthError: Not logged in"))
+        }
     }
 }
 
