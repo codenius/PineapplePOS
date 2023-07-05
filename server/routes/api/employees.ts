@@ -3,7 +3,6 @@ import passport from "passport";
 import EmployeeModel from "../../types/api/employee";
 import EmployeeController from "../../controllers/api/employeeController";
 import Authenticator from "../../auth/authenticator";
-import AuthError from "../../types/errors/authError";
 
 const employeeRouter = Router()
 
@@ -77,6 +76,17 @@ employeeRouter.get("/", [
     (req, res, next) => Authenticator.admin(req, res, next),
     (req, res, next) => EmployeeController.select.all(req, res, next) 
 ])
+
+/**
+ * Get current employee
+ *
+ * @access - Level: Read
+ */
+employeeRouter.get("/current", [
+    (req, res, next) => Authenticator.read(req, res, next),
+    (req, res, next) => { res.status(200).json(req.user) }
+])
+
 
 /**
  * Deletes an employee from id
