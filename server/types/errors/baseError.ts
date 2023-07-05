@@ -15,7 +15,7 @@ class BaseError extends Error {
      * @param src = A error source 
      */
     constructor(msg: string = "If you see this error message, please report it", src: ErrorSource) {
-        super(msg);
+        super(msg)
         this.src = src
         this.name = "BaseError"
         Object.setPrototypeOf(this, BaseError.prototype);
