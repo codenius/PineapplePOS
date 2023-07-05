@@ -1,7 +1,7 @@
 [
 	{
 		"id": 1,
-		"category": "Drinks",
+		"category": "a01d8852-bbfd-41af-9da2-4b494467e0eb",
 		"name": "Mousse - Mango",
 		"price": 0.78,
 		"amount": 88,
@@ -9,7 +9,7 @@
 	},
 	{
 		"id": 2,
-		"category": "Sweets",
+		"category": "fe428a7f-976f-42c5-9ac3-80f5cfd90f4f",
 		"name": "Salt - Seasoned",
 		"price": 1.86,
 		"amount": 77,
@@ -17,7 +17,7 @@
 	},
 	{
 		"id": 3,
-		"category": "Drinks",
+		"category": "a01d8852-bbfd-41af-9da2-4b494467e0eb",
 		"name": "Soup - Cream Of Broccoli",
 		"price": 3.71,
 		"amount": 56,
@@ -25,7 +25,7 @@
 	},
 	{
 		"id": 4,
-		"category": "Sweets",
+		"category": "fe428a7f-976f-42c5-9ac3-80f5cfd90f4f",
 		"name": "Veal - Osso Bucco",
 		"price": 2.58,
 		"amount": 44,
@@ -33,7 +33,7 @@
 	},
 	{
 		"id": 5,
-		"category": "Snacks",
+		"category": "b87d4166-660d-4376-a20e-65dfc8d7bac9",
 		"name": "Island Oasis - Raspberry",
 		"price": 6.48,
 		"amount": 44,
@@ -41,7 +41,7 @@
 	},
 	{
 		"id": 6,
-		"category": "Sweets",
+		"category": "fe428a7f-976f-42c5-9ac3-80f5cfd90f4f",
 		"name": "Tuna - Loin",
 		"price": 4.75,
 		"amount": 59,
@@ -49,7 +49,7 @@
 	},
 	{
 		"id": 7,
-		"category": "Snacks",
+		"category": "b87d4166-660d-4376-a20e-65dfc8d7bac9",
 		"name": "Pan Grease",
 		"price": 6.85,
 		"amount": 26,
@@ -57,7 +57,7 @@
 	},
 	{
 		"id": 8,
-		"category": "Snacks",
+		"category": "b87d4166-660d-4376-a20e-65dfc8d7bac9",
 		"name": "Oil - Food, Lacquer Spray",
 		"price": 0.14,
 		"amount": 48,
@@ -65,7 +65,7 @@
 	},
 	{
 		"id": 9,
-		"category": "Drinks",
+		"category": "a01d8852-bbfd-41af-9da2-4b494467e0eb",
 		"name": "Chinese Foods - Chicken",
 		"price": 1.28,
 		"amount": 87,
@@ -73,7 +73,7 @@
 	},
 	{
 		"id": 10,
-		"category": "Sweets",
+		"category": "fe428a7f-976f-42c5-9ac3-80f5cfd90f4f",
 		"name": "Yeast - Fresh, Fleischman",
 		"price": 7.99,
 		"amount": 3,
@@ -81,7 +81,7 @@
 	},
 	{
 		"id": 11,
-		"category": "Snacks",
+		"category": "b87d4166-660d-4376-a20e-65dfc8d7bac9",
 		"name": "Lemon Balm - Fresh",
 		"price": 3.11,
 		"amount": 58,
@@ -89,7 +89,7 @@
 	},
 	{
 		"id": 12,
-		"category": "Drinks",
+		"category": "a01d8852-bbfd-41af-9da2-4b494467e0eb",
 		"name": "Pork - Loin, Center Cut",
 		"price": 5.81,
 		"amount": 86,
@@ -97,7 +97,7 @@
 	},
 	{
 		"id": 13,
-		"category": "Snacks",
+		"category": "b87d4166-660d-4376-a20e-65dfc8d7bac9",
 		"name": "Pork - Ham, Virginia",
 		"price": 4.98,
 		"amount": 37,
@@ -105,7 +105,7 @@
 	},
 	{
 		"id": 14,
-		"category": "Snacks",
+		"category": "b87d4166-660d-4376-a20e-65dfc8d7bac9",
 		"name": "Pears - Bosc",
 		"price": 0.28,
 		"amount": 13,
@@ -113,7 +113,7 @@
 	},
 	{
 		"id": 15,
-		"category": "Drinks",
+		"category": "a01d8852-bbfd-41af-9da2-4b494467e0eb",
 		"name": "Beer - Original Organic Lager",
 		"price": 7.25,
 		"amount": 31,
@@ -121,7 +121,7 @@
 	},
 	{
 		"id": 16,
-		"category": "Drinks",
+		"category": "a01d8852-bbfd-41af-9da2-4b494467e0eb",
 		"name": "Longos - Chicken Wings",
 		"price": 5.45,
 		"amount": 85,
@@ -129,7 +129,7 @@
 	},
 	{
 		"id": 17,
-		"category": "Drinks",
+		"category": "a01d8852-bbfd-41af-9da2-4b494467e0eb",
 		"name": "Soup - Campbells Chicken",
 		"price": 6.64,
 		"amount": 15,
@@ -137,7 +137,7 @@
 	},
 	{
 		"id": 18,
-		"category": "Drinks",
+		"category": "a01d8852-bbfd-41af-9da2-4b494467e0eb",
 		"name": "Chicken - Wieners",
 		"price": 5.14,
 		"amount": 13,
@@ -145,7 +145,7 @@
 	},
 	{
 		"id": 19,
-		"category": "Sweets",
+		"category": "fe428a7f-976f-42c5-9ac3-80f5cfd90f4f",
 		"name": "Versatainer Nc - 888",
 		"price": 0.44,
 		"amount": 56,
@@ -153,7 +153,7 @@
 	},
 	{
 		"id": 20,
-		"category": "Snacks",
+		"category": "b87d4166-660d-4376-a20e-65dfc8d7bac9",
 		"name": "Gatorade - Fruit Punch",
 		"price": 5.3,
 		"amount": 10,
@@ -161,7 +161,7 @@
 	},
 	{
 		"id": 21,
-		"category": "Sweets",
+		"category": "fe428a7f-976f-42c5-9ac3-80f5cfd90f4f",
 		"name": "Soup - Campbells, Classic Chix",
 		"price": 6.81,
 		"amount": 3,
@@ -169,7 +169,7 @@
 	},
 	{
 		"id": 22,
-		"category": "Snacks",
+		"category": "b87d4166-660d-4376-a20e-65dfc8d7bac9",
 		"name": "Pork - Bacon, Sliced",
 		"price": 1.27,
 		"amount": 44,
@@ -177,7 +177,7 @@
 	},
 	{
 		"id": 23,
-		"category": "Sweets",
+		"category": "fe428a7f-976f-42c5-9ac3-80f5cfd90f4f",
 		"name": "Mudslide",
 		"price": 7.11,
 		"amount": 73,
@@ -185,7 +185,7 @@
 	},
 	{
 		"id": 24,
-		"category": "Drinks",
+		"category": "a01d8852-bbfd-41af-9da2-4b494467e0eb",
 		"name": "Beef - Short Loin",
 		"price": 6.47,
 		"amount": 92,
@@ -193,7 +193,7 @@
 	},
 	{
 		"id": 25,
-		"category": "Snacks",
+		"category": "b87d4166-660d-4376-a20e-65dfc8d7bac9",
 		"name": "Wine - Saint - Bris 2002, Sauv",
 		"price": 7.43,
 		"amount": 8,

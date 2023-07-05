@@ -19,29 +19,37 @@
 	import { searchResults, searchTerm } from './SearchInput.svelte';
 	import { ItemsController } from '$lib/ApiControllers';
 	import { t } from '$lib/i18n';
+	import EditCategoriesOrderModal from './components/Items/EditCategoriesOrderModal.svelte';
 
-	const queryResult = useQuery('items', async () => {
+	const itemsQuery = useQuery('items', async () => {
 		return ItemsController.getItems();
+	});
+
+	const categoriesQuery = useQuery('categories', async () => {
+		return ItemsController.getCategories();
 	});
 
 	interface categoryItems {
 		category: Item['category'];
 		items: Item[];
+		_isDefault?: boolean;
 	}
 
 	let items: Item[];
 	let itemsByCategory: categoryItems[];
 
 	$: {
-		if ($queryResult.isSuccess) {
-			items = substracteShoppingBagAmount($queryResult.data, $shoppingBag);
+		if ($itemsQuery.isSuccess && $categoriesQuery.isSuccess) {
+			items = substracteShoppingBagAmount($itemsQuery.data, $shoppingBag);
 			itemsByCategory = splitItemsToCategorys(items);
 
-			let index = itemsByCategory.findIndex(
-				(categoryItems) => categoryItems.category === null
+			const defaultCategoryIndex = itemsByCategory.findIndex(
+				(categoryItem) => categoryItem._isDefault
 			);
-			if (index != -1) {
-				itemsByCategory[index].category = $t('uncategorized');
+			if (defaultCategoryIndex != -1) {
+				itemsByCategory[defaultCategoryIndex].category = $t(
+					'uncategorized'
+				) as string;
 			}
 		}
 	}
@@ -67,33 +75,24 @@
 
 	function splitItemsToCategorys(items: Item[]) {
 		let itemsByCategory: categoryItems[] = [];
-		for (let index = 0; index < items.length; index++) {
-			const item = items[index];
-			let categoryIndex = itemsByCategory.findIndex(
-				(categoryEntry) => categoryEntry.category == item.category
+		for (let index = 0; index < $categoriesQuery.data.length; index++) {
+			const category = $categoriesQuery.data[index];
+			const categoryItems = items.filter((item) =>
+				item.category ? item.category.id == category.id : false
 			);
-			if (categoryIndex == -1) {
-				itemsByCategory.push({ category: item.category, items: [] });
-				categoryIndex = itemsByCategory.length - 1;
-			}
-			itemsByCategory[categoryIndex].items.push(item);
+			itemsByCategory.push({
+				category: category.name,
+				items: categoryItems,
+				_isDefault: category._isDefault
+			});
 		}
-		itemsByCategory = itemsByCategory.sort((a, b) => {
-			if (a.category > b.category) {
-				return 1;
-			}
-			if (a.category < b.category) {
-				return -1;
-			}
-			return 0;
-		});
 		return itemsByCategory;
 	}
 
 	let activeSection: string;
 </script>
 
-{#if $queryResult.isSuccess}
+{#if $itemsQuery.isSuccess}
 	<div id={$t('stock:all')} style="font-size: {($zoomFactor / 1.5) * 0.2}rem">
 		<ButtonToolbar
 			class="position-sticky top-0 bg-white p-2 d-flex flex-nowrap overflow-auto gap-1 shadow-sm"
@@ -114,7 +113,7 @@
 		>
 			{#each [{ category: $t('stock:all') }, ...itemsByCategory] as category}
 				<Button
-					class="rounded-pill"
+					class="rounded-pill text-nowrap"
 					color="primary"
 					outline={!(activeSection == category.category)}
 					size="sm"
@@ -124,6 +123,7 @@
 					}}>{category.category}</Button
 				>
 			{/each}
+			<EditCategoriesOrderModal />
 		</ButtonToolbar>
 
 		{#if $searchTerm.length}
@@ -164,16 +164,16 @@
 	</div>
 {:else}
 	<div class="h-100 d-flex justify-content-center align-items-center px-4">
-		{#if $queryResult.isLoading}
+		{#if $itemsQuery.isLoading}
 			<Spinner type="grow" />
 		{/if}
-		{#if $queryResult.isError}
+		{#if $itemsQuery.isError}
 			<span class="h4">{$t('loading_error')}</span>
 		{/if}
 	</div>
 {/if}
 
-{#if $queryResult.isSuccess}
+{#if $itemsQuery.isSuccess}
 	{#if !itemsByCategory.length}
 		<div class="h-100 d-flex justify-content-center align-items-center px-4">
 			<span class="h4">{$t('no_items')}</span>

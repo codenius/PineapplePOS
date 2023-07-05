@@ -11,6 +11,8 @@
 	"clear_shoppingBag": "$t(shop:shoppingBag) leeren",
 	"not_items_in_shoppingBag": "Es sind keine $t(item_other) im $t(shop:shoppingBag). Klicke welche an, um sie hinzuzufügen.",
 	"restore_shoppingBag": "$t(shop:shoppingBag) wiederherstellen",
+	"edit_categories_order": "Kategorienreihenfolge bearbeiten",
+	"edit_categories_order_info": "Einen Eintrag anklicken und ziehen, um ihn an eine andere Position zu bewegen.",
 
 	"available_items": "{{amount}} verfüg.",
 

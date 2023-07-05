@@ -74,13 +74,20 @@
 		}),
 		table.column({
 			header: $t('stock:category') as string,
-			accessor: 'category',
-			cell: checkEmpty,
+			id: 'category',
+			accessor: (item) => item.category || null,
+			cell: ({ row }) =>
+				checkEmpty({
+					value: row.original.category ? row.original.category.name : null
+				}),
 			plugins: {
 				colFilter: {
 					fn: matchFilter,
 					render: ({ filterValue, preFilteredValues }) =>
 						createRender(SortSelect, { filterValue, preFilteredValues })
+				},
+				sort: {
+					getSortValue: (category) => category.name
 				}
 			}
 		}),

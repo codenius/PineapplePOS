@@ -40,6 +40,7 @@
 	import div, { filedrop } from 'filedrop-svelte';
 	import { t } from '$lib/i18n';
 	import ItemCard from '$routes/shop/components/Items/ItemCard.svelte';
+	import type { Category } from '$lib/types/Category';
 
 	export let data: PageData;
 	let item: Item = data as Item;
@@ -83,7 +84,7 @@
 
 		{
 			onSuccess: () => {
-				queryClient.invalidateQueries('items');
+				queryClient.invalidateQueries(['items', 'categories']);
 				goto('/stock');
 			}
 		}
@@ -109,15 +110,24 @@
 
 	let isDeleteModalOpen = false;
 
-	let initCategories: string[] = [];
+	let initCategories: Category[] = [];
 	ItemsController.getCategories().then((categories) => {
-		initCategories = categories;
+		initCategories = categories.map((category) => ({
+			value: category.id,
+			label: category.name,
+			_isDefault: category._isDefault
+		}));
 	});
 	let categories = initCategories;
 	$: categories = initCategories;
 
-	$: newCategory ? (categories = [...initCategories, newCategory]) : {};
-	let newCategory: string;
+	$: newCategoryName
+		? (categories = [
+				...initCategories,
+				{ value: newCategoryName, label: newCategoryName }
+		  ])
+		: {};
+	let newCategoryName: string;
 	let categoryFilterText: string;
 </script>
 
@@ -207,7 +217,7 @@
 						<Select
 							placeholder={$t('stock:select_category')}
 							on:filter={() => {
-								newCategory = categoryFilterText;
+								newCategoryName = categoryFilterText;
 							}}
 							on:blur={() => {
 								!item.category ? (categories = initCategories) : {};
@@ -218,7 +228,9 @@
 							bind:filterText={categoryFilterText}
 							value={item.category}
 							bind:justValue={item.category}
-							items={categories.filter((category) => !!category)}
+							items={categories.filter(
+								(category) => !!category && !category._isDefault
+							)}
 							--font-size="1rem"
 							--padding="0 0 0 .75rem"
 							--input-padding=".375rem 0"
@@ -296,7 +308,7 @@
 				<div class="my-2">
 					<i>{$t('stock:preview')}</i>
 					<div>
-						<ItemCard style="width: 15rem" {...item}></ItemCard>
+						<ItemCard style="width: 15rem" {...item} />
 					</div>
 				</div>
 			</Col>

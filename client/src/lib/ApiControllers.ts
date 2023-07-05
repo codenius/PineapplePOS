@@ -1,7 +1,9 @@
 import { env } from '$env/dynamic/public';
 
 import type { Item } from '$lib/types/Item';
-import items from './ApiControllers/items/example.json';
+import items from './ApiControllers/items/exampleItems.json';
+import categories from './ApiControllers/items/exampleCategories.json';
+
 import { ItemsController as ApiItemsController } from './ApiControllers/items/ItemsController';
 import { ItemsController as MockItemsController } from './ApiControllers/items/LocalStorageItemsController';
 
@@ -14,7 +16,10 @@ export let EmployeesController: MockEmployeesController;
 
 (async () => {
 	if (env.PUBLIC_MOCK_API == 'true') {
-		ItemsController = new MockItemsController(items as unknown as Item[]);
+		ItemsController = new MockItemsController(
+			items as unknown as Item[],
+			categories
+		);
 		EmployeesController = new MockEmployeesController(
 			employees as unknown as Employee[]
 		);
