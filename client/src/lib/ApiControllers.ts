@@ -9,6 +9,8 @@ import { ItemsController as MockItemsController } from './ApiControllers/items/L
 
 import type { Employee } from '$lib/types/Employee';
 import employees from './ApiControllers/employees/example.json';
+
+import { EmployeesController as ApiEmployeesController } from './ApiControllers/employees/EmployeesController';
 import { EmployeesController as MockEmployeesController } from './ApiControllers/employees/LocalStorageEmployeesController';
 
 export let ItemsController: ApiItemsController | MockItemsController;
@@ -25,5 +27,8 @@ export let EmployeesController: MockEmployeesController;
 		);
 	} else {
 		ItemsController = new ApiItemsController(env.PUBLIC_BACKEND_URL || '/api');
+		EmployeesController = new ApiEmployeesController(
+			env.PUBLIC_BACKEND_URL || '/api'
+		);
 	}
 })();

@@ -30,7 +30,7 @@
 	let loggedOut: boolean = false;
 
 	function isUnauthenticated(error: Error) {
-		return error.toString().includes('401');
+		return error.toString().includes('422');
 	}
 
 	const queryResult = useQuery(

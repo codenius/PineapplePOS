@@ -80,7 +80,7 @@ export class EmployeesController {
 			if (employee) {
 				return employee;
 			} else {
-				throw new Error('401');
+				throw new Error('422');
 			}
 		}
 	}
