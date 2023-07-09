@@ -11,9 +11,11 @@ const employeeRouter = Router()
  */
 employeeRouter.post('/register', [
     (req, res, next) => {
-        EmployeeModel.register(new EmployeeModel({username: req.body.username}), req.body.password, (err) => {
+        const password = req.body.password
+        delete req.body.password
+        EmployeeModel.register(new EmployeeModel(req.body), password, (err, user) => {
             if (err) { next(err) }
-            else { res.redirect("/api/employees/login") }
+            else { res.status(200).json(user) }
         })
     }
 ])
@@ -78,9 +80,9 @@ employeeRouter.get("/", [
 
 /**
  * Get current employee
- *
- * @access - Level: Read
- */
+*
+* @access - Level: Read
+*/
 employeeRouter.get("/current", [
     (req, res, next) => Authenticator.read(req, res, next),
     (req, res, next) => { res.status(200).json(req.user) }
@@ -100,7 +102,7 @@ employeeRouter.get('/:id', [
  * Deletes an employee from id
  * 
  * @access - Level: Admin
- */
+*/
 employeeRouter.delete("/:id", [
     (req, res, next) => Authenticator.admin(req, res, next),
     (req, res, next) => EmployeeController.delete.single(req, res, next) 
