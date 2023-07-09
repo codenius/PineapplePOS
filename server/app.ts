@@ -16,7 +16,7 @@ import loggerMiddleware from "./middlewares/loggerMiddleware";
 import apiRouter from "./routes/api";
 import BaseError from "./types/errors/baseError";
 import {ErrorJson} from "./types/errors/commons";
-import { corsMiddleware } from "./middlewares/corsMiddleware";
+import cors from "cors"
 import passport from "passport";
 import session from "express-session"
 import EmployeeModel from "./types/api/employee";
@@ -45,7 +45,7 @@ app.use(urlencoded({ extended: true }))
 app.use(json())
 app.use(inputMiddleware)
 app.use(loggerMiddleware)
-app.use(corsMiddleware)
+app.use(cors({ origin: true, credentials: true }))
 app.use(session({
     secret: "secret",
     resave: false,
