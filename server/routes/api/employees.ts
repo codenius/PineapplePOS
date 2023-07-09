@@ -115,7 +115,17 @@ employeeRouter.delete("/:id", [
  */
 employeeRouter.put("/:id", [
     (req, res, next) => Authenticator.admin(req, res, next),
-    (req, res, next) => EmployeeController.update.single(req, res, next) 
+    (req, res, next) => {
+        EmployeeModel.findById(req.params.id).then((user) => {
+            if (user && req.body.password.length) {
+                user.setPassword(req.body.password, (err, user) => {
+                    user.save();
+                    next(err);
+                });
+            } else { next(); }
+        });
+    },
+    (req, res, next) => EmployeeController.update.single(req, res, next)
 ])
 
 export default employeeRouter
