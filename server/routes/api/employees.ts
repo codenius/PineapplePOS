@@ -87,6 +87,15 @@ employeeRouter.get("/current", [
     (req, res, next) => { res.status(200).json(req.user) }
 ])
 
+/**
+ * Gets a single employee from id
+ * 
+ * @access - Level:Read
+ */
+employeeRouter.get('/:id', [
+    (req,res,next) => Authenticator.admin(req,res,next),
+    (req,res,next) => EmployeeController.select.single(req,res,next)
+])
 
 /**
  * Deletes an employee from id
