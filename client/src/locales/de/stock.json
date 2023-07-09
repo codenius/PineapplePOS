@@ -1,0 +1,43 @@
+{
+	"image": "Bild",
+	"name": "Name",
+	"category": "Kategorie",
+	"company": "Hersteller",
+	"amount": "Anzahl",
+	"price": "Preis",
+
+	"all": "Alle",
+
+	"search_table": "Tabelle durchsuchen",
+	"add_item": "$t(item, {'count': 1}) hinzuzufügen",
+
+	"confirm_deletion": "Löschen bestätigen",
+	"delete_prompt": "Sicher, dass dieses $t(item, {'count': 1}) gelöscht werden soll?",
+
+	"create_item": "Neues $t(item, {'count': 1}) hinzuzufügen",
+	"edit_item": "$t(item, {'count': 1}) bearbeiten",
+
+	"item_data": "Produktdaten",
+	"load_item_data": "$t(stock:item_data) laden",
+	"only_load_image": "Nur Bild laden",
+	"scan_barcode": "Barcode scannen",
+	"search_item": "$t(item, {'count': 1}) suchen",
+
+	"select_category": "$t(stock:category) auswählen",
+
+	"load": "Laden",
+	"scan_again": "Erneut scannen",
+	"camera_permission_warning": "Auf die Kamera konnte nicht zugegriffen werden. Bitte Berechtigungen überprüfen.",
+	"no_items_found": "Es wurden keine Ergebnisse gefunden.",
+	"search_provider_info": "Durchsuche {{provider}} nach $t(item_other)n.",
+
+	"result_other": "{{count}} Ergebnisse",
+
+	"file": "Datei",
+	"select_file": "Klicken um Datei auszuwählen oder ein Bild hier draufziehen",
+	"drop_image": "Bild ablegen",
+	"file_selected": "{{filename}} ausgewählt",
+	"url": "Link",
+	"enter_image_url": "$t(stock:url) zu einem Bild eingeben",
+	"preview": "Vorschau"
+}

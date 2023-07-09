@@ -14,9 +14,8 @@
 
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { addItem, getCategories, setItem } from '$lib/data';
 	import type { Item } from '$lib/types/Item';
-	import { useMutation } from '@sveltestack/svelte-query';
+	import { useMutation, useQueryClient } from '@sveltestack/svelte-query';
 	import {
 		Button,
 		ButtonToolbar,
@@ -37,6 +36,11 @@
 	import type { PageData } from './$types';
 	import ProductSearch from './ProductSearch.svelte';
 	import ScanBarcode from './ScanBarcode.svelte';
+	import { ItemsController } from '$lib/ApiControllers';
+	import div, { filedrop } from 'filedrop-svelte';
+	import { t } from '$lib/i18n';
+	import ItemCard from '$routes/shop/components/Items/ItemCard.svelte';
+	import type { Category } from '$lib/types/Category';
 
 	export let data: PageData;
 	let item: Item = data as Item;
@@ -65,33 +69,65 @@
 		});
 	}
 
-	async function setBase64Image(event: Event) {
-		const fileInput = event.target as HTMLInputElement;
-		fileInput.files
-			? (item.image = await convertBase64(fileInput.files[0]))
-			: {};
+	async function setBase64Image(files: FileList) {
+		if (files) {
+			fileName = files[0].name;
+			item.image = await convertBase64(files[0]);
+		}
 	}
 
+	const queryClient = useQueryClient();
+
 	const saveItemMutation = useMutation(
-		async (item: Item) => {
-			if (isNewItem) {
-				addItem(item);
-			} else {
-				setItem(item);
-			}
-		},
+		async (item: Item) =>
+			isNewItem ? ItemsController.addItem(item) : ItemsController.setItem(item),
+
 		{
 			onSuccess: () => {
+				queryClient.invalidateQueries(['items', 'categories']);
 				goto('/stock');
 			}
 		}
 	);
 
+	let fileName: string = '';
+	let isFileOver: boolean = false;
+
+	function setDragOver(isDragOver: boolean) {
+		return (event: Event) => {
+			if (
+				isDragOver == false &&
+				!event.currentTarget.contains(event.relatedTarget)
+			) {
+				isFileOver = false;
+			} else if (isDragOver == true) {
+				isFileOver = true;
+			}
+			/* isFileOver = isDragOver
+			console.log(isDragOver) */
+		};
+	}
+
 	let isDeleteModalOpen = false;
-	const initCategories = getCategories();
+
+	let initCategories: Category[] = [];
+	ItemsController.getCategories().then((categories) => {
+		initCategories = categories.map((category) => ({
+			value: category.id,
+			label: category.name,
+			_isDefault: category._isDefault
+		}));
+	});
 	let categories = initCategories;
-	$: newCategory ? (categories = [...initCategories, newCategory]) : {};
-	let newCategory: string;
+	$: categories = initCategories;
+
+	$: newCategoryName
+		? (categories = [
+				...initCategories,
+				{ value: newCategoryName, label: newCategoryName }
+		  ])
+		: {};
+	let newCategoryName: string;
 	let categoryFilterText: string;
 </script>
 
@@ -99,29 +135,33 @@
 	<Container xl>
 		<Row>
 			<Col class="p-0">
-				<a href="/stock" class="p-0"><Icon name="chevron-left" />Back</a>
+				<a href="/stock" class="p-0"><Icon name="chevron-left" />{$t('back')}</a
+				>
 			</Col>
 		</Row>
 		<Row class="mb-2">
 			<Col class="p-0">
-				<h1 class="p-0 m-0">{isNewItem ? 'Create new item' : 'Edit item'}</h1>
+				<h1 class="p-0 m-0">
+					{isNewItem ? $t('stock:create_item') : $t('stock:edit_item')}
+				</h1>
 			</Col>
 			<Col class="p-0 d-flex align-items-center justify-content-end">
 				<ButtonToolbar class="gap-2">
 					<Button type="submit" form="item_form" color="primary">
-						Save
+						{$t('save')}
 						{#if $saveItemMutation.isLoading}
 							<Spinner size="sm" />
 						{/if}
 					</Button>
-					<Button href="/stock">Cancel</Button>
+					<Button href="/stock">{$t('cancel')}</Button>
 					<Button
 						color="danger"
 						disabled={isNewItem}
 						on:click={() => {
 							isDeleteModalOpen = true;
 						}}
-						>Delete
+					>
+						{$t('delete')}
 					</Button>
 					<DeleteModal
 						on:deleted={() => {
@@ -136,41 +176,48 @@
 		<Row><hr /></Row>
 		<Row class="gap-3">
 			<Col class="p-0">
-				<h2>Product data</h2>
+				<h2>{$t('stock:item_data')}</h2>
 				<Form
 					id="item_form"
 					on:submit={(event) => {
 						event.preventDefault();
-						!item.category ? (item.category = '') : {};
+						!item.category ? (item.category = null) : {};
 						$saveItemMutation.mutate(item);
 					}}
 				>
 					<FormGroup>
-						<Label>Name</Label>
-						<Input bind:value={item.name} />
+						<Label>{$t('stock:name')}</Label>
+						<Input required bind:value={item.name} />
 					</FormGroup>
 					<FormGroup>
-						<Label>Amount</Label>
-						<Input type="number" inputmode="numeric" bind:value={item.amount} />
-					</FormGroup>
-					<FormGroup>
-						<Label>Price</Label>
+						<Label>{$t('stock:amount')}</Label>
 						<Input
+							min={0}
 							type="number"
 							inputmode="numeric"
+							bind:value={item.amount}
+						/>
+					</FormGroup>
+					<FormGroup>
+						<Label>{$t('stock:price')}</Label>
+						<Input
+							min={0}
+							type="number"
+							inputmode="decimal"
 							step="any"
 							bind:value={item.price}
 						/>
 					</FormGroup>
 					<FormGroup>
-						<Label>Company</Label>
+						<Label>{$t('stock:company')}</Label>
 						<Input bind:value={item.company} />
 					</FormGroup>
 					<FormGroup>
-						<Label>Category</Label>
+						<Label>{$t('stock:category')}</Label>
 						<Select
+							placeholder={$t('stock:select_category')}
 							on:filter={() => {
-								newCategory = categoryFilterText;
+								newCategoryName = categoryFilterText;
 							}}
 							on:blur={() => {
 								!item.category ? (categories = initCategories) : {};
@@ -181,7 +228,9 @@
 							bind:filterText={categoryFilterText}
 							value={item.category}
 							bind:justValue={item.category}
-							items={categories}
+							items={categories.filter(
+								(category) => !!category && !category._isDefault
+							)}
 							--font-size="1rem"
 							--padding="0 0 0 .75rem"
 							--input-padding=".375rem 0"
@@ -192,35 +241,75 @@
 				</Form>
 			</Col>
 			<Col class="p-0">
-				<h2>Load product data</h2>
-				<div class="d-flex gap-2">
+				<h2>{$t('stock:load_item_data')}</h2>
+				<div class="d-flex gap-2 mb-2">
 					<ScanBarcode callback={insertProductData} />
 					<ProductSearch callback={insertProductData} />
 				</div>
-				<h2>Image</h2>
+				<h2>{$t('stock:image')}</h2>
 				<TabContent>
-					<TabPane class="p-2 border-start" tabId="file" active tab="File">
-						<Label>Select or Drag'n'Drop an image file</Label>
-						<Input type="file" on:input={setBase64Image} />
+					<TabPane
+						class="p-2 border-start FILE_TAB"
+						tabId="file"
+						active
+						tab={$t('stock:file')}
+					>
+						<div
+							use:filedrop={{ multiple: false, windowDrop: false }}
+							on:filedrop={(event) => {
+								isFileOver = false;
+								setBase64Image(event.detail.files.accepted);
+							}}
+							on:filedragenter={setDragOver(true)}
+							on:dragleave={setDragOver(false)}
+						>
+							<div
+								class="p-3 bg-light rounded w-100 border DROPZONE {isFileOver &&
+									'hover'} d-flex align-items-center justify-content-center"
+								style="border-style: dashed !important; border-width: 0.15rem !important;"
+							>
+								<div class="d-flex gap-1 text-secondary">
+									{#if isFileOver}
+										<div class="text-black h5">
+											<Icon name="plus-circle-dotted" />
+											{$t('stock:drop_image')}
+										</div>
+									{:else if fileName}
+										<img
+											style="object-fit: contain; height: 2rem;"
+											src={item.image}
+											alt=""
+										/>
+										<span
+											>{$t('stock:file_selected', { filename: fileName })}</span
+										>
+									{:else}
+										{$t('stock:select_file')}
+									{/if}
+								</div>
+							</div>
+						</div>
+						<!-- <Dropzone multiple={false} containerClasses="mb-2" on:drop={(event)=>{setBase64Image(event.detail.acceptedFiles)}}>
+							{#if fileName}
+								<div class="d-flex align-items-center gap-1">
+									<img style="object-fit: contain; height: 2rem;" src="{item.image}" alt="">
+									<span>{fileName} selected</span>
+								</div>
+							{:else}
+								Click to select or Drag'n'Drop a image
+							{/if}
+						</Dropzone> -->
 					</TabPane>
-					<TabPane class="p-2 border-start" tabId="url" tab="URL">
-						<Label>Enter an image url from the public web</Label>
+					<TabPane class="p-2 border-start" tabId="url" tab={$t('stock:url')}>
+						<Label>{$t('stock:enter_image_url')}</Label>
 						<Input type="url" bind:value={item.image} />
 					</TabPane>
 				</TabContent>
 				<div class="my-2">
-					<i>Image preview</i>
-					<figure
-						class="bg-secondary bg-opacity-25 border border-dark rounded d-flex justify-content-center align-items-center p-2 my-2"
-						style="height: 15rem; aspect-ratio: 1/1;"
-					>
-						<img
-							style="height: 100%; width: 100%; 
-						object-fit: contain;"
-							src={item.image}
-							alt=""
-						/>
-					</figure>
+					<i>{$t('stock:preview')}</i>
+					<div>
+						<ItemCard style="width: 15rem" {...item} />
+					</div>
 				</div>
 			</Col>
 		</Row>
@@ -240,5 +329,16 @@
 	}
 	:global(.svelte-select.focused) {
 		box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%);
+	}
+
+	:global(.DROPZONE) {
+		min-height: 10rem;
+		transition: border-color 0.2s;
+	}
+	:global(.DROPZONE:hover, .DROPZONE.hover) {
+		border-color: var(--bs-primary) !important;
+	}
+	:global(.FILE_TAB label) {
+		display: unset;
 	}
 </style>

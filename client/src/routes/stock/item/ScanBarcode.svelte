@@ -1,7 +1,9 @@
 <script lang="ts">
-	import { Button, Form, Input, Modal, Spinner } from 'sveltestrap';
+	import { Button, Form, Icon, Input, Modal, Spinner } from 'sveltestrap';
 	import type { Product, ProductSelectCallback } from './+page.svelte';
+	import BarcodeScanner from './BarcodeScanner.svelte';
 	import ProductResultCard from './ProductResultCard.svelte';
+	import { t } from '$lib/i18n';
 
 	export let callback: ProductSelectCallback;
 
@@ -13,7 +15,7 @@
 	async function loadProduct(barcode: string): Promise<Product> {
 		return fetch(`${BARCODE_ENDPOINT}${barcode}`)
 			.then((res) => res.json())
-			.then((res) => res.product);
+			.then((res) => (res.status == 0 ? null : res.product));
 	}
 
 	let open = false;
@@ -22,17 +24,23 @@
 	let input: HTMLInputElement;
 </script>
 
-<Button on:click={toggle}>Scan barcode</Button>
+<Button on:click={toggle}>{$t('stock:scan_barcode')}</Button>
 <Modal
 	isOpen={open}
 	{toggle}
 	body
-	header="Scan barcode"
+	header={$t('stock:scan_barcode')}
 	size="lg"
 	on:open={() => {
 		input.focus();
 	}}
 >
+	<BarcodeScanner
+		bind:code={barcode}
+		on:scan={() => {
+			productResult = loadProduct(barcode);
+		}}
+	/>
 	<Form
 		class="d-flex gap-2"
 		on:submit={(e) => {
@@ -40,8 +48,13 @@
 			productResult = loadProduct(barcode);
 		}}
 	>
-		<Input bind:inner={input} bind:value={barcode} type="search" />
-		<Button type="submit">Load</Button>
+		<Input
+			bind:inner={input}
+			bind:value={barcode}
+			type="search"
+			inputmode="numeric"
+		/>
+		<Button type="submit">{$t('stock:load')}</Button>
 	</Form>
 
 	<div class="my-2">
@@ -51,13 +64,17 @@
 					<Spinner class="m-auto" />
 				</div>
 			{:then product}
-				<ProductResultCard
-					{product}
-					callback={(product, mode) => {
-						open = false;
-						callback(product, mode);
-					}}
-				/>
+				{#if product == null}
+					<div class="m-0 p-1">{$t('stock:no_items_found')}</div>
+				{:else}
+					<ProductResultCard
+						{product}
+						callback={(product, mode) => {
+							open = false;
+							callback(product, mode);
+						}}
+					/>
+				{/if}
 			{/await}
 		{/if}
 	</div>

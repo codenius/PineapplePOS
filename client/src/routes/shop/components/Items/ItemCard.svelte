@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { shoppingBag } from '$lib/stores/shoppingBag';
-	import { CardImg, Card, CardSubtitle, CardFooter, Icon } from 'sveltestrap';
+	import { Card, CardSubtitle, CardFooter, Icon } from 'sveltestrap';
 	import type { Item } from '$lib/types/Item';
 	import { formatCurrency } from '$lib/currencyHelpers';
-	import { language } from '$lib/i18n';
+	import { language, t } from '$lib/i18n';
+	import ItemCardImage from './ItemCardImage.svelte';
 
 	export let id: Item['id'];
 	export let name: Item['name'];
@@ -54,8 +55,8 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div
-	class="CARD"
+<button
+	class="CARD rounded"
 	style={isSearchItemCard ? 'grid-row: 1; width: 15em' : ''}
 	class:active
 	on:mousedown={() => {
@@ -68,6 +69,7 @@
 		);
 	}}
 	on:click={() => {
+		increaseInShoppingBag();
 		if (timeoutPassed) {
 			active = false;
 			timeoutPassed = false;
@@ -89,17 +91,12 @@
 			});
 		}
 	}}
+	{...$$restProps}
 >
 	<Card
-		on:click={increaseInShoppingBag}
 		class="h-100 {checkAmount(amount, '', 'border-warning', 'border-danger')}"
 	>
-		<CardImg
-			draggable={false}
-			class="w-auto flex-grow-1"
-			style="min-height: 8em; max-height: 8em; object-fit: contain"
-			src={image}
-		/>
+		<ItemCardImage {image} {name} />
 
 		<CardFooter class="d-flex justify-content-between gap-2 h-100">
 			<span class="d-flex align-items-baseline gap-2">
@@ -110,7 +107,7 @@
 				-webkit-box-orient: vertical;
 				-webkit-line-clamp: 3;"
 				>
-					{name}
+					{name || '–'}
 				</span>
 				<CardSubtitle style="font-size: inherit">
 					<small
@@ -124,23 +121,28 @@
 						{#if checkAmount(amount, false, true, true)}
 							<Icon name="exclamation-triangle" />
 						{/if}
-						{amount} aval.</small
-					>
+						{$t('shop:available_items', { amount: amount || 0 })}
+					</small>
 				</CardSubtitle>
 			</span>
 			<span class="text-nowrap">{formatCurrency(price, $language)}</span>
 		</CardFooter>
 	</Card>
-</div>
+</button>
 
 <style>
 	.CARD {
+		all: unset;
 		transition: opacity, transform 75ms;
 		transition-timing-function: ease-out;
 	}
 
 	.CARD:hover {
 		opacity: 0.85;
+	}
+
+	.CARD:focus-visible {
+		outline: solid 0.12rem;
 	}
 
 	.CARD.active {

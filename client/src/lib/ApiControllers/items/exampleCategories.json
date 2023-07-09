@@ -1,0 +1,17 @@
+[
+	{
+		"id": "fe428a7f-976f-42c5-9ac3-80f5cfd90f4f",
+		"index": 0,
+		"name": "Sweets"
+	},
+	{
+		"id": "b87d4166-660d-4376-a20e-65dfc8d7bac9",
+		"index": 1,
+		"name": "Snacks"
+	},
+	{
+		"id": "a01d8852-bbfd-41af-9da2-4b494467e0eb",
+		"index": 2,
+		"name": "Drinks"
+	}
+]

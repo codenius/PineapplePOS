@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { getDatabase } from '$lib/data';
 	import {
 		createTable,
 		Subscribe,
@@ -15,7 +14,7 @@
 	import { writable } from 'svelte/store';
 	import { useQuery } from '@sveltestack/svelte-query';
 	import type { Item } from '$lib/types/Item';
-	import ItemImage from './ItemImage.svelte';
+	import ListItemImage from '$lib/components/ListItemImage.svelte';
 	import { Icon, Spinner, Table } from 'sveltestrap';
 	import ActionButtons from './ActionButtons.svelte';
 	import SortSelect from './SortSelect.svelte';
@@ -23,14 +22,25 @@
 	import { fade } from 'svelte/transition';
 	import TableSearch from './TableSearch.svelte';
 	import { searchTerm } from './searchTerm';
+	import { ItemsController } from '$lib/ApiControllers';
+	import Price from './Price.svelte';
+	import { formatCurrency } from '$lib/currencyHelpers';
+	import { language, t } from '$lib/i18n';
 
 	let queryResult = useQuery<Item[], Error>(
 		'items',
 		async () => {
-			return getDatabase();
+			return ItemsController.getItems();
 		},
 		{ refetchOnMount: 'always' }
 	);
+
+	function checkEmpty<T>({ value }: { value: T }) {
+		if (value !== null) {
+			return value;
+		}
+		return '–';
+	}
 
 	const data = writable<Item[]>([]);
 	$: if ($queryResult.isSuccess) {
@@ -50,32 +60,51 @@
 
 	const columns = table.createColumns([
 		table.column({
-			header: 'Image',
+			header: $t('stock:image') as string,
 			accessor: 'image',
-			cell: ({ value }) => createRender(ItemImage, { image: value }),
+			cell: ({ value }) => createRender(ListItemImage, { image: value }),
 			plugins: {
 				sort: { disable: true },
 				tableFilter: { exclude: true }
 			}
 		}),
 		table.column({
-			header: 'Name',
+			header: $t('stock:name') as string,
 			accessor: 'name'
 		}),
 		table.column({
-			header: 'Category',
-			accessor: 'category',
+			header: $t('stock:category') as string,
+			id: 'category',
+			accessor: (item) => item.category || null,
+			cell: ({ row }) =>
+				checkEmpty({
+					value: row.original.category ? row.original.category.name : null
+				}),
 			plugins: {
 				colFilter: {
 					fn: matchFilter,
 					render: ({ filterValue, preFilteredValues }) =>
 						createRender(SortSelect, { filterValue, preFilteredValues })
+				},
+				sort: {
+					getSortValue: (category) => category.name
 				}
 			}
 		}),
 		table.column({
-			header: 'Amount',
-			accessor: 'amount'
+			header: $t('stock:amount') as string,
+			accessor: 'amount',
+			cell: checkEmpty
+		}),
+		table.column({
+			header: $t('stock:price') as string,
+			accessor: 'price',
+			cell: ({ value }) => createRender(Price, { price: value }),
+			plugins: {
+				tableFilter: {
+					getFilterValue: (price) => formatCurrency(price, $language)
+				}
+			}
 		}),
 		table.column({
 			header: () => createRender(TableSearch),
@@ -101,7 +130,7 @@
 			class="right-0 bottom-0 position-fixed m-2 p-2 px-3 text-primary bg-light rounded-pill border shadow-lg"
 		>
 			<Spinner size="sm" />
-			Refreshing...
+			{$t('refreshing')}...
 		</div>
 	{/if}
 
@@ -121,9 +150,10 @@
 									<span class="d-flex align-items-center gap-1">
 										<button
 											style="height: 2rem;"
-											class="d-flex align-items-center gap-1 text-dark bg-transparent p-0 border-0"
+											class="d-flex align-items-center gap-1 text-dark font-bold bg-transparent p-0 border-0"
 											on:click={props.sort.toggle}
 											disabled={props.sort.disabled}
+											type="button"
 										>
 											<Render of={cell.render()} />
 											<Icon
@@ -179,7 +209,7 @@
 	</Table>
 	{#if $queryResult.isSuccess}
 		{#if !$rows.length}
-			<h4 class="m-auto">No products found.</h4>
+			<h4 class="m-auto px-4">{$t('no_items')}</h4>
 		{/if}
 	{/if}
 	{#if $queryResult.isLoading}
@@ -188,5 +218,8 @@
 		>
 			<Spinner type="grow" />
 		</div>
+	{/if}
+	{#if $queryResult.isError}
+		<h4 class="m-auto px-4">{$t('loading_error')}</h4>
 	{/if}
 </div>

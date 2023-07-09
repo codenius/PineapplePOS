@@ -3,7 +3,6 @@ import passwordLocalMongoosePlugin from "passport-local-mongoose";
 
 export const Employee = new Schema({
     username: String,
-    password: String,
     created: {
         type: Date,
         default: Date.now(),
