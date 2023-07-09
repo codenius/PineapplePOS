@@ -16,7 +16,7 @@ export class ItemsController {
 
 	private async fetch<T>(
 		path: string,
-		options?: RequestInit,
+		options: RequestInit = {},
 		remap: boolean = true,
 		json: boolean = true
 	) {
@@ -29,11 +29,9 @@ export class ItemsController {
 				'Content-Type': 'application/json'
 			};
 		}
+		options.credentials = 'include';
 		const response = await fetch(this.url(path), options);
 		if (!response.ok) {
-			if (response.status == 401) {
-			} else {
-			}
 			throw new Error(`${response.status}: ${response.statusText}`);
 		}
 		const data = json ? response.json() : response.text();
