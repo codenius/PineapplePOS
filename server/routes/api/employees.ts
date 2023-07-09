@@ -32,8 +32,7 @@ employeeRouter.post('/login', [
 employeeRouter.post('/logout', [
     (req, res, next) => Authenticator.read(req, res, next),
     (req, res, next) => {
-        req.logout((err) => { if (err) { return next(err)} })
-        res.redirect("/")
+        req.logout((err) => { if (err) { return next(err)} else { res.status(200).send('ok') } })
     }
 ])
 
