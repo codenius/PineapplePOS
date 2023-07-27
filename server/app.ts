@@ -23,9 +23,11 @@ import EmployeeModel from "./types/api/employee";
 import { Strategy as LocalStrategy } from "passport-local"
 
 const DATABASE_URL = process.env.DB_URL || "mongodb://localhost:27017"
+const DATABASE_USER = process.env.DB_USER || undefined
+const DATABASE_PASSWORD = process.env.DB_PASSWORD || undefined
 const DEBUG = process.env.DEBUG || true
 
-mongoose.connect(DATABASE_URL).then(
+mongoose.connect(DATABASE_URL, { user: DATABASE_USER, pass: DATABASE_PASSWORD }).then(
     () => {
         logger.info("connected to database"),
         EmployeeModel.count({level: "admin"}).then((count) => {
