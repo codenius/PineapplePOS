@@ -53,6 +53,7 @@ app.use(json())
 app.use(inputMiddleware)
 app.use(loggerMiddleware)
 app.use(cors({ origin: true, credentials: true }))
+app.set('trust proxy', true)
 app.use(session({
     secret: "secret",
     resave: false,
