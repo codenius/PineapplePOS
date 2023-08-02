@@ -26,6 +26,11 @@ const DATABASE_URL = process.env.DB_URL || "mongodb://localhost:27017"
 const DATABASE_USER = process.env.DB_USER || undefined
 const DATABASE_PASSWORD = process.env.DB_PASSWORD || undefined
 const DEBUG = process.env.DEBUG || true
+const XS_COOKIE = process.env.XS_COOKIE || false 
+    /* makes session cookie XS-compliant, 
+    requires secure context (HTTPS), 
+    therefor can't be used in local development without additional configuration (local certificates), 
+    most useful in crossorigin cloud environments */
 
 mongoose.connect(DATABASE_URL, { user: DATABASE_USER, pass: DATABASE_PASSWORD }).then(
     () => {
@@ -51,7 +56,8 @@ app.use(cors({ origin: true, credentials: true }))
 app.use(session({
     secret: "secret",
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: XS_COOKIE == "true" ? { sameSite: "none", secure: true } : undefined
 }))
 
 /* Authentication middlewares */
