@@ -8,6 +8,7 @@
 
 	export let id: Item['id'];
 	export let name: Item['name'];
+	export let company: Item['company'];
 	export let price: Item['price'];
 	export let amount: Item['amount'];
 	export let image: Item['image'];
@@ -94,9 +95,10 @@
 	{...$$restProps}
 >
 	<Card
+		title={`${name || '–'} ${company ? '–' : ''} ${company || ''}`}
 		class="h-100 {checkAmount(amount, '', 'border-warning', 'border-danger')}"
 	>
-		<ItemCardImage {image} {name} />
+		<ItemCardImage {image} alt={name} />
 
 		<CardFooter class="d-flex justify-content-between gap-2 h-100">
 			<span class="d-flex align-items-baseline gap-2">
@@ -108,6 +110,8 @@
 				-webkit-line-clamp: 3;"
 				>
 					{name || '–'}
+					{company ? '–' : ''}
+					{company || ''}
 				</span>
 				<CardSubtitle style="font-size: inherit">
 					<small

@@ -36,7 +36,7 @@
 	);
 
 	function checkEmpty<T>({ value }: { value: T }) {
-		if (value !== null) {
+		if (value || value === 0) {
 			return value;
 		}
 		return '–';
@@ -71,6 +71,11 @@
 		table.column({
 			header: $t('stock:name') as string,
 			accessor: 'name'
+		}),
+		table.column({
+			header: $t('stock:company') as string,
+			accessor: 'company',
+			cell: checkEmpty
 		}),
 		table.column({
 			header: $t('stock:category') as string,

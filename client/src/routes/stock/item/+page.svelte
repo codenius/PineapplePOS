@@ -37,7 +37,7 @@
 	import ProductSearch from './ProductSearch.svelte';
 	import ScanBarcode from './ScanBarcode.svelte';
 	import { ItemsController } from '$lib/ApiControllers';
-	import div, { filedrop } from 'filedrop-svelte';
+	import { filedrop } from 'filedrop-svelte';
 	import { t } from '$lib/i18n';
 	import ItemCard from '$routes/shop/components/Items/ItemCard.svelte';
 	import type { Category } from '$lib/types/Category';
@@ -190,6 +190,10 @@
 						<Input required bind:value={item.name} />
 					</FormGroup>
 					<FormGroup>
+						<Label>{$t('stock:company')}</Label>
+						<Input bind:value={item.company} />
+					</FormGroup>
+					<FormGroup>
 						<Label>{$t('stock:amount')}</Label>
 						<Input
 							min={0}
@@ -207,10 +211,6 @@
 							step="any"
 							bind:value={item.price}
 						/>
-					</FormGroup>
-					<FormGroup>
-						<Label>{$t('stock:company')}</Label>
-						<Input bind:value={item.company} />
 					</FormGroup>
 					<FormGroup>
 						<Label>{$t('stock:category')}</Label>

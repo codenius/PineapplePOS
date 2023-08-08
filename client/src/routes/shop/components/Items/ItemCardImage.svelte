@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Item } from '$lib/types/Item';
 	import { CardImg, Icon } from 'sveltestrap';
-	export let name: Item['name'];
+	export let alt: string;
 	export let image: Item['image'];
 </script>
 
@@ -23,7 +23,7 @@
 		>
 			<Icon name="image" style="font-size: 1.7em" />
 			<div class="text-truncate">
-				{name || '–'}
+				{alt || '–'}
 			</div>
 		</div>
 	</div>
