@@ -27,6 +27,7 @@
 	import type { ShoppingBagEntry } from '$lib/types/ShoppingBagEntry';
 	import { ItemsController } from '$lib/ApiControllers';
 	import Kbd from '$lib/Kbd';
+	import toast from 'svelte-french-toast';
 
 	function toggle() {
 		$payModal = !$payModal;
@@ -56,7 +57,11 @@
 	);
 
 	function sell() {
-		$sellMutation.mutate($shoppingBag);
+		toast.promise($sellMutation.mutateAsync($shoppingBag), {
+			loading: $t('shop:complete_msg.loading'),
+			success: $t('shop:complete_msg.success'),
+			error: $t('shop:complete_msg.error')
+		});
 	}
 </script>
 

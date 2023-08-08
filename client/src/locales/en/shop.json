@@ -19,5 +19,11 @@
 	"total": "Total",
 	"given": "Given",
 	"change": "Change",
-	"pay_proceed": "Hit {{key}} to proceed."
+	"pay_proceed": "Hit {{key}} to proceed.",
+
+	"complete_msg": {
+		"loading": "Completing...",
+		"success": "Successfully completed",
+		"error": "Failed"
+	}
 }

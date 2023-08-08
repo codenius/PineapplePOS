@@ -19,5 +19,11 @@
 	"total": "Gesamt",
 	"given": "Gegeben",
 	"change": "Rückgeld",
-	"pay_proceed": "{{key}} drücken, um fortzufahren."
+	"pay_proceed": "{{key}} drücken, um fortzufahren.",
+
+	"complete_msg": {
+		"loading": "Fertigstellen...",
+		"success": "Erfolgreich fertiggestellt",
+		"error": "Fehlgeschlagen"
+	}
 }
