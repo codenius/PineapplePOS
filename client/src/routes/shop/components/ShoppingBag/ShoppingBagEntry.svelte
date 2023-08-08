@@ -44,7 +44,7 @@
 	</span>
 	<span class="d-flex align-items-center flex-shrink-0 gap-2">
 		<Counter max={amount} bind:value={shoppingBagAmount} />
-		<span>{formatCurrency(price, $language)}</span>
+		<span>{formatCurrency(shoppingBagAmount * price, $language)}</span>
 		<Button
 			on:click={() => {
 				shoppingBagAmount = 0;
