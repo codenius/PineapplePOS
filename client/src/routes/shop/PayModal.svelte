@@ -30,11 +30,12 @@
 
 	function toggle() {
 		$payModal = !$payModal;
+		given = undefined;
 	}
 
 	let queryResult = useQuery<Item[], Error>('items');
 
-	let given: number;
+	let given: number | undefined;
 
 	let total: number;
 	$: total = calculateTotal($shoppingBag, $queryResult.data || []);
@@ -137,6 +138,7 @@
 			<Button
 				on:click={() => {
 					$payModal = false;
+					given = undefined;
 				}}
 				color="secondary">{$t('cancel')}</Button
 			>
