@@ -9,20 +9,29 @@
 	} from 'sveltestrap';
 	import NavPart from './NavPart.svelte';
 	import { i18n, t } from '$lib/i18n';
+	import { useQuery } from '@sveltestack/svelte-query';
+	import type { Employee } from '$lib/types/Employee';
 
 	export let expanded: boolean = false;
 	let isOpen: boolean = false;
+
+	const currentEmployee = useQuery<Employee>('currentEmployee');
 </script>
 
 <ButtonDropdown class="Settings" {isOpen} toggle={() => (isOpen = !isOpen)}>
 	<DropdownToggle color="transparent" class="p-0">
-		<ul class="list-unstyled mb-1">
+		<ul class="list-unstyled mb-1 nav d-block">
 			<NavPart icon="gear" class="border-bottom-0" bind:expanded
 				>{$t('settings')}</NavPart
 			>
 		</ul></DropdownToggle
 	>
 	<DropdownMenu class="shadow-sm mx-2">
+		{#if $currentEmployee.isSuccess && $currentEmployee.data.role == 'admin'}
+			<DropdownItem href="/employees"
+				><Icon name="people-fill" /> {$t('manage_employees')}</DropdownItem
+			>
+		{/if}
 		<Dropdown direction="right">
 			<DropdownToggle
 				caret

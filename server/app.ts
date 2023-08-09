@@ -16,16 +16,23 @@ import loggerMiddleware from "./middlewares/loggerMiddleware";
 import apiRouter from "./routes/api";
 import BaseError from "./types/errors/baseError";
 import {ErrorJson} from "./types/errors/commons";
-import { corsMiddleware } from "./middlewares/corsMiddleware";
+import cors from "cors"
 import passport from "passport";
 import session from "express-session"
 import EmployeeModel from "./types/api/employee";
 import { Strategy as LocalStrategy } from "passport-local"
 
 const DATABASE_URL = process.env.DB_URL || "mongodb://localhost:27017"
+const DATABASE_USER = process.env.DB_USER || undefined
+const DATABASE_PASSWORD = process.env.DB_PASSWORD || undefined
 const DEBUG = process.env.DEBUG || true
+const XS_COOKIE = process.env.XS_COOKIE || false 
+    /* makes session cookie XS-compliant, 
+    requires secure context (HTTPS), 
+    therefor can't be used in local development without additional configuration (local certificates), 
+    most useful in crossorigin cloud environments */
 
-mongoose.connect(DATABASE_URL).then(
+mongoose.connect(DATABASE_URL, { user: DATABASE_USER, pass: DATABASE_PASSWORD }).then(
     () => {
         logger.info("connected to database"),
         EmployeeModel.count({level: "admin"}).then((count) => {
@@ -45,11 +52,13 @@ app.use(urlencoded({ extended: true }))
 app.use(json())
 app.use(inputMiddleware)
 app.use(loggerMiddleware)
-app.use(corsMiddleware)
+app.use(cors({ origin: true, credentials: true }))
+app.set('trust proxy', true)
 app.use(session({
     secret: "secret",
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: XS_COOKIE == "true" ? { sameSite: "none", secure: true } : undefined
 }))
 
 /* Authentication middlewares */

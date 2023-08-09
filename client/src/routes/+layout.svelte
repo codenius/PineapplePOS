@@ -4,6 +4,7 @@
 	import { beforeNavigate, afterNavigate } from '$app/navigation';
 	import ProgressBar from 'svelte-progress-bar';
 	import { QueryClient, QueryClientProvider } from '@sveltestack/svelte-query';
+	import { Toaster } from 'svelte-french-toast';
 
 	let progress: any;
 	beforeNavigate(() => {
@@ -18,6 +19,9 @@
 
 <!-- includes Bootstrap stylesheet -->
 <Styles />
+
+<!-- renders toast notifications -->
+<Toaster />
 
 <ProgressBar bind:this={progress} />
 <QueryClientProvider client={queryClient}>

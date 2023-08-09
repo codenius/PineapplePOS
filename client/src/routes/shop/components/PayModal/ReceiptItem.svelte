@@ -12,7 +12,11 @@
 <ListGroupItem class="d-flex justify-content-between gap-2">
 	<span class="d-flex gap-2">
 		<ListItemImage image={item.image} />
-		<span>{item.name}</span>
+		<span>
+			{item.name}
+			{item.company ? '–' : ''}
+			{item.company ? item.company : ''}
+		</span>
 	</span>
 
 	<span class="flex-shrink-0">

@@ -10,6 +10,7 @@
 
 	export let id: Item['id'];
 	export let name: Item['name'];
+	export let company: Item['company'];
 	export let amount: Item['amount'];
 	export let price: Item['price'];
 	export let image: Item['image'];
@@ -32,19 +33,23 @@
 </script>
 
 <ListGroupItem class="d-flex justify-content-between align-items-center">
-	<span class="d-flex justify-content-between align-items-center gap-2">
+	<span
+		title={`${name || '–'} ${company ? '–' : ''} ${company || ''}`}
+		class="d-flex justify-content-between align-items-center gap-2"
+	>
 		<ListItemImage {image} />
 		<span
 			style="overflow-y:hidden; 
 			word-break: break-word;  
 			display: -webkit-box;
 			-webkit-box-orient: vertical;
-			-webkit-line-clamp: 2;">{name}</span
+			-webkit-line-clamp: 2;"
+			>{name} {company ? '–' : ''} {company ? company : ''}</span
 		>
 	</span>
 	<span class="d-flex align-items-center flex-shrink-0 gap-2">
 		<Counter max={amount} bind:value={shoppingBagAmount} />
-		<span>{formatCurrency(price, $language)}</span>
+		<span>{formatCurrency(shoppingBagAmount * price, $language)}</span>
 		<Button
 			on:click={() => {
 				shoppingBagAmount = 0;

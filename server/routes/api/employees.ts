@@ -11,9 +11,11 @@ const employeeRouter = Router()
  */
 employeeRouter.post('/register', [
     (req, res, next) => {
-        EmployeeModel.register(new EmployeeModel({username: req.body.username}), req.body.password, (err) => {
+        const password = req.body.password
+        delete req.body.password
+        EmployeeModel.register(new EmployeeModel(req.body), password, (err, user) => {
             if (err) { next(err) }
-            else { res.redirect("/api/employees/login") }
+            else { res.status(200).json(user) }
         })
     }
 ])
@@ -32,8 +34,7 @@ employeeRouter.post('/login', [
 employeeRouter.post('/logout', [
     (req, res, next) => Authenticator.read(req, res, next),
     (req, res, next) => {
-        req.logout((err) => { if (err) { return next(err)} })
-        res.redirect("/")
+        req.logout((err) => { if (err) { return next(err)} else { res.status(200).send('ok') } })
     }
 ])
 
@@ -79,20 +80,29 @@ employeeRouter.get("/", [
 
 /**
  * Get current employee
- *
- * @access - Level: Read
- */
+*
+* @access - Level: Read
+*/
 employeeRouter.get("/current", [
     (req, res, next) => Authenticator.read(req, res, next),
     (req, res, next) => { res.status(200).json(req.user) }
 ])
 
+/**
+ * Gets a single employee from id
+ * 
+ * @access - Level:Read
+ */
+employeeRouter.get('/:id', [
+    (req,res,next) => Authenticator.admin(req,res,next),
+    (req,res,next) => EmployeeController.select.single(req,res,next)
+])
 
 /**
  * Deletes an employee from id
  * 
  * @access - Level: Admin
- */
+*/
 employeeRouter.delete("/:id", [
     (req, res, next) => Authenticator.admin(req, res, next),
     (req, res, next) => EmployeeController.delete.single(req, res, next) 
@@ -105,7 +115,17 @@ employeeRouter.delete("/:id", [
  */
 employeeRouter.put("/:id", [
     (req, res, next) => Authenticator.admin(req, res, next),
-    (req, res, next) => EmployeeController.update.single(req, res, next) 
+    (req, res, next) => {
+        EmployeeModel.findById(req.params.id).then((user) => {
+            if (user && req.body.password.length) {
+                user.setPassword(req.body.password, (err, user) => {
+                    user.save();
+                    next(err);
+                });
+            } else { next(); }
+        });
+    },
+    (req, res, next) => EmployeeController.update.single(req, res, next)
 ])
 
 export default employeeRouter

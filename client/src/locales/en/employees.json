@@ -1,0 +1,22 @@
+{
+	"employee": "Employee",
+	"name": "Name",
+	"password": "Password",
+	"role": "Role",
+	"all": "All",
+	"search_table": "Search table",
+
+	"add_employee": "Add employee",
+	"edit_employee": "Edit employee",
+	"employee_data": "$t(employees:employee) data",
+	"select_role": "Select role",
+
+	"confirm_deletion": "Delete employee",
+	"delete_prompt": "Are you sure you want to delete this employee?",
+	"roles": {
+		"read": "Read",
+		"sell": "Sell",
+		"edit": "Edit (stock management)",
+		"admin": "Admin (employees management)"
+	}
+}

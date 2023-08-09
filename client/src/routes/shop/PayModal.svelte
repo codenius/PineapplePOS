@@ -23,17 +23,20 @@
 	import Receipt from './components/PayModal/Receipt.svelte';
 	import { formatCurrency } from '$lib/currencyHelpers';
 	import { calculateTotal } from './+page.svelte';
-	import { language } from '$lib/i18n';
+	import { language, t } from '$lib/i18n';
 	import type { ShoppingBagEntry } from '$lib/types/ShoppingBagEntry';
-	import { sellItems } from '$lib/data';
+	import { ItemsController } from '$lib/ApiControllers';
+	import Kbd from '$lib/Kbd';
+	import toast from 'svelte-french-toast';
 
 	function toggle() {
 		$payModal = !$payModal;
+		given = undefined;
 	}
 
 	let queryResult = useQuery<Item[], Error>('items');
 
-	let given: number;
+	let given: number | undefined;
 
 	let total: number;
 	$: total = calculateTotal($shoppingBag, $queryResult.data || []);
@@ -42,7 +45,7 @@
 
 	const sellMutation = useMutation(
 		async (shoppingBag: ShoppingBagEntry[]) => {
-			return sellItems(shoppingBag);
+			return ItemsController.sellItems(shoppingBag);
 		},
 		{
 			onSuccess: () => {
@@ -52,10 +55,31 @@
 			}
 		}
 	);
+
+	function sell() {
+		toast.promise($sellMutation.mutateAsync($shoppingBag), {
+			loading: $t('shop:complete_msg.loading'),
+			success: $t('shop:complete_msg.success'),
+			error: $t('shop:complete_msg.error')
+		});
+	}
 </script>
 
+<!-- <svelte:window
+	use:shortcut={{ trigger: { key: 'Enter', modifier: 'ctrl', callback: sell } }}
+/>
+ -->
+
+<svelte:window
+	on:keydown={(e) => {
+		if (e.key == 'Enter' && e.ctrlKey && $payModal) {
+			sell();
+		}
+	}}
+/>
+
 <Modal scrollable={true} size="xl" isOpen={$payModal} {toggle}>
-	<ModalHeader {toggle}>Pay</ModalHeader>
+	<ModalHeader {toggle}>{$t('shop:pay')}</ModalHeader>
 	<ModalBody>
 		<Container fluid class="m-0 p-0">
 			<Row class="gap-3 flex-nowrap">
@@ -64,7 +88,7 @@
 				</Col>
 				<Col class="flex-shrink-0">
 					<div class="mb-3">
-						<h2 class="m-0">Total</h2>
+						<h2 class="m-0">{$t('shop:total')}</h2>
 						<h3
 							class="text-truncate"
 							style="font-weight: initial; max-width: 15rem;"
@@ -73,7 +97,7 @@
 						</h3>
 					</div>
 					<div class="mb-3">
-						<h2>Given</h2>
+						<h2>{$t('shop:given')}</h2>
 						<h3
 							class="text-truncate"
 							style="font-weight: initial; max-width: 15rem;"
@@ -89,7 +113,7 @@
 						</h3>
 					</div>
 					<div class="mb-3">
-						<h2>Change</h2>
+						<h2>{$t('shop:change')}</h2>
 						<h3
 							class="text-truncate"
 							style="font-weight: initial; max-width: 15rem;"
@@ -108,28 +132,33 @@
 			</Row>
 		</Container>
 	</ModalBody>
-	<ModalFooter>
-		<Button
-			on:click={() => {
-				$payModal = false;
-			}}
-			color="secondary">Cancel</Button
-		>
-		<Button
-			on:click={() => {
-				$sellMutation.mutate($shoppingBag);
-			}}
-			color="primary"
-			>Done
-			{#if $sellMutation.isLoading}
-				<Spinner size="sm" />
-			{/if}
-		</Button>
+	<ModalFooter class="justify-content-between">
+		<span class="text-secondary">
+			{@html $t('shop:pay_proceed', {
+				key: `${Kbd('Ctrl')} + ${Kbd('Enter')}`,
+				interpolation: { escapeValue: false }
+			})}
+		</span>
+		<div>
+			<Button
+				on:click={() => {
+					$payModal = false;
+					given = undefined;
+				}}
+				color="secondary">{$t('cancel')}</Button
+			>
+			<Button on:click={sell} color="primary"
+				>{$t('done')}
+				{#if $sellMutation.isLoading}
+					<Spinner size="sm" />
+				{/if}
+			</Button>
+		</div>
 	</ModalFooter>
 </Modal>
 
 <style global>
-	.Modal {
+	/* 	.Modal {
 		width: initial;
 		height: max-content;
 	}
@@ -138,5 +167,11 @@
 	}
 	.modal-dialog.modal-xl {
 		max-width: 80%;
+	} */
+	@media (max-width: 1024px) {
+		.modal-dialog {
+			max-width: 100%;
+			margin: 1.75rem 1rem;
+		}
 	}
 </style>

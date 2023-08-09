@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { language } from '$lib/i18n';
+	import { language, t } from '$lib/i18n';
 	import { NumberParser } from '$lib/numberParser';
 	import { onMount } from 'svelte';
 	import Keyboard from 'svelte-keyboard';
@@ -133,6 +133,11 @@
 <div style="max-width: 25rem" class="m-auto">
 	<Form class="mb-2" on:submit={(e) => e.preventDefault()}>
 		<input
+			on:keydown={(e) => {
+				if (!(e.key == 'Escape' || (e.ctrlKey && e.key == 'Enter'))) {
+					e.stopPropagation();
+				} /* prevent global shortcuts from firing */
+			}}
 			use:onselectionchange
 			on:selectionchange={() => {
 				selectionStartGlobal = input.selectionStart;
@@ -147,7 +152,7 @@
 				prevSelectionEnd = input.selectionEnd;
 			}}
 			class="form-control"
-			placeholder="Given"
+			placeholder={$t('shop:given')}
 			inputmode="none"
 			bind:value
 			bind:this={input}
