@@ -12,7 +12,7 @@ export const AuthenticationLevels = {
  * ## Authenticator
  * 
  * A collection of middlewares to manage access from 4 hardcoded access levels.
- * Access of routes is decleared by @access decorators in the documentation.
+ * Access of routes is declared by @access decorators in the documentation.
  * 
  * This types are available
  * 
