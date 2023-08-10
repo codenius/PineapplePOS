@@ -2,8 +2,10 @@ import ItemController from "../../controllers/api/itemController";
 import {Router} from "express";
 import Authenticator from "../../auth/authenticator";
 import itemVersionRouter from "./itemVersion";
-import { Types } from "mongoose";
+import { SchemaTypes, Types } from "mongoose";
 import validate from "../../types/validator";
+import category from "../../types/api/category";
+import CategoryController from "../../controllers/api/categoryController";
 
 const itemRouter = Router();
 
@@ -34,10 +36,7 @@ itemRouter.post('/new', [
  */
 itemRouter.get("/categories", [
     (req, res, next) => Authenticator.read(req, res, next),
-    async (req, res) => {
-        let items = await ItemController.model.find().exec()
-        res.status(200).json([...new Set(items.map(item => item["category"]))])
-    }
+    (req, res, next) => CategoryController.select.all(req, res, next) 
 ])
 
 /**
@@ -80,6 +79,24 @@ itemRouter.delete('/:id', [
  */
 itemRouter.put('/:id', [
     (req,res,next) => Authenticator.edit(req,res,next),
+    async (req,res,next) => {
+        try {
+            validate(SchemaTypes.ObjectId, req.body.category)
+            next()
+        }catch (e) {
+            (category.findOne({_isDefault: true}).lean() || category.create({name: "–",_isDefault: true}))
+                .then((result) => {
+                    return result.json()
+                })
+                .then((doc) => {
+                    //@ts-ignore
+                    req.body._id = doc._id
+                    next()
+                })
+        } 
+        next()
+         
+    },
     (req,res,next) => ItemController.update.single(req,res,next)
 ])
 

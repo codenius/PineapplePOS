@@ -1,5 +1,7 @@
-import { Schema, model } from "mongoose";
+import { Schema, SchemaTypes, Types, isValidObjectId, model } from "mongoose";
 import versioning from "mongoose-versioned";
+import CategoryModel, { Category } from "./category";
+import mongooseAutoPopulate from "mongoose-autopopulate";
 
 export const Item = new Schema({
     name: {
@@ -16,8 +18,9 @@ export const Item = new Schema({
         default: ""
     },
     category: {
-        type: String,
-        default: ""
+        type: SchemaTypes.Mixed,
+        ref: "Category",
+        autopopulate: true
     },
     sell_price: {
         type: Number,
@@ -37,8 +40,34 @@ export const Item = new Schema({
         type: String,
         default: ""
     }
-}, { skipVersioning: { amount: true }})
+}, { skipVersioning: { amount: true } })
 
-Item.plugin(versioning, {collection: "items.versioning"})
+Item.plugin(versioning, { collection: "items.versioning" })
+Item.plugin(mongooseAutoPopulate)
+
+Item.pre("validate", async function (next) {
+    if (typeof this.category === 'string') {
+        let existingCategory = await CategoryModel.findOne({ name: this.category });
+
+        if (!existingCategory) {
+            existingCategory = new CategoryModel({ name: this.category, _isDefault: false });
+            await existingCategory.save();
+        }
+
+        this.category = existingCategory._id;
+    } else if (!this.category || !isValidObjectId(this.category)) {
+        let default_category_filter = {name: "--", _isDefault: true}
+        let default_category = await CategoryModel.findOne(default_category_filter);
+
+        if (!default_category) {
+            default_category = new CategoryModel(default_category_filter);
+            await default_category.save();
+        }
+        this.category = default_category._id;
+    } 
+
+    next();
+});
+
 
 export default model("Item", Item, "items")

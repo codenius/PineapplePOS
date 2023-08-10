@@ -115,11 +115,11 @@ class SimpleController {
         return new ControllerChild(this, [
             (req, res) => { this.allowMethod(req, res, ["POST"]) }
         ], [
-            (req, res) => {
+            async (req, res) => {
                 let document = new this.model(req.body)
-                let err = document.validateSync()
+                let err = await document.validate()
                 if (err) { throw new DatabaseError(err._message) }
-                document.save()
+                await document.save()
                 return document
             }
         ], [
