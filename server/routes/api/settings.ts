@@ -2,7 +2,7 @@ import { Router } from "express"
 import Authenticator from "../../auth/authenticator"
 import { localSettingController, globalSettingController } from "../../controllers/api/settingController"
 
-let settingsRouter = Router()
+const settingsRouter = Router()
 
 function setUser(req, res, next) {
     req.body["user"] = req.user._id
