@@ -2,6 +2,7 @@ import { Schema, SchemaTypes, Types, isValidObjectId, model } from "mongoose";
 import versioning from "mongoose-versioned";
 import CategoryModel, { Category } from "./category";
 import mongooseAutoPopulate from "mongoose-autopopulate";
+import category from "./category";
 
 export const Item = new Schema({
     name: {
@@ -68,6 +69,17 @@ Item.pre("validate", async function (next) {
 
     next();
 });
+
+Item.post("findOneAndDelete", async function (doc) {
+    if (!doc.category) return
+
+    const itemModel = model("Item")
+    const count = await itemModel.countDocuments({ category: category}) 
+
+    if (count !== 0) return
+
+    await CategoryModel.findByIdAndDelete(doc.category)
+})
 
 
 export default model("Item", Item, "items")
