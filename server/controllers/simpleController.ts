@@ -43,12 +43,12 @@ class SimpleController {
         ], [
             async (req, res) => {
                 validate(Types.ObjectId, req.params.id)
-                return await this.model.findById(req.params.id).lean()
+                return await this.model.findById(req.params.id).lean({ autopopulate: true })
             }
         ], [
             async (req, res) => {
                 let filter = req.body || {}
-                return await this.model.find(filter).lean()
+                return await this.model.find(filter).lean({ autopopulate: true })
             }
         ]);
     }
