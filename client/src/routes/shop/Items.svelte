@@ -20,6 +20,7 @@
 	import { ItemsController } from '$lib/ApiControllers';
 	import { t } from '$lib/i18n';
 	import EditCategoriesOrderModal from './components/Items/EditCategoriesOrderModal.svelte';
+	import type { Category } from '$lib/types/Category';
 
 	const itemsQuery = useQuery('items', async () => {
 		return ItemsController.getItems();
@@ -30,7 +31,8 @@
 	});
 
 	interface categoryItems {
-		category: Item['category'];
+		categoryName: Category['name'];
+		categoryId: Category['id'];
 		items: Item[];
 		_isDefault?: boolean;
 	}
@@ -47,7 +49,7 @@
 				(categoryItem) => categoryItem._isDefault
 			);
 			if (defaultCategoryIndex != -1) {
-				itemsByCategory[defaultCategoryIndex].category = $t(
+				itemsByCategory[defaultCategoryIndex].categoryName = $t(
 					'uncategorized'
 				) as string;
 			}
@@ -81,7 +83,8 @@
 				item.category ? item.category.id == category.id : false
 			);
 			itemsByCategory.push({
-				category: category.name,
+				categoryName: category.name,
+				categoryId: category.id,
 				items: categoryItems,
 				_isDefault: category._isDefault
 			});
@@ -92,7 +95,7 @@
 	let activeSection: string;
 </script>
 
-{#if $itemsQuery.isSuccess}
+{#if itemsByCategory}
 	<div id={$t('stock:all')} style="font-size: {($zoomFactor / 1.5) * 0.2}rem">
 		<ButtonToolbar
 			class="position-sticky top-0 bg-white p-2 d-flex flex-nowrap overflow-auto gap-1 shadow-sm"
@@ -111,17 +114,19 @@
 				background-attachment: local, local, scroll, scroll;
 				"
 		>
-			{#each [{ category: $t('stock:all') }, ...itemsByCategory] as category}
+			{#each [{ categoryName: $t('stock:all'), categoryId: 'all' }, ...itemsByCategory] as category}
 				<Button
 					class="rounded-pill text-nowrap"
 					color="primary"
-					outline={!(activeSection == category.category)}
+					outline={!(activeSection == category.categoryId)}
 					size="sm"
-					href="#{category.category}"
+					href="#{category.categoryId}"
 					on:click={() => {
-						activeSection = category.category;
-					}}>{category.category}</Button
+						activeSection = category.categoryId;
+					}}
 				>
+					{category.categoryName}
+				</Button>
 			{/each}
 			<EditCategoriesOrderModal />
 		</ButtonToolbar>
@@ -148,9 +153,9 @@
 		<Accordion stayOpen={true} class="ItemGroup">
 			{#each itemsByCategory as category}
 				<AccordionItem active={true}>
-					<span class="ACCORDIONHEADER" slot="header" id={category.category}
-						>{category.category}</span
-					>
+					<span class="ACCORDIONHEADER" slot="header" id={category.categoryId}>
+						{category.categoryName}
+					</span>
 					<div class="p-1" id="wrapper">
 						{#each category.items as item}
 							<ItemCard {...item} />
@@ -173,7 +178,7 @@
 	</div>
 {/if}
 
-{#if $itemsQuery.isSuccess}
+{#if itemsByCategory}
 	{#if !itemsByCategory.length}
 		<div class="h-100 d-flex justify-content-center align-items-center px-4">
 			<span class="h4">{$t('no_items')}</span>
