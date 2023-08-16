@@ -1,6 +1,6 @@
 import { Schema, SchemaTypes, Types, isValidObjectId, model } from "mongoose";
 import versioning from "mongoose-versioned";
-import CategoryModel, { Category } from "./category";
+import CategoryModel, { Category, getDefaultCategory } from "./category";
 import mongooseAutoPopulate from "mongoose-autopopulate";
 import category from "./category";
 
@@ -57,14 +57,7 @@ Item.pre("validate", async function (next) {
 
         this.category = existingCategory._id;
     } else if (!this.category || !isValidObjectId(this.category)) {
-        let default_category_filter = {name: "--", _isDefault: true}
-        let default_category = await CategoryModel.findOne(default_category_filter);
-
-        if (!default_category) {
-            default_category = new CategoryModel(default_category_filter);
-            await default_category.save();
-        }
-        this.category = default_category._id;
+        this.category = (await getDefaultCategory())._id;
     } 
 
     next();
