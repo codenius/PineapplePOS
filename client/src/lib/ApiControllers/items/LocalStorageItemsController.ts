@@ -43,7 +43,7 @@ export class ItemsController {
 		this.setStores();
 	}
 
-	private addCategory(name: Category['name'], _isDefault?: boolean) {
+	private addCategory(name: Category['name'], _isDefault: boolean = false) {
 		const id = crypto.randomUUID();
 		this.categories = [...this.categories, { name, id, _isDefault }];
 		this.setStores();
