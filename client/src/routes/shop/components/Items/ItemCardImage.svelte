@@ -1,16 +1,25 @@
 <script lang="ts">
 	import type { Item } from '$lib/types/Item';
-	import { CardImg, Icon } from 'sveltestrap';
+	import { Icon } from 'sveltestrap';
 	export let alt: string;
 	export let image: Item['image'];
+	$: image,
+		(() => {
+			error = false;
+		})(); // set error to false when image updates
+	let error = false;
 </script>
 
-{#if image}
-	<CardImg
+{#if image && !error}
+	<img
 		draggable={false}
-		class="w-auto flex-grow-1"
+		class="card-img w-auto flex-grow-1"
 		style="min-height: 8em; max-height: 8em; object-fit: contain"
 		src={image}
+		alt=""
+		on:error={() => {
+			error = true;
+		}}
 	/>
 {:else}
 	<div
@@ -21,7 +30,10 @@
 			class="text-secondary overflow-hidden fw-bolder"
 			style="font-size: 1.5em; margin: 0.7em;"
 		>
-			<Icon name="image" style="font-size: 1.7em" />
+			<Icon
+				name={!error ? 'image' : 'file-earmark-x'}
+				style="font-size: 1.7em"
+			/>
 			<div class="text-truncate">
 				{alt || '–'}
 			</div>
