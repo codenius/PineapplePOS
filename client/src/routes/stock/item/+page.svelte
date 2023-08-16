@@ -181,7 +181,9 @@
 					id="item_form"
 					on:submit={(event) => {
 						event.preventDefault();
-						!item.category ? (item.category = null) : {};
+						!item.category
+							? (item.category = null)
+							: (item.category = item.category.id);
 						$saveItemMutation.mutate(item);
 					}}
 				>
@@ -226,11 +228,9 @@
 								categories = initCategories;
 							}}
 							bind:filterText={categoryFilterText}
-							value={item.category}
-							bind:justValue={item.category}
-							items={categories.filter(
-								(category) => !!category && !category._isDefault
-							)}
+							value={item.category ? item.category.id : undefined}
+							bind:justValue={item.category.id}
+							items={categories}
 							--font-size="1rem"
 							--padding="0 0 0 .75rem"
 							--input-padding=".375rem 0"

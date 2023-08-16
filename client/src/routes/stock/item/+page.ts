@@ -1,4 +1,5 @@
 import { ItemsController } from '$lib/ApiControllers';
+import type { Category } from '$lib/types/Category';
 import type { Item } from '$lib/types/Item';
 import type { PageLoad } from './$types';
 
@@ -12,5 +13,6 @@ export const load = (async ({ url }) => {
 	} catch {
 		item = {} as Item;
 	}
+	if (!item.category) item.category = {} as Category;
 	return item;
 }) satisfies PageLoad;
