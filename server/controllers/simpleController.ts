@@ -65,18 +65,29 @@ class SimpleController {
         ], [
             async (req, res) => {
                 validate(Types.ObjectId, req.params.id)
-                validateModel(this.model, req.body)
-                if (Object.keys(req.body).length != 0) {
-                    return await this.model.findByIdAndUpdate(req.params.id, req.body, this.options).lean()
-                } else {
-                    return await this.model.findById(req.params.id).lean()
+                let existing_object = await this.model.findById(req.params.id).lean()
+                let updated_object = {...existing_object, ...req.body}
+                let validating_object = new this.model(updated_object)
+                let err = await validating_object.validate()
+                updated_object = validating_object._doc
+                if (err) {
+                    return await this.model.findById(req.params.id).lean({ autopopulate: true })
                 }
+                return await this.model.findByIdAndUpdate(req.params.id, updated_object, this.options).lean({ autopopulate: true })
             }
         ], [
             async (req, res) => {
-                return await req.body.map(async elem => {
+                return await req.body.map(async (elem) => {
                     validateModel(this.model, elem)
-                    await this.model.findByIdAndUpdate(elem.id, elem, this.options).lean()
+                    let existing_object = await this.model.findById(elem._id).lean()
+                    let updated_object = {...existing_object, ...req.body}
+                    let validating_object = new this.model(updated_object)
+                    let err = await validating_object.validate()
+                    updated_object = validating_object._doc
+                    if (err) {
+                        return await this.model.findById(elem._id).lean({ autopopulate: true })
+                    }
+                    return await this.model.findByIdAndUpdate(elem._id, updated_object, this.options).lean({ autopopulate: true })
                 })
             }
         ]);
@@ -94,13 +105,13 @@ class SimpleController {
             async (req, res) => {
                 validate(Types.ObjectId, req.params.id)
                 req.body._id = req.params.id
-                return await this.model.findOneAndDelete(req.body, this.options).lean()
+                return await this.model.findOneAndDelete(req.body, this.options).lean({ autopopulate: true })
             }
         ], [
             async (req, res) => {
                 validate([Types.ObjectId], req.body)
                 return await req.body.map(async elem => {
-                    await this.model.findOneAndDelete(elem, this.options).lean()
+                    await this.model.findOneAndDelete(elem, this.options).lean({ autopopulate: true })
                 })
             }
         ]);

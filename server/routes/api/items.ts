@@ -4,7 +4,7 @@ import Authenticator from "../../auth/authenticator";
 import itemVersionRouter from "./itemVersion";
 import { SchemaTypes, Types } from "mongoose";
 import validate from "../../types/validator";
-import category from "../../types/api/category";
+import category, { getDefaultCategory } from "../../types/api/category";
 import CategoryController from "../../controllers/api/categoryController";
 
 const itemRouter = Router();
@@ -79,24 +79,6 @@ itemRouter.delete('/:id', [
  */
 itemRouter.put('/:id', [
     (req,res,next) => Authenticator.edit(req,res,next),
-    async (req,res,next) => {
-        try {
-            validate(SchemaTypes.ObjectId, req.body.category)
-            next()
-        }catch (e) {
-            (category.findOne({_isDefault: true}).lean() || category.create({name: "–",_isDefault: true}))
-                .then((result) => {
-                    return result.json()
-                })
-                .then((doc) => {
-                    //@ts-ignore
-                    req.body._id = doc._id
-                    next()
-                })
-        } 
-        next()
-         
-    },
     (req,res,next) => ItemController.update.single(req,res,next)
 ])
 
