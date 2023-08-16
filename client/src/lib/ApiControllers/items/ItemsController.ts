@@ -1,3 +1,4 @@
+import type { Category } from '$lib/types/Category';
 import type { Item } from '$lib/types/Item';
 import type { ShoppingBagEntry } from '$lib/types/ShoppingBagEntry';
 
@@ -17,7 +18,7 @@ export class ItemsController {
 	private async fetch<T>(
 		path: string,
 		options: RequestInit = {},
-		remap: boolean = true,
+		parser: <T>(arg: T) => T = this.parseItem,
 		json: boolean = true
 	) {
 		if (
@@ -35,17 +36,24 @@ export class ItemsController {
 			throw new Error(`${response.status}: ${response.statusText}`);
 		}
 		const data = json ? response.json() : response.text();
-		if (json && remap) {
+		if (json && parser) {
 			(data as Promise<Item[]>).then((json) =>
-				Array.isArray(json) ? json.map(this.parseItem) : this.parseItem(json)
+				Array.isArray(json) ? json.map(parser) : parser(json)
 			);
 		}
 		return data as Promise<T>;
 	}
 
+	private static parseCategory(category: Category) {
+		category.id = category._id as string;
+		delete category._id;
+		return category;
+	}
+
 	private parseItem(item: Item) {
 		item.id = item._id as string;
 		delete item._id;
+		item.category = ItemsController.parseCategory(item.category as Category);
 		item.price = item.sell_price as number;
 		delete item.sell_price;
 		return item;
@@ -62,10 +70,12 @@ export class ItemsController {
 	getItem(id: Item['id']) {
 		return this.fetch<Item>(`/items/${id}`);
 	}
-	async getCategories() {
-		const items = (await this.getItems()) as Item[];
-		const categories = Array.from(new Set(items.map((item) => item.category)));
-		return categories;
+	getCategories() {
+		return this.fetch<Category[]>(
+			'/categories',
+			{},
+			ItemsController.parseCategory
+		);
 	}
 	sellItems(shoppingBag: ShoppingBagEntry[]) {
 		return this.fetch('/sellpoint/sell', {
