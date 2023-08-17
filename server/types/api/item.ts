@@ -71,7 +71,6 @@ function categoryGarbageCollector() {
         
         if (!doc_before_change.category) return
         const count = (await this.model.find({ category: doc_before_change.category._id})).filter(item => item == doc_before_change._id).length
-        console.log(count)
         if (count === 0) {
             await CategoryModel.findByIdAndDelete(doc_before_change.category);
         }
