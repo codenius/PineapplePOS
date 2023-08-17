@@ -73,7 +73,7 @@ class SimpleController {
                 if (err) {
                     return await this.model.findById(req.params.id).lean({ autopopulate: true })
                 }
-                return await this.model.findByIdAndUpdate(req.params.id, updated_object, this.options).lean({ autopopulate: true })
+                return await this.model.findOneAndUpdate({_id: req.params.id}, updated_object, this.options).lean({ autopopulate: true })
             }
         ], [
             async (req, res) => {
@@ -87,7 +87,7 @@ class SimpleController {
                     if (err) {
                         return await this.model.findById(elem._id).lean({ autopopulate: true })
                     }
-                    return await this.model.findByIdAndUpdate(elem._id, updated_object, this.options).lean({ autopopulate: true })
+                    return await this.model.findOneAndUpdate({_id: elem._id}, updated_object, this.options).lean({ autopopulate: true })
                 })
             }
         ]);

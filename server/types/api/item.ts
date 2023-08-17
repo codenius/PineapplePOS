@@ -48,7 +48,8 @@ Item.plugin(mongooseAutoPopulate)
 
 Item.pre("validate", async function (next) {
     if (typeof this.category === 'string') {
-        let existingCategory = await CategoryModel.findOne({ name: this.category });
+        let filter = isValidObjectId(this.category)?{ _id: this.category }:{ name: this.category }
+        let existingCategory = await CategoryModel.findOne(filter);
 
         if (!existingCategory) {
             existingCategory = new CategoryModel({ name: this.category, _isDefault: false });
@@ -63,16 +64,21 @@ Item.pre("validate", async function (next) {
     next();
 });
 
-Item.post("findOneAndDelete", async function (doc) {
-    if (!doc.category) return
+function categoryGarbageCollector() {
+    return async function (next) {
+        const doc_before_change = await this.model.findOne(this.getQuery())
+        await next()
+        
+        if (!doc_before_change.category) return
+        const count = (await this.model.find({ category: doc_before_change.category._id})).filter(item => item == doc_before_change._id).length
+        console.log(count)
+        if (count === 0) {
+            await CategoryModel.findByIdAndDelete(doc_before_change.category);
+        }
+    }
+}
 
-    const itemModel = model("Item")
-    const count = await itemModel.countDocuments({ category: category}) 
-
-    if (count !== 0) return
-
-    await CategoryModel.findByIdAndDelete(doc.category)
-})
-
+Item.pre("findOneAndDelete", categoryGarbageCollector())
+Item.pre("findOneAndUpdate", categoryGarbageCollector())
 
 export default model("Item", Item, "items")
