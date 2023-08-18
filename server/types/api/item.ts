@@ -64,20 +64,4 @@ Item.pre("validate", async function (next) {
     next();
 });
 
-function categoryGarbageCollector() {
-    return async function (next) {
-        const doc_before_change = await this.model.findOne(this.getQuery())
-        await next()
-        
-        if (!doc_before_change.category) return
-        const count = (await this.model.find({ category: doc_before_change.category._id})).filter(item => item == doc_before_change._id).length
-        if (count === 0) {
-            await CategoryModel.findByIdAndDelete(doc_before_change.category);
-        }
-    }
-}
-
-Item.pre("findOneAndDelete", categoryGarbageCollector())
-Item.pre("findOneAndUpdate", categoryGarbageCollector())
-
 export default model("Item", Item, "items")
