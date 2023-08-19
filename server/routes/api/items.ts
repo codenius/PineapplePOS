@@ -5,7 +5,7 @@ import itemVersionRouter from "./itemVersion";
 import { SchemaTypes, Types } from "mongoose";
 import validate from "../../types/validator";
 import category, { getDefaultCategory } from "../../types/api/category";
-import CategoryController from "../../controllers/api/categoryController";
+import {CategoryController} from "../../controllers/api/categoryController";
 
 const itemRouter = Router();
 
