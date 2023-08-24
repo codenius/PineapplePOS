@@ -181,10 +181,13 @@
 					id="item_form"
 					on:submit={(event) => {
 						event.preventDefault();
-						!item.category
-							? (item.category = null)
-							: (item.category = item.category.id);
-						$saveItemMutation.mutate(item);
+						const saveItem = { ...item }; // clone item to local scope
+						if (!saveItem.category) {
+							saveItem.category = null;
+						} else {
+							saveItem.category = item.category.id;
+						}
+						$saveItemMutation.mutate(saveItem);
 					}}
 				>
 					<FormGroup>
