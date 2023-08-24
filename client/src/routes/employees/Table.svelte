@@ -8,14 +8,13 @@
 	import {
 		addColumnFilters,
 		addSortBy,
-		addTableFilter,
-		matchFilter
+		addTableFilter
 	} from 'svelte-headless-table/plugins';
 	import { writable } from 'svelte/store';
 	import { useQuery } from '@sveltestack/svelte-query';
 	import { Icon, Spinner, Table } from 'sveltestrap';
 	import ActionButtons from './ActionButtons.svelte';
-	import SortSelect from './SortSelect.svelte';
+	import SortSelect, { matchFilter } from './SortSelect.svelte';
 	import { goto } from '$app/navigation';
 	import { fade } from 'svelte/transition';
 	import TableSearch from './TableSearch.svelte';
