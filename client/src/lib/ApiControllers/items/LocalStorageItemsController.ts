@@ -26,16 +26,21 @@ export class ItemsController {
 	async getItems() {
 		return this.items.map((item) => ({
 			...item,
-			category: this.categories.find((category) => category.id == item.category)
+			category: this.getCategory(item.category)
 		}));
 	}
 
 	async getItem(id: Item['id']) {
-		return this.items.find((element) => element.id == id);
+		const item = this.items.find((element) => element.id == id) as Item;
+		return { ...item, category: this.getCategory(item.category) };
 	}
 
 	async getCategories() {
 		return this.categories;
+	}
+
+	private getCategory(id: Category['id']) {
+		return { ...this.categories.find((category) => category.id == id) };
 	}
 
 	async orderCategories(categories: Category[]) {
@@ -50,6 +55,28 @@ export class ItemsController {
 		return id;
 	}
 
+	private garbageCollectCategories() {
+		for (const category of this.categories) {
+			const remainingItems = this.items.filter(
+				(item) => item.category == category.id
+			).length;
+			if (remainingItems <= 0) {
+				this.deleteCategory(category.id);
+			}
+		}
+	}
+
+	private getDefaultCategoryId() {
+		const defaultCategory = this.categories.find(
+			(category) => category._isDefault
+		);
+		if (defaultCategory) {
+			return defaultCategory.id;
+		} else {
+			return this.addCategory('–', true);
+		}
+	}
+
 	private deleteCategory(id: Category['id']) {
 		this.categories = this.categories.filter((category) => category.id != id);
 		this.setStores();
@@ -57,25 +84,13 @@ export class ItemsController {
 
 	async setItem(item: Item) {
 		const index = this.items.findIndex((dbItem) => dbItem.id == item.id);
-		const modifiedItem = this.items[index];
-		let newCategoryId!: Category['id'];
-		if (
-			this.items.filter((item) => item.category == modifiedItem.category)
-				.length <= 1
-		) {
-			this.deleteCategory(modifiedItem.category as string);
-		}
-		if (item.category != modifiedItem.category) {
+		const prevItem = this.items[index];
+		let newCategoryId: Category['id'] | undefined = undefined;
+		if (item.category != prevItem.category) {
 			if (!item.category) {
-				const defaultCategory = this.categories.find(
-					(category) => category._isDefault
-				);
-				if (defaultCategory) {
-					item.category = defaultCategory.id;
-				} else {
-					newCategoryId = this.addCategory('–', true);
-				}
+				newCategoryId = this.getDefaultCategoryId();
 			} else if (
+				// no category with this id exists
 				!this.categories.find((category) => category.id == item.category)
 			) {
 				newCategoryId = this.addCategory(item.category as string);
@@ -83,21 +98,16 @@ export class ItemsController {
 		}
 		this.items[index] = { ...item, category: newCategoryId || item.category };
 		this.setStores();
+		this.garbageCollectCategories();
 	}
 
 	async addItem(item: Item) {
 		const id = crypto.randomUUID();
-		let newCategoryId!: Category['id'];
+		let newCategoryId: Category['id'] | undefined = undefined;
 		if (!item.category) {
-			const defaultCategory = this.categories.find(
-				(category) => category._isDefault
-			);
-			if (defaultCategory) {
-				item.category = defaultCategory.id;
-			} else {
-				newCategoryId = this.addCategory('–', true);
-			}
+			newCategoryId = this.getDefaultCategoryId();
 		} else if (
+			// no category with this id exists
 			!this.categories.find((category) => category.id == item.category)
 		) {
 			newCategoryId = this.addCategory(item.category as string);
@@ -107,19 +117,14 @@ export class ItemsController {
 			{ ...item, id, category: newCategoryId || item.category }
 		];
 		this.setStores();
+		this.garbageCollectCategories();
 	}
 
 	async deleteItem(id: Item['id']) {
 		const index = this.items.findIndex((dbItem) => dbItem.id == id);
-		const deletedItem = this.items[index];
 		this.items.splice(index, 1);
-		if (
-			this.items.filter((item) => item.category == deletedItem.category)
-				.length == 0
-		) {
-			this.deleteCategory(deletedItem.category as string);
-		}
 		this.setStores();
+		this.garbageCollectCategories();
 	}
 
 	private sellItem(shoppingBagEntry: ShoppingBagEntry) {
