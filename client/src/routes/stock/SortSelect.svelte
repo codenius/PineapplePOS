@@ -1,13 +1,8 @@
 <script context="module" lang="ts">
 	function getDistinct(categories: Category[]): Category[] {
-		return Array.from(
-			new Set(categories.map((category) => (category ? category.id : null)))
-		)
-			.map(
-				(category) =>
-					categories.find((itemsCategory) =>
-						itemsCategory ? category == itemsCategory.id : false
-					) || category
+		return Array.from(new Set(categories.map((category) => category.id)))
+			.map((categoryId) =>
+				categories.find((itemsCategory) => categoryId == itemsCategory.id)
 			)
 			.sort((a, b) => {
 				if (!a) return 1;
