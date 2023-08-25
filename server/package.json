@@ -4,6 +4,7 @@
     "scripts": {
         "dev": "nodemon",
         "build": "esbuild app.ts --platform=node --bundle --minify --outdir=build && cp backend.env ./build/backend.env",
+        "buildDev" : "etsc",
         "start": "node ./build/app.js"
     },
     "dependencies": {

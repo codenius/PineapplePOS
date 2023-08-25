@@ -1,5 +1,5 @@
 {
     "watch": ["."],
     "ext": "ts",
-    "exec": "etsc && node ./build/app.js"
+    "exec": "npm run buildDev && npm run start"
 }
