@@ -1,7 +1,3 @@
-<script lang="ts" context="module">
-	export let searchResultsContainer: HTMLDivElement;
-</script>
-
 <script lang="ts">
 	import ItemCard from './components/Items/ItemCard.svelte';
 	import { zoomFactor } from '$lib/stores/itemsZoom';
@@ -57,9 +53,13 @@
 	}
 
 	let searchItems: Item[];
+	let searchResultsContainer: HTMLDivElement;
 
 	$: {
 		searchItems = substracteShoppingBagAmount($searchResults, $shoppingBag);
+	}
+	$: if (searchResultsContainer && $searchResults) {
+		searchResultsContainer.scrollIntoView();
 	}
 
 	function substracteShoppingBagAmount(
