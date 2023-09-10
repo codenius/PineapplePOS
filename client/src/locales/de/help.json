@@ -1,0 +1,25 @@
+{
+	"placeholder": "Einen Befehl suchen",
+	"commands": {
+		"pay": {
+			"short": "Bezahlen",
+			"long": "Bezahlungvorgang starten"
+		},
+		"search": {
+			"short": "Suchen",
+			"long": "In die Produktsuche springen"
+		},
+		"clear": {
+			"short": "Leeren",
+			"long": "Warenkorb leeren"
+		},
+		"restore": {
+			"short": "Wiederherstellen",
+			"long": "Warenkorb wiederherstellen"
+		},
+		"help": {
+			"short": "Hilfe",
+			"long": "Diese Tastaturkurzbefehlhilfe öffnen"
+		}
+	}
+}

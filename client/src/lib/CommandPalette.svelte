@@ -7,44 +7,40 @@
 		defineActions,
 		createStoreMethods
 	} from 'svelte-command-palette';
-	import { language } from './i18n';
-
-	// define actions using the defineActions API
+	import type { action } from 'svelte-command-palette/types';
+	import { language, t } from './i18n';
 
 	const paletteMethods = createStoreMethods();
 
 	const shortcuts = [
-		{ short: 'pay', long: 'Open the pay dialog', key: 'p', cb: openPayModal },
+		{ short: 'pay', key: 'p', cb: openPayModal },
 		{
 			short: 'search',
-			long: 'Focus the product search',
 			key: 's',
 			cb: focusSearch
 		},
 		{
 			short: 'clear',
-			long: 'Clear the shopping bag',
 			key: 'x',
 			cb: clearShoppingBag
 		},
 		{
 			short: 'restore',
-			long: 'Restore the shopping bag',
 			key: 'r',
 			cb: restoreShoppingBag
 		},
 		{
 			short: 'help',
-			long: 'Open the  shortcut help',
 			key: 'h',
 			cb: paletteMethods.openPalette
 		}
 	];
 
-	const actions = defineActions(
+	let actions: action[];
+	$: actions = defineActions(
 		shortcuts.map((sc) => ({
-			title: capitalize(sc.short),
-			subTitle: sc.long,
+			title: capitalize($t(`help:commands.${sc.short}.short`) as string),
+			subTitle: $t(`help:commands.${sc.short}.long`) as string,
 			onRun: sc.cb,
 			shortcut: sc.key
 		}))
@@ -53,12 +49,28 @@
 	function capitalize(string: string) {
 		return string.charAt(0).toLocaleUpperCase($language) + string.slice(1);
 	}
+
+	/*   force rerender CommandPalette when 'actions' changes, 
+		since 'commands' property is not reactive, 
+		necessary for lazy loaded translations, 
+		!!!HACK!!! may affect performance */
+	function rerender() {
+		isActive = false;
+		setTimeout(() => {
+			isActive = true;
+		});
+	}
+	let isActive: boolean = true;
+	$: actions, rerender(); // runs when 'actions' changes
 </script>
 
-<CommandPalette
-	resultsContainerClass="m-0 p-0 overflow-auto"
-	overlayStyle={{ zIndex: '1100' }}
-	subtitleStyle={{ fontSize: '1rem' }}
-	subtitleClass=""
-	commands={actions}
-/>
+{#if isActive}
+	<CommandPalette
+		resultsContainerClass="m-0 p-0 overflow-auto"
+		overlayStyle={{ zIndex: '1100' }}
+		subtitleStyle={{ fontSize: '1rem' }}
+		subtitleClass=""
+		placeholder={$t('help:placeholder')}
+		commands={actions}
+	/>
+{/if}

@@ -1,0 +1,25 @@
+{
+	"placeholder": "Search for a command",
+	"commands": {
+		"pay": {
+			"short": "pay",
+			"long": "Open the pay dialog"
+		},
+		"search": {
+			"short": "search",
+			"long": "Focus the product search"
+		},
+		"clear": {
+			"short": "clear",
+			"long": "Clear the shopping bag"
+		},
+		"restore": {
+			"short": "restore",
+			"long": "Restore the shopping bag"
+		},
+		"help": {
+			"short": "help",
+			"long": "Open this shortcut help"
+		}
+	}
+}

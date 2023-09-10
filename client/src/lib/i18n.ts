@@ -20,7 +20,7 @@ i18next
 			lookupLocalStorage: 'locale'
 		},
 		fallbackLng: ['en', 'de'],
-		ns: ['common', 'shop', 'stock', 'employees'],
+		ns: ['common', 'shop', 'stock', 'employees', 'help'],
 		interpolation: { escapeValue: true }
 	});
 
