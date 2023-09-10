@@ -140,13 +140,13 @@
 						event.currentTarget.scrollLeft += event.deltaY;
 					}
 				}}
-				class="p-2 w-100"
+				class="p-2 w-100 border-bottom border-3"
 				id="searchWrapper"
 			>
 				{#each searchItems as item}
 					<ItemCard {...item} isSearchItemCard={true} />
 				{:else}
-					<h4 class="m-auto my-5">{$t('no_items_found')}</h4>
+					<h5 class="mx-2 my-5">{$t('no_items_found')}</h5>
 				{/each}
 			</div>
 		{/if}
