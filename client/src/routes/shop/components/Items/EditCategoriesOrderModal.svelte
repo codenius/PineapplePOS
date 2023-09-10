@@ -10,6 +10,7 @@
 	import { ItemsController } from '$lib/ApiControllers';
 	import type { Category } from '$lib/types/Category';
 	import { t } from '$lib/i18n';
+	import { fade } from 'svelte/transition';
 
 	let isOpen: boolean = false;
 
@@ -74,6 +75,9 @@
 		{#if $queryResult.isSuccess}
 			<p>
 				{$t('shop:edit_categories_order_info')}
+				{#if $queryResult.isFetching}
+					<span transition:fade><Spinner size="sm" /></span>
+				{/if}
 			</p>
 			<SortableList
 				{onUpdate}
@@ -87,14 +91,6 @@
 					</li>
 				{/each}
 			</SortableList>
-		{/if}
-		{#if $queryResult.isFetching}
-			<div
-				class="d-flex w-100 justify-content-center align-items-center"
-				style="min-height: 10rem;"
-			>
-				<Spinner />
-			</div>
 		{/if}
 	</ModalBody>
 	<ModalFooter>
