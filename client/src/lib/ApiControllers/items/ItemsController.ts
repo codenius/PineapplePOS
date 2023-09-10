@@ -1,14 +1,18 @@
 import type { Category } from '$lib/types/Category';
 import type { Item } from '$lib/types/Item';
 import type { ShoppingBagEntry } from '$lib/types/ShoppingBagEntry';
+import { persisted } from 'svelte-local-storage-store';
+import { get, type Writable } from 'svelte/store';
 
 export class ItemsController {
 	private BACKEND_URL: string;
+	private categoriesOrder!: Writable<Pick<Category, 'id' | 'index'>[]>;
 	constructor(BACKEND_URL: string) {
 		if (BACKEND_URL.endsWith('/')) {
 			BACKEND_URL.substring(0, BACKEND_URL.length - 1);
 		}
 		this.BACKEND_URL = BACKEND_URL;
+		this.categoriesOrder = persisted('categoriesOrder', []);
 	}
 
 	private url(path: string, base_url: string = this.BACKEND_URL) {
@@ -75,6 +79,17 @@ export class ItemsController {
 			'/categories',
 			{},
 			ItemsController.parseCategory
+		).then((categories) => {
+			const categoriesOrder = get(this.categoriesOrder);
+			return categories.map((category) => ({
+				...category,
+				index: categoriesOrder.find((c) => c.id == category.id)?.index
+			}));
+		});
+	}
+	orderCategories(categories: Category[]) {
+		this.categoriesOrder.set(
+			categories.map((category) => ({ id: category.id, index: category.index }))
 		);
 	}
 	sellItems(shoppingBag: ShoppingBagEntry[]) {
