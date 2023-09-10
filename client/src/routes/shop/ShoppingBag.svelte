@@ -17,6 +17,7 @@
 	import type { Item } from '$lib/types/Item';
 	import { get } from 'svelte/store';
 	import { t } from '$lib/i18n';
+	import { payModal } from '$lib/stores/payModal';
 
 	let queryResult = useQuery<Item[], Error>('items');
 
@@ -30,6 +31,10 @@
 
 	$: if ($shoppingBag.length) {
 		$clearedShoppingBag = [];
+	}
+
+	$: if (!$shoppingBag.length) {
+		$payModal = false;
 	}
 </script>
 

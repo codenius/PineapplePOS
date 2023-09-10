@@ -57,6 +57,7 @@
 
 <CommandPalette
 	resultsContainerClass="m-0 p-0 overflow-auto"
+	overlayStyle={{ zIndex: '1100' }}
 	subtitleStyle={{ fontSize: '1rem' }}
 	subtitleClass=""
 	commands={actions}
