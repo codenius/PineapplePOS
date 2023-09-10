@@ -41,9 +41,11 @@
 				interpolation: { escapeValue: false }
 			})}
 		</a>
-		<Button
-			><Icon name="arrow-counterclockwise" /> {$t('shop:undo_purchase')}</Button
-		>
+		<!-- feature currently not required
+		<Button>
+			<Icon name="arrow-counterclockwise" />
+			{$t('shop:undo_purchase')}
+		</Button> -->
 		<Button
 			disabled={!$shoppingBag.length}
 			outline={true}
