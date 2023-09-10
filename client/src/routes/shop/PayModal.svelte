@@ -45,16 +45,20 @@
 
 	const sellMutation = useMutation(
 		async (shoppingBag: ShoppingBagEntry[]) => {
+			$payModal = false;
+			resetShoppingBag();
 			return ItemsController.sellItems(shoppingBag);
 		},
 		{
 			onSuccess: () => {
-				$shoppingBag = [];
-				$payModal = false;
 				queryClient.invalidateQueries('items');
 			}
 		}
 	);
+
+	function resetShoppingBag() {
+		$shoppingBag = [];
+	}
 
 	function sell() {
 		toast.promise($sellMutation.mutateAsync($shoppingBag), {
