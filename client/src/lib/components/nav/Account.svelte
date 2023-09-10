@@ -105,9 +105,10 @@
 				<Icon name="person" />
 				{$t('logged_in_as', { user: $queryResult.data?.name })}
 			</DropdownItem>
-			<DropdownItem
-				><Icon name="key-fill" /> {$t('change_password')}</DropdownItem
-			>
+			<!-- feature currently not required
+			<DropdownItem>
+				<Icon name="key-fill" /> {$t('change_password')}
+			</DropdownItem> -->
 			<DropdownItem
 				on:click={() => {
 					$logoutMutation.mutate();
