@@ -6,7 +6,7 @@
 	import type { TypewriterClass } from 'typewriter-effect';
 	import GraphemeSplitter from 'grapheme-splitter';
 	import { Container } from 'sveltestrap';
-	import { language, t } from '$lib/i18n';
+	import { i18n, t } from '$lib/i18n';
 
 	function stringSplitter(string: string) {
 		const splitter = new GraphemeSplitter();
@@ -65,7 +65,7 @@
 		}
 	}
 
-	$: $language, setupTypewriter(); // setup typewriter with new locales when language changes
+	$: $i18n, setupTypewriter(); // setup typewriter with new locales when language changes or new locales become available
 
 	let showDefaultHeading = true;
 	onMount(() => {
