@@ -1,0 +1,10 @@
+{
+	"typewriter": {
+		"welcome_to": "Wilkommen bei {{br}}{{name}}",
+		"slogan": "Das {{italic}} {{br}}Kassen-Programm",
+		"easy-to-use": "einfache"
+	},
+	"product_introduction": "Dies ist eine einfache und leicht zu bedienende Lagerverwaltungssoftware für kleine Verkäufe. Die Benutzeroberfläche basiert auf dem Antippen von Produkten anstelle des Scannens von Barcodes, um noch einfacher zu funktionieren.",
+	"open_source_note": "PineapplePOS ist Open-Source-Software. Besuche dieses Projekt auf GitHub, um mitzwirken, Fragen zu stellen, Fehler zu melden oder Funktionen anzufordern.",
+	"on_github": "{{name}} auf GitHub"
+}

@@ -1,0 +1,10 @@
+{
+	"typewriter": {
+		"welcome_to": "Welcome to {{br}}{{name}}",
+		"slogan": "The {{italic}} {{br}}shop software",
+		"easy-to-use": "easy-to-use"
+	},
+	"product_introduction": "This is a simple and easy-to-use inventory managment software made for small sales. The user interface is based on tapping products instad of scanning barcodes for even greater simplicity.",
+	"open_source_note": "PineapplePOS is Open Source software. Find this project on GitHub to contribute, ask questions, report bugs or request features.",
+	"on_github": "{{name}} on GitHub"
+}
