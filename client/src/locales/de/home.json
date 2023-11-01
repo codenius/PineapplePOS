@@ -1,6 +1,6 @@
 {
 	"typewriter": {
-		"welcome_to": "Wilkommen bei {{br}}{{name}}",
+		"welcome_to": "Willkommen bei {{br}}{{name}}",
 		"slogan": "Das {{italic}} {{br}}Kassen-Programm",
 		"easy-to-use": "einfache"
 	},
