@@ -23,6 +23,7 @@
 	import type { ShoppingBagEntry } from '$lib/types/ShoppingBagEntry';
 	import type { Item } from '$lib/types/Item';
 	import CommandPalette from '$lib/CommandPalette.svelte';
+	import { shoppingBagWidth } from '$lib/stores/shoppingBagWidth';
 </script>
 
 <CommandPalette />
@@ -33,7 +34,11 @@
 		<Pane minSize={30} class="scroll-pane overflow-auto scroll-padding">
 			<Items />
 		</Pane>
-		<Pane minSize={30} size={30} class="scroll-pane overflow-auto">
+		<Pane
+			minSize={30}
+			bind:size={$shoppingBagWidth}
+			class="scroll-pane overflow-auto"
+		>
 			<ShoppingBag />
 		</Pane>
 	</Splitpanes>
