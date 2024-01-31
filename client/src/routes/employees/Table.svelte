@@ -86,6 +86,12 @@
 		table.createViewModel(columns);
 	const { filterValue } = pluginStates.tableFilter;
 	$: $filterValue = $searchTerm;
+
+	// WORKAROUND to fix sorting indicators not updating
+	const { sortKeys } = pluginStates.sort;
+	function getSortOrder(columnId: string) {
+		return $sortKeys.filter(x => x.id == columnId)[0]?.order || undefined
+	}
 </script>
 
 <div class="d-flex flex-column" style="height: 100%;">
@@ -122,12 +128,12 @@
 										>
 											<Render of={cell.render()} />
 											<Icon
-												class="d-inline-block {props.sort.order === undefined
+												class="d-inline-block {getSortOrder(cell.id) === undefined
 													? 'invisible'
 													: ''}"
-												name={props.sort.order === 'asc'
+												name={getSortOrder(cell.id) === 'asc'
 													? 'sort-down'
-													: props.sort.order === 'desc'
+													: getSortOrder(cell.id) === 'desc'
 													? 'sort-up'
 													: 'filter-left'}
 											/>

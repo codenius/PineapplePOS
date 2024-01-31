@@ -125,6 +125,10 @@
 		table.createViewModel(columns);
 	const { filterValue } = pluginStates.tableFilter;
 	$: $filterValue = $searchTerm;
+
+	// WORKAROUND to fix sorting indicators not updating
+	const { sortKeys } = pluginStates.sort;
+	$: $sortKeys
 </script>
 
 <div class="d-flex flex-column" style="height: 100%;">
